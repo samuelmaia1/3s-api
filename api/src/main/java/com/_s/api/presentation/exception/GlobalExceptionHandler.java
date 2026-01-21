@@ -1,4 +1,4 @@
-package com._s.api.infra.exception;
+package com._s.api.presentation.exception;
 
 import com._s.api.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
