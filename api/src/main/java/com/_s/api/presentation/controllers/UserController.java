@@ -8,6 +8,7 @@ import com._s.api.presentation.dto.CreateUserRequest;
 import com._s.api.presentation.mapper.UserRequestMapper;
 import com._s.api.presentation.mapper.UserResponseMapper;
 import com._s.api.presentation.response.UserResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<UserResponse> createUser(@RequestBody CreateUserRequest request) {
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest request) {
         CreateUserCommand command = UserRequestMapper.toCommand(request);
 
         User user = createUserService.execute(command);

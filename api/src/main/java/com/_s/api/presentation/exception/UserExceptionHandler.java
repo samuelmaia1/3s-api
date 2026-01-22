@@ -1,7 +1,7 @@
 package com._s.api.presentation.exception;
 
 import com._s.api.domain.user.exception.EmailAlreadyInUseException;
-import com._s.api.response.ErrorResponse;
+import com._s.api.presentation.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
