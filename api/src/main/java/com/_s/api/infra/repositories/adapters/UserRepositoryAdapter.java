@@ -11,16 +11,24 @@ import java.util.Optional;
 @Component
 public class UserRepositoryAdapter implements UserRepository {
 
-    @Autowired
-    private UserJpaRepository repository;
+    private final UserJpaRepository repository;
 
-    @Override
-    public Optional<User> findByEmail(String email) {
-        return Optional.empty();
+    public UserRepositoryAdapter(UserJpaRepository repository, UserMapper mapper){
+        this.repository = repository;
     }
 
     @Override
-    public void save(User user) {
+    public Optional<User> findByEmail(String email) {
+        return repository.findByEmail(email).map(UserMapper::toDomain);
+    }
 
+    @Override
+    public User save(User user) {
+        return UserMapper.toDomain(repository.save(UserMapper.toEntity(user)));
+    }
+
+    @Override
+    public Optional<User> findById(String id) {
+        return repository.findById(id).map(UserMapper::toDomain);
     }
 }
