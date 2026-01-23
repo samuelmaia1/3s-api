@@ -2,8 +2,8 @@ package com._s.api.infra.repositories.adapters;
 
 import com._s.api.domain.user.User;
 import com._s.api.domain.user.UserRepository;
+import com._s.api.infra.mappers.UserMapper;
 import com._s.api.infra.repositories.UserJpaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

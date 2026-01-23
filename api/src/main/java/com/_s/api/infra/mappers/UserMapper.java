@@ -1,4 +1,4 @@
-package com._s.api.infra.repositories.adapters;
+package com._s.api.infra.mappers;
 
 import com._s.api.domain.user.User;
 import com._s.api.infra.repositories.entity.UserEntity;

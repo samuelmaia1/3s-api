@@ -1,6 +1,10 @@
 package com._s.api.presentation.exception;
 
+import com._s.api.domain.user.exception.UserNotFoundException;
+import com._s.api.infra.auth.GenerateTokenFailException;
 import com._s.api.presentation.response.ErrorResponse;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -32,5 +36,4 @@ public class GlobalExceptionHandler {
                 )
         );
     }
-
 }
