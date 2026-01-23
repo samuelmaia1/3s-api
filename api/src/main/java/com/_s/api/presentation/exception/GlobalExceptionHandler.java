@@ -8,18 +8,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleException(Exception exception) {
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ErrorResponse.buildError(HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno do servidor."));
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationErrors(
             MethodArgumentNotValidException ex) {
@@ -32,7 +26,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.badRequest().body(
                 ErrorResponse.buildValidationError(
-                        HttpStatus.BAD_REQUEST,
+                        HttpStatus.NOT_FOUND,
                         "Erro de validação",
                         fields
                 )

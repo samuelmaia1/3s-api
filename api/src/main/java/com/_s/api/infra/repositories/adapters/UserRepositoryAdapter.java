@@ -31,4 +31,7 @@ public class UserRepositoryAdapter implements UserRepository {
     public Optional<User> findById(String id) {
         return repository.findById(id).map(UserMapper::toDomain);
     }
+
+    @Override
+    public Optional<User> findByCpf(String cpf) { return repository.findByCpf(cpf).map(UserMapper::toDomain); }
 }

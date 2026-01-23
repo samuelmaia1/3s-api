@@ -20,6 +20,7 @@ public class CreateUserService {
 
     public User execute(CreateUserCommand command) {
         userPolicy.validateEmailIsUnique(command.getEmail());
+        userPolicy.validateIdentityIsUnique(command.getCpf());
 
         User user = new User(command);
 

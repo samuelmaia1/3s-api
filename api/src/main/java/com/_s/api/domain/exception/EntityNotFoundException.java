@@ -1,4 +1,10 @@
 package com._s.api.domain.exception;
 
-public class EntityNotFoundException {
+public class EntityNotFoundException extends RuntimeException{
+    public EntityNotFoundException() {
+    }
+
+    public EntityNotFoundException(String message) {
+        super(message);
+    }
 }

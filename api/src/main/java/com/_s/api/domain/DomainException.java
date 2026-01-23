@@ -1,4 +1,4 @@
-package com._s.api.domain.user;
+package com._s.api.domain;
 
 public class DomainException {
 }
