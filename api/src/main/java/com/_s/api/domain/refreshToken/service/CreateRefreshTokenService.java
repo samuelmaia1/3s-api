@@ -36,6 +36,6 @@ public class CreateRefreshTokenService {
     }
 
     private Instant generateExpireDate() {
-        return LocalDateTime.now().plusDays(7).toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime.now().plusMinutes(60 * 24 * 7).toInstant(ZoneOffset.of("-03:00"));
     }
 }

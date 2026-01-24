@@ -39,8 +39,14 @@ public class ValidateRefreshTokenService {
 
         RefreshToken refreshToken = optionalRefreshToken.get();
 
-        if (!refreshTokenPolicy.isValid(optionalRefreshToken.get()) || !passwordEncoder.matches(rawRefreshToken, refreshToken.getTokenHash()))
+        if (
+            !refreshTokenPolicy.isValid(optionalRefreshToken.get()) ||
+            !passwordEncoder.matches(rawRefreshToken, refreshToken.getTokenHash())
+        ) {
+            refreshToken.setIsActive(false);
+            repository.save(refreshToken);
             throw new InvalidTokenException("Token inválido ou expirado.");
+        }
 
         return refreshToken;
     }
