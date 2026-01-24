@@ -22,8 +22,6 @@ public class CreateRefreshTokenService {
     }
 
     public String execute(CreateRefreshTokenCommand command) {
-        String id = UUID.randomUUID().toString();
-
         String rawRefreshToken = UUID.randomUUID().toString();
         String hashedToken = passwordEncoder.encode(rawRefreshToken);
 
@@ -32,9 +30,9 @@ public class CreateRefreshTokenService {
         token.setExpiresAt(generateExpireDate());
         token.setTokenHash(hashedToken);
 
-        repository.save(token);
+        RefreshToken savedRefreshToken = repository.save(token);
 
-        return id;
+        return savedRefreshToken.getId() + "." + rawRefreshToken;
     }
 
     private Instant generateExpireDate() {

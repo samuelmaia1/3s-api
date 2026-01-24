@@ -1,11 +1,8 @@
 package com._s.api.domain.user;
 
-import com._s.api.domain.exception.EntityNotFoundException;
 import com._s.api.domain.user.exception.EmailAlreadyInUseException;
 import com._s.api.domain.user.exception.IdentityAlreadyInUseException;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 public class UserPolicy {

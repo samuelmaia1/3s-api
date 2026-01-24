@@ -2,6 +2,7 @@ package com._s.api.presentation.exception;
 
 import com._s.api.infra.auth.GenerateTokenFailException;
 import com._s.api.infra.auth.InvalidCredentialsException;
+import com._s.api.infra.auth.InvalidTokenException;
 import com._s.api.presentation.response.ErrorResponse;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -21,7 +22,14 @@ public class AuthExceptionHandler {
     @ExceptionHandler(GenerateTokenFailException.class)
     public ResponseEntity<ErrorResponse> handleGenTokenFail(GenerateTokenFailException exception) {
         return ResponseEntity.internalServerError().body(
-                ErrorResponse.buildError(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao gerar token para autenticação")
+                ErrorResponse.buildError(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage())
+        );
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidToken(InvalidTokenException exception) {
+        return ResponseEntity.internalServerError().body(
+                ErrorResponse.buildError(HttpStatus.UNAUTHORIZED, exception.getMessage())
         );
     }
 }

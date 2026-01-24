@@ -26,6 +26,7 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.POST, "/api/user/create").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/user/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/auth/refresh").permitAll()
                     .requestMatchers("/error").permitAll()
                     .anyRequest().authenticated()
             ).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

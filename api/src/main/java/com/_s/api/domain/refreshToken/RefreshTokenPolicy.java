@@ -1,7 +1,10 @@
 package com._s.api.domain.refreshToken;
 
+import org.springframework.stereotype.Component;
+
 import java.time.Instant;
 
+@Component
 public class RefreshTokenPolicy {
 
     public boolean isValid(RefreshToken token) {

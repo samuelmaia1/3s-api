@@ -6,6 +6,8 @@ import com._s.api.infra.mappers.RefreshTokenMapper;
 import com._s.api.infra.repositories.RefreshTokenJpaRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class RefreshTokenRepositoryAdapter implements RefreshTokenRepository {
     private final RefreshTokenJpaRepository repository;
@@ -17,5 +19,10 @@ public class RefreshTokenRepositoryAdapter implements RefreshTokenRepository {
     @Override
     public RefreshToken save(RefreshToken token) {
         return RefreshTokenMapper.toDomain(repository.save(RefreshTokenMapper.toEntity(token)));
+    }
+
+    @Override
+    public Optional<RefreshToken> findById(String id) {
+        return repository.findById(id).map(RefreshTokenMapper::toDomain);
     }
 }
