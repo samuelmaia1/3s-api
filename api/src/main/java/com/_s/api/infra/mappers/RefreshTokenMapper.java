@@ -1,9 +1,7 @@
 package com._s.api.infra.mappers;
 
 import com._s.api.domain.refreshToken.RefreshToken;
-import com._s.api.domain.user.User;
 import com._s.api.infra.repositories.entity.RefreshTokenEntity;
-import com._s.api.infra.repositories.entity.UserEntity;
 
 public class RefreshTokenMapper {
     private RefreshTokenMapper() {}

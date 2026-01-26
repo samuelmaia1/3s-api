@@ -1,12 +1,19 @@
 package com._s.api.presentation.controllers;
 
+import com._s.api.domain.product.Product;
+import com._s.api.domain.product.service.CreateProductCommand;
+import com._s.api.domain.product.service.CreateProductService;
 import com._s.api.domain.user.User;
 import com._s.api.domain.user.service.CreateUserCommand;
 import com._s.api.domain.user.service.CreateUserService;
 import com._s.api.domain.user.service.GetUserService;
+import com._s.api.presentation.dto.CreateProductRequest;
 import com._s.api.presentation.dto.CreateUserRequest;
-import com._s.api.presentation.mapper.UserRequestMapper;
-import com._s.api.presentation.mapper.UserResponseMapper;
+import com._s.api.presentation.mapper.product.ProductRequestMapper;
+import com._s.api.presentation.mapper.product.ProductResponseMapper;
+import com._s.api.presentation.mapper.user.UserRequestMapper;
+import com._s.api.presentation.mapper.user.UserResponseMapper;
+import com._s.api.presentation.response.ProductResponse;
 import com._s.api.presentation.response.UserResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 @RestController
 @Tag(
         name = "Usuários",
@@ -30,10 +37,15 @@ public class UserController {
 
     private final CreateUserService createUserService;
     private final GetUserService getUserService;
+    private final CreateProductService createProductService;
 
-    public UserController(CreateUserService createUserService, GetUserService getUserService) {
+    public UserController(CreateUserService createUserService,
+                          GetUserService getUserService,
+                          CreateProductService createProductService)
+    {
         this.createUserService = createUserService;
         this.getUserService = getUserService;
+        this.createProductService = createProductService;
     }
 
     @Operation(
@@ -102,4 +114,51 @@ public class UserController {
                 .status(HttpStatus.OK)
                 .body(UserResponseMapper.toResponse(getUserService.executeById(id)));
     }
+
+    @Operation(
+            summary = "Criar produto para um usuário",
+            description = "Cria um novo produto associado a um usuário existente"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Produto criado com sucesso",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ProductResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Dados inválidos enviados na requisição",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuário não encontrado",
+                    content = @Content
+            )
+    })
+    @PostMapping("/{userId}/products")
+    public ResponseEntity<ProductResponse> createProduct(
+            @Parameter(
+                    description = "ID do usuário ao qual o produto será associado",
+                    example = "b3b9c2f1-9f5c-4e8d-a0f3-123456789abc"
+            )
+            @PathVariable String userId,
+
+            @Valid
+            @RequestBody
+            @Schema(description = "Dados necessários para criação do produto")
+            CreateProductRequest data
+    ) {
+        CreateProductCommand command = ProductRequestMapper.toCommand(data);
+
+        Product product = createProductService.execute(command, userId);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ProductResponseMapper.toResponse(product));
+    }
+
 }

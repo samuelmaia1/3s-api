@@ -1,4 +1,4 @@
-package com._s.api.presentation.mapper;
+package com._s.api.presentation.mapper.user;
 
 import com._s.api.domain.user.User;
 import com._s.api.presentation.response.UserResponse;
