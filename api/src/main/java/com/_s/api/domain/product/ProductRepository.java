@@ -1,12 +1,12 @@
 package com._s.api.domain.product;
 
-import com._s.api.domain.user.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository {
     Product save(Product product, String userId);
     Optional<Product> findById(String id);
-    List<Product> findAllByUserId(String userId);
+    Page<Product> findAllByUserId(String userId, Pageable pageable);
 }

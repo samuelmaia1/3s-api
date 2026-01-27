@@ -24,6 +24,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -169,18 +172,19 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/products")
-    public ResponseEntity<List<ProductResponse>> getProductsByUserId(
+    public ResponseEntity<Page<ProductResponse>> getProductsByUserId(
             @Parameter(
                     description = "ID do usuário ao qual o produto será associado",
                     example = "b3b9c2f1-9f5c-4e8d-a0f3-123456789abc"
             )
-            @PathVariable String userId
-    ) {
+            @PathVariable String userId,
+            Pageable pageable
+            ) {
         getUserService.executeById(userId);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(getProductsService.getByUserId(userId).stream().map(ProductResponseMapper::toResponse).toList());
+                .body(getProductsService.executeByUserId(userId, pageable).map(ProductResponseMapper::toResponse));
     }
 
 }

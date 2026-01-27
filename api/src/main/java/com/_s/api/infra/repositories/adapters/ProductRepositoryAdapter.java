@@ -2,13 +2,13 @@ package com._s.api.infra.repositories.adapters;
 
 import com._s.api.domain.product.Product;
 import com._s.api.domain.product.ProductRepository;
-import com._s.api.domain.user.User;
 import com._s.api.domain.user.exception.UserNotFoundException;
 import com._s.api.infra.mappers.ProductMapper;
-import com._s.api.infra.mappers.UserMapper;
 import com._s.api.infra.repositories.ProductJpaRepository;
 import com._s.api.infra.repositories.UserJpaRepository;
 import com._s.api.infra.repositories.entity.UserEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -41,11 +41,8 @@ public class ProductRepositoryAdapter implements ProductRepository {
     }
 
     @Override
-    public List<Product> findAllByUserId(String userId) {
+    public Page<Product> findAllByUserId(String userId, Pageable pageable) {
         return repository
-                .findAllByUserId(userId)
-                .stream()
-                .map(ProductMapper::toDomain)
-                .toList();
+                .findAllByUserId(userId, pageable).map(ProductMapper::toDomain);
     }
 }
