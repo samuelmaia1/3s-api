@@ -3,6 +3,7 @@ package com._s.api.presentation.controllers;
 import com._s.api.domain.product.Product;
 import com._s.api.domain.product.service.CreateProductCommand;
 import com._s.api.domain.product.service.CreateProductService;
+import com._s.api.domain.product.service.GetProductsService;
 import com._s.api.domain.user.User;
 import com._s.api.domain.user.service.CreateUserCommand;
 import com._s.api.domain.user.service.CreateUserService;
@@ -27,6 +28,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping("/api/users")
 @RestController
 @Tag(
@@ -38,14 +41,18 @@ public class UserController {
     private final CreateUserService createUserService;
     private final GetUserService getUserService;
     private final CreateProductService createProductService;
+    private final GetProductsService getProductsService;
 
     public UserController(CreateUserService createUserService,
                           GetUserService getUserService,
-                          CreateProductService createProductService)
+                          CreateProductService createProductService,
+                          GetProductsService getProductsService
+    )
     {
         this.createUserService = createUserService;
         this.getUserService = getUserService;
         this.createProductService = createProductService;
+        this.getProductsService = getProductsService;
     }
 
     @Operation(
@@ -159,6 +166,21 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ProductResponseMapper.toResponse(product));
+    }
+
+    @GetMapping("/{userId}/products")
+    public ResponseEntity<List<ProductResponse>> getProductsByUserId(
+            @Parameter(
+                    description = "ID do usuário ao qual o produto será associado",
+                    example = "b3b9c2f1-9f5c-4e8d-a0f3-123456789abc"
+            )
+            @PathVariable String userId
+    ) {
+        getUserService.executeById(userId);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(getProductsService.getByUserId(userId).stream().map(ProductResponseMapper::toResponse).toList());
     }
 
 }

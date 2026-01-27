@@ -11,6 +11,7 @@ import com._s.api.infra.repositories.UserJpaRepository;
 import com._s.api.infra.repositories.entity.UserEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -37,5 +38,14 @@ public class ProductRepositoryAdapter implements ProductRepository {
     @Override
     public Optional<Product> findById(String id) {
         return repository.findById(id).map(ProductMapper::toDomain);
+    }
+
+    @Override
+    public List<Product> findAllByUserId(String userId) {
+        return repository
+                .findAllByUserId(userId)
+                .stream()
+                .map(ProductMapper::toDomain)
+                .toList();
     }
 }

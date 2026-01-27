@@ -23,8 +23,8 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(HttpMethod.POST, "/api/user/create").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/user/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/users/create").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/auth/refresh").permitAll()
                     .requestMatchers("/error").permitAll()
