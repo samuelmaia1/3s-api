@@ -1,15 +1,14 @@
 package com._s.api.domain.user;
 
 import com._s.api.domain.user.service.CreateUserCommand;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com._s.api.domain.user.service.UpdateUserCommand;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User {
     private String id;
 
@@ -33,5 +32,38 @@ public class User {
         this.email = data.getEmail();
         this.cpf = data.getCpf();
         this.password = data.getPassword();
+    }
+
+    public void updateProfile(UpdateUserCommand command) {
+        if (command.getName() != null)
+            this.name = command.getName();
+
+        if (command.getLastName() != null)
+            this.lastName = command.getLastName();
+
+        if (command.getEmail() != null)
+            this.email = command.getEmail();
+
+        if (command.getCpf() != null)
+            this.cpf = command.getCpf();
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+
+    public static User mount(
+            String id,
+            String name,
+            String lastName,
+            String email,
+            String cpf,
+            String password,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
+    ) {
+        return new User(
+                id, name, lastName, email, cpf, password, createdAt, updatedAt
+        );
     }
 }

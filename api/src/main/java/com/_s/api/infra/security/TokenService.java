@@ -7,6 +7,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,8 @@ public class TokenService {
 
             return JWT.create()
                     .withIssuer(ISSUER)
-                    .withSubject(user.getEmail())
+                    .withSubject(user.getId())
+                    .withClaim("email", user.getEmail())
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
 
@@ -54,6 +56,16 @@ public class TokenService {
 
     public String getSubject(String token) {
         return decode(token).getSubject();
+    }
+
+    public String recoverToken(HttpServletRequest request) {
+        var authHeader = request.getHeader("Authorization");
+        if (authHeader == null) return null;
+        return authHeader.replace("Bearer ", "");
+    }
+
+    public String getEmail(String token) {
+        return decode(token).getClaim("email").asString();
     }
 
     private DecodedJWT decode(String token) {

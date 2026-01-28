@@ -12,6 +12,7 @@ public class UserResponse {
     private String lastName;
     private String email;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public UserResponse(User user) {
         this.id = user.getId();
@@ -19,5 +20,6 @@ public class UserResponse {
         this.lastName = user.getLastName();
         this.email = user.getEmail();
         this.createdAt = user.getCreatedAt();
+        this.updatedAt = user.getUpdatedAt();
     }
 }

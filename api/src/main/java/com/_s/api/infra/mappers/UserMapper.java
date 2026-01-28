@@ -16,17 +16,16 @@ public class UserMapper {
             return null;
         }
 
-        User user = new User();
-        user.setId(entity.getId());
-        user.setName(entity.getName());
-        user.setLastName(entity.getLastName());
-        user.setEmail(entity.getEmail());
-        user.setCpf(entity.getCpf());
-        user.setPassword(entity.getPassword());
-        user.setCreatedAt(entity.getCreatedAt());
-        user.setUpdatedAt(entity.getUpdatedAt());
-
-        return user;
+        return User.mount(
+            entity.getId(),
+            entity.getName(),
+            entity.getLastName(),
+            entity.getEmail(),
+            entity.getCpf(),
+            entity.getPassword(),
+            entity.getCreatedAt(),
+            entity.getUpdatedAt()
+        );
     }
 
     public static UserEntity toEntity(User user) {

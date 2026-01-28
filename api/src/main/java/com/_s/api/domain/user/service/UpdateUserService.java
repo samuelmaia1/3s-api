@@ -4,27 +4,32 @@ import com._s.api.domain.user.PasswordEncoder;
 import com._s.api.domain.user.User;
 import com._s.api.domain.user.UserPolicy;
 import com._s.api.domain.user.UserRepository;
+import com._s.api.domain.user.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
-public class CreateUserService {
+public class UpdateUserService {
     private final UserRepository repository;
     private final UserPolicy userPolicy;
     private final PasswordEncoder passwordEncoder;
 
-    public CreateUserService(UserRepository repository, UserPolicy userPolicy, PasswordEncoder passwordEncoder) {
+    public UpdateUserService(UserRepository repository, UserPolicy userPolicy, PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.userPolicy = userPolicy;
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User execute(CreateUserCommand command) {
-        userPolicy.validateEmailIsUnique(command.getEmail());
-        userPolicy.validateIdentityIsUnique(command.getCpf());
+    public User execute(UpdateUserCommand command) {
+        Optional<User> optionalUser = repository.findById(command.getId());
 
-        User user = new User(command);
+        if (optionalUser.isEmpty())
+            throw new UserNotFoundException("Usuário não encontrado.");
 
-        user.updatePassword(passwordEncoder.encode(command.getPassword()));
+        User user = optionalUser.get();
+
+        user.updateProfile(command);
 
         return repository.save(user);
     }
