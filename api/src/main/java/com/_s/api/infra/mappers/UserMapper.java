@@ -1,8 +1,11 @@
 package com._s.api.infra.mappers;
 
 import com._s.api.domain.user.User;
+import com._s.api.infra.repositories.entity.OrderEntity;
 import com._s.api.infra.repositories.entity.UserEntity;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 
 @Component
 public class UserMapper {
@@ -24,7 +27,8 @@ public class UserMapper {
             entity.getCpf(),
             entity.getPassword(),
             entity.getCreatedAt(),
-            entity.getUpdatedAt()
+            entity.getUpdatedAt(),
+            entity.getOrders().stream().map(OrderMapper::toDomain).toList()
         );
     }
 
@@ -42,6 +46,14 @@ public class UserMapper {
         entity.setPassword(user.getPassword());
         entity.setCreatedAt(user.getCreatedAt());
         entity.setUpdatedAt(user.getUpdatedAt());
+        entity.setOrders(new ArrayList<>());
+
+        user.getOrders().forEach(order -> {
+            OrderEntity orderEntity = OrderMapper.toEntity(order, entity);
+            orderEntity.setUser(entity);
+
+            entity.getOrders().add(orderEntity);
+        });
 
         return entity;
     }

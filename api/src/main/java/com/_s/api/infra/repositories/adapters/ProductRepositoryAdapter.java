@@ -45,4 +45,9 @@ public class ProductRepositoryAdapter implements ProductRepository {
         return repository
                 .findAllByUserId(userId, pageable).map(ProductMapper::toDomain);
     }
+
+    @Override
+    public List<Product> findAllByIdIn(List<String> ids) {
+        return repository.findAllByIdIn(ids).stream().map(ProductMapper::toDomain).toList();
+    }
 }

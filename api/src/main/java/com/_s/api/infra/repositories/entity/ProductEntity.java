@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "product")
 @AllArgsConstructor
@@ -22,7 +26,7 @@ public class ProductEntity {
     private String description;
 
     @Column(nullable = false)
-    private Double price;
+    private BigDecimal price;
 
     @Column(nullable = false)
     private Integer stock;
@@ -32,4 +36,7 @@ public class ProductEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
+
+    @OneToMany(mappedBy = "product")
+    private List<OrderItemEntity> orders = new ArrayList<>();
 }

@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class CreateProductRequest {
     @NotBlank
@@ -15,7 +17,7 @@ public class CreateProductRequest {
 
     @Positive
     @NotNull
-    private Double price;
+    private BigDecimal price;
 
     @Positive
     @NotNull

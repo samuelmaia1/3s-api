@@ -3,6 +3,8 @@ package com._s.api.presentation.response;
 import com._s.api.domain.product.Product;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class ProductResponse {
     private String id;
@@ -11,7 +13,7 @@ public class ProductResponse {
 
     private String description;
 
-    private Double price;
+    private BigDecimal price;
 
     private Integer stock;
 

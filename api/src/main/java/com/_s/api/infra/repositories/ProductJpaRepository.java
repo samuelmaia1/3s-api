@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface ProductJpaRepository extends JpaRepository<ProductEntity, String> {
     Page<ProductEntity> findAllByUserId(String userId, Pageable pageable);
+    List<ProductEntity> findAllByIdIn(List<String> ids);
 }
