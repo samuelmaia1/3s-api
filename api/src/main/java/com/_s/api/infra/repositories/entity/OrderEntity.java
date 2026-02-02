@@ -38,4 +38,8 @@ public class OrderEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "costumer_id", nullable = false)
+    private CostumerEntity costumer;
+
 }

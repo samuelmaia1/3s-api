@@ -28,7 +28,9 @@ public class UserMapper {
             entity.getPassword(),
             entity.getCreatedAt(),
             entity.getUpdatedAt(),
-            entity.getOrders().stream().map(OrderMapper::toDomain).toList()
+            entity.getOrders().stream().map(OrderMapper::toDomain).toList(),
+            AddressMapper.toDomain(entity.getAddress()),
+            entity.getCostumers().stream().map(CostumerMapper::toDomain).toList()
         );
     }
 
@@ -46,6 +48,7 @@ public class UserMapper {
         entity.setPassword(user.getPassword());
         entity.setCreatedAt(user.getCreatedAt());
         entity.setUpdatedAt(user.getUpdatedAt());
+        entity.setAddress(AddressMapper.toEntity(user.getAddress()));
         entity.setOrders(new ArrayList<>());
 
         user.getOrders().forEach(order -> {

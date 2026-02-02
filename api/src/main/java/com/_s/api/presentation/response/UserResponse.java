@@ -1,5 +1,6 @@
 package com._s.api.presentation.response;
 
+import com._s.api.domain.shared.Address;
 import com._s.api.domain.user.User;
 import lombok.Data;
 
@@ -13,6 +14,7 @@ public class UserResponse {
     private String email;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Address address;
 
     public UserResponse(User user) {
         this.id = user.getId();
@@ -21,5 +23,6 @@ public class UserResponse {
         this.email = user.getEmail();
         this.createdAt = user.getCreatedAt();
         this.updatedAt = user.getUpdatedAt();
+        this.address = user.getAddress();
     }
 }

@@ -2,6 +2,7 @@ package com._s.api.infra.repositories.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -11,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
-@EntityListeners(AuditingEntityListener.class)
+@Table(name = "costumers")
 @Data
-public class UserEntity {
-
+@Getter
+@EntityListeners(AuditingEntityListener.class)
+public class CostumerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -32,9 +33,6 @@ public class UserEntity {
     @Column(name = "cpf", unique = true, nullable = false)
     private String cpf;
 
-    @Column(name = "password", nullable = false)
-    private String password;
-
     @CreatedDate
     @Column(name = "createdAt")
     private LocalDateTime createdAt;
@@ -47,23 +45,13 @@ public class UserEntity {
     private AddressEntity address;
 
     @OneToMany(
-            mappedBy = "user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<ProductEntity> products = new ArrayList<>();
-
-    @OneToMany(
-            mappedBy = "user",
+            mappedBy = "costumer",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     private List<OrderEntity> orders = new ArrayList<>();
 
-    @OneToMany(
-            mappedBy = "user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<CostumerEntity> costumers = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 }

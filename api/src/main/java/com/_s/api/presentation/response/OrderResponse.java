@@ -19,13 +19,16 @@ public class OrderResponse {
 
     private BigDecimal total;
 
-    private List<OrderItem> items;
+    private List<OrderItemResponse> items;
+
+    private String costumerId;
 
     public OrderResponse(Order order) {
         this.id = order.getId();
         this.createdAt = order.getCreatedAt();
         this.status = order.getStatus();
         this.total = order.getTotal();
-        this.items = order.getItems();
+        this.costumerId = order.getCostumerId();
+        this.items = order.getItems().stream().map(OrderItemResponse::new).toList();
     }
 }

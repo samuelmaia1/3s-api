@@ -1,7 +1,9 @@
 package com._s.api.infra.mappers;
 
+import com._s.api.domain.costumer.Costumer;
 import com._s.api.domain.order.Order;
 import com._s.api.domain.orderItem.OrderItem;
+import com._s.api.infra.repositories.entity.CostumerEntity;
 import com._s.api.infra.repositories.entity.OrderEntity;
 import com._s.api.infra.repositories.entity.OrderItemEntity;
 import com._s.api.infra.repositories.entity.UserEntity;
@@ -23,11 +25,34 @@ public class OrderMapper {
         return Order.mount(
                 entity.getId(),
                 entity.getUser().getId(),
+                entity.getCostumer().getId(),
                 entity.getCreatedAt(),
                 entity.getStatus(),
                 entity.getTotal(),
                 items
         );
+    }
+
+    public static OrderEntity toEntity(Order order, UserEntity userEntity, CostumerEntity costumerEntity) {
+        if (order == null) return null;
+
+        OrderEntity entity = new OrderEntity();
+        entity.setId(order.getId());
+        entity.setStatus(order.getStatus());
+        entity.setTotal(order.getTotal());
+        entity.setUser(userEntity);
+        entity.setCostumer(costumerEntity);
+
+        List<OrderItemEntity> items = order.getItems()
+                .stream()
+                .map(item ->
+                        OrderItemMapper.toEntity(item, entity, ProductMapper.toEntity(item.getProduct(), null))
+                )
+                .toList();
+
+        entity.setItems(items);
+
+        return entity;
     }
 
     public static OrderEntity toEntity(Order order, UserEntity userEntity) {
@@ -45,6 +70,27 @@ public class OrderMapper {
                     OrderItemMapper.toEntity(item, entity, ProductMapper.toEntity(item.getProduct(), null))
             )
             .toList();
+
+        entity.setItems(items);
+
+        return entity;
+    }
+
+    public static OrderEntity toEntity(Order order, CostumerEntity costumer) {
+        if (order == null) return null;
+
+        OrderEntity entity = new OrderEntity();
+        entity.setId(order.getId());
+        entity.setStatus(order.getStatus());
+        entity.setTotal(order.getTotal());
+        entity.setCostumer(costumer);
+
+        List<OrderItemEntity> items = order.getItems()
+                .stream()
+                .map(item ->
+                        OrderItemMapper.toEntity(item, entity, ProductMapper.toEntity(item.getProduct(), null))
+                )
+                .toList();
 
         entity.setItems(items);
 

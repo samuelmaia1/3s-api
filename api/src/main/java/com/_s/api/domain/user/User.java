@@ -1,6 +1,8 @@
 package com._s.api.domain.user;
 
+import com._s.api.domain.costumer.Costumer;
 import com._s.api.domain.order.Order;
+import com._s.api.domain.shared.Address;
 import com._s.api.domain.user.service.CreateUserCommand;
 import com._s.api.domain.user.service.UpdateUserCommand;
 import lombok.*;
@@ -21,8 +23,10 @@ public class User {
     private String password;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Address address;
 
     private final List<Order> orders = new ArrayList<>();
+    private final List<Costumer> costumers = new ArrayList<>();
 
     private User(
             String id,
@@ -32,7 +36,8 @@ public class User {
             String cpf,
             String password,
             LocalDateTime createdAt,
-            LocalDateTime updatedAt
+            LocalDateTime updatedAt,
+            Address address
     ) {
         this.id = id;
         this.name = name;
@@ -42,6 +47,7 @@ public class User {
         this.password = password;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.address = address;
     }
 
     public User(CreateUserCommand data) {
@@ -50,6 +56,7 @@ public class User {
         this.email = data.getEmail();
         this.cpf = data.getCpf();
         this.password = data.getPassword();
+        this.address = data.getAddress();
     }
 
     public void updateProfile(UpdateUserCommand command) {
@@ -67,6 +74,8 @@ public class User {
         this.orders.add(order);
     }
 
+    public void addCostumer(Costumer costumer) { this.costumers.add(costumer); }
+
     public static User mount(
             String id,
             String name,
@@ -76,14 +85,20 @@ public class User {
             String password,
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
-            List<Order> orders
+            List<Order> orders,
+            Address address,
+            List<Costumer> costumers
     ) {
         User user = new User(
-                id, name, lastName, email, cpf, password, createdAt, updatedAt
+                id, name, lastName, email, cpf, password, createdAt, updatedAt, address
         );
 
         if (orders != null) {
             orders.forEach(user::addOrder);
+        }
+
+        if (costumers != null) {
+            costumers.forEach(user::addCostumer);
         }
 
         return user;

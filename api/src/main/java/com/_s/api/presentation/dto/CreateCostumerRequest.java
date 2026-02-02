@@ -1,12 +1,14 @@
 package com._s.api.presentation.dto;
 
-import com._s.api.infra.validation.Password;
-import jakarta.validation.constraints.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.br.CPF;
 
 @Data
-public class CreateUserRequest {
+public class CreateCostumerRequest {
     @NotBlank
     private String name;
 
@@ -21,10 +23,7 @@ public class CreateUserRequest {
     @CPF
     private String cpf;
 
-    @NotBlank
-    @Password
-    private String password;
-
     @NotNull
+    @Valid
     private AddressRequest address;
 }

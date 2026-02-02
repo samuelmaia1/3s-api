@@ -19,4 +19,6 @@ public class UpdateUserRequest {
     private String lastName;
 
     private String name;
+
+    private AddressRequest address;
 }
