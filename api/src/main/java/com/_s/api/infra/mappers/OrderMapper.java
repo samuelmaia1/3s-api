@@ -34,67 +34,54 @@ public class OrderMapper {
     }
 
     public static OrderEntity toEntity(Order order, UserEntity userEntity, CostumerEntity costumerEntity) {
-        if (order == null) return null;
+        OrderEntity entity = buildEntity(order);
 
-        OrderEntity entity = new OrderEntity();
-        entity.setId(order.getId());
-        entity.setStatus(order.getStatus());
-        entity.setTotal(order.getTotal());
         entity.setUser(userEntity);
         entity.setCostumer(costumerEntity);
 
-        List<OrderItemEntity> items = order.getItems()
-                .stream()
-                .map(item ->
-                        OrderItemMapper.toEntity(item, entity, ProductMapper.toEntity(item.getProduct(), null))
-                )
-                .toList();
-
-        entity.setItems(items);
+        entity.setItems(mapItems(order, entity));
 
         return entity;
     }
 
     public static OrderEntity toEntity(Order order, UserEntity userEntity) {
-        if (order == null) return null;
+        OrderEntity entity = buildEntity(order);
 
-        OrderEntity entity = new OrderEntity();
-        entity.setId(order.getId());
-        entity.setStatus(order.getStatus());
-        entity.setTotal(order.getTotal());
         entity.setUser(userEntity);
 
-        List<OrderItemEntity> items = order.getItems()
-            .stream()
-            .map(item ->
-                    OrderItemMapper.toEntity(item, entity, ProductMapper.toEntity(item.getProduct(), null))
-            )
-            .toList();
-
-        entity.setItems(items);
+        entity.setItems(mapItems(order, entity));
 
         return entity;
     }
 
     public static OrderEntity toEntity(Order order, CostumerEntity costumer) {
+        OrderEntity entity = buildEntity(order);
+
+        entity.setCostumer(costumer);
+
+        entity.setItems(mapItems(order, entity));
+
+        return entity;
+    }
+
+    private static OrderEntity buildEntity(Order order) {
         if (order == null) return null;
 
         OrderEntity entity = new OrderEntity();
         entity.setId(order.getId());
         entity.setStatus(order.getStatus());
         entity.setTotal(order.getTotal());
-        entity.setCostumer(costumer);
+        entity.setCreatedAt(order.getCreatedAt());
+        return entity;
+    }
 
-        List<OrderItemEntity> items = order.getItems()
+    private static List<OrderItemEntity> mapItems(Order order, OrderEntity entity) {
+        return order.getItems()
                 .stream()
                 .map(item ->
                         OrderItemMapper.toEntity(item, entity, ProductMapper.toEntity(item.getProduct(), null))
                 )
                 .toList();
-
-        entity.setItems(items);
-
-        return entity;
     }
 }
 

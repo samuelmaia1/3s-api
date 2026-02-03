@@ -37,6 +37,6 @@ public class CostumerRepositoryAdapter implements CostumerRepository {
 
     @Override
     public Optional<Costumer> findByCpf(String cpf) {
-        return Optional.empty();
+        return repository.findByCpf(cpf).map(CostumerMapper::toDomain);
     }
 }

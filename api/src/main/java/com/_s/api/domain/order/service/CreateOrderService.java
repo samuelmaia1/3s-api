@@ -1,6 +1,7 @@
 package com._s.api.domain.order.service;
 
 import com._s.api.domain.costumer.Costumer;
+import com._s.api.domain.costumer.CostumerNotFoundException;
 import com._s.api.domain.costumer.CostumerRepository;
 import com._s.api.domain.order.Order;
 import com._s.api.domain.order.OrderRepository;
@@ -57,11 +58,11 @@ public class CreateOrderService {
 
         Optional<Costumer> costumer = costumerRepository.findById(command.getRequest().getCostumerId());
 
-        System.out.println(user.isEmpty());
-        System.out.println(costumer.isEmpty());
+        if (user.isEmpty())
+            throw new UserNotFoundException("Usuário não encontrado");
 
-        if (user.isEmpty() || costumer.isEmpty())
-            throw new UserNotFoundException("Usuário ou cliente não encontrado");
+        if (costumer.isEmpty())
+            throw new CostumerNotFoundException("Cliente não encontrado");
 
         List<String> productIds = command.getRequest()
                 .getItems()

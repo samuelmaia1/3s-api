@@ -3,6 +3,8 @@ package com._s.api.infra.repositories.adapters;
 import com._s.api.domain.costumer.CostumerRepository;
 import com._s.api.domain.order.Order;
 import com._s.api.domain.order.OrderRepository;
+import com._s.api.domain.order.OrderStatus;
+import com._s.api.domain.order.exception.OrderNotFoundException;
 import com._s.api.infra.mappers.OrderMapper;
 import com._s.api.infra.mappers.ProductMapper;
 import com._s.api.infra.repositories.CostumerJpaRepository;
@@ -11,9 +13,12 @@ import com._s.api.infra.repositories.UserJpaRepository;
 import com._s.api.infra.repositories.entity.CostumerEntity;
 import com._s.api.infra.repositories.entity.OrderEntity;
 import com._s.api.infra.repositories.entity.UserEntity;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 public class OrderRepositoryAdapter implements OrderRepository {
@@ -39,5 +44,28 @@ public class OrderRepositoryAdapter implements OrderRepository {
 
     public Page<Order> findAllByUserId(String userId, Pageable pageable) {
         return repository.findAllByUserId(userId, pageable).map(OrderMapper::toDomain);
+    }
+
+    @Override
+    public Page<Order> findAllByCostumerId(String costumerId, Pageable pageable) {
+        return repository.findAllByCostumerId(costumerId, pageable).map(OrderMapper::toDomain);
+    }
+
+    @Override
+    public Optional<Order> findById(String id) {
+        return repository.findById(id).map(OrderMapper::toDomain);
+    }
+
+    @Override
+    @Transactional
+    public void updateStatus(String id, OrderStatus status) {
+        Optional<OrderEntity> optionalOrderEntity = repository.findById(id);
+
+        if (optionalOrderEntity.isEmpty())
+            throw new OrderNotFoundException("Pedido não encontrado.");
+
+        OrderEntity entity = optionalOrderEntity.get();
+
+        entity.setStatus(status);
     }
 }

@@ -18,4 +18,8 @@ public class GetOrderService {
     public Page<Order> executeByUserId(String id, Pageable pageable) {
         return repository.findAllByUserId(id, pageable);
     }
+
+    public Page<Order> executeByCostumerId(String id, Pageable pageable) {
+        return repository.findAllByCostumerId(id, pageable);
+    }
 }

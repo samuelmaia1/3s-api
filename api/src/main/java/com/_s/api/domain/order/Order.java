@@ -52,4 +52,8 @@ public class Order {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    public void updateStatus(OrderStatus status) {
+        this.status = status;
+    }
+
 }

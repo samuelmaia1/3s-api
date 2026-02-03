@@ -24,7 +24,9 @@ import com._s.api.presentation.response.ProductResponse;
 import com._s.api.presentation.response.UserResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -87,6 +89,8 @@ public class UserController {
     @PutMapping
     public ResponseEntity<UserResponse> updateUser(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
                                                    @Valid @RequestBody UpdateUserRequest data) {
+        validateUserExists(authenticatedUser.id());
+
         UpdateUserCommand command = UserRequestMapper.toUpdateCommand(data, authenticatedUser.id());
 
         User updatedUser = updateUserService.execute(command);
@@ -101,6 +105,8 @@ public class UserController {
             CreateProductRequest data,
             @AuthenticationPrincipal AuthenticatedUser authenticatedUser
     ) {
+        validateUserExists(authenticatedUser.id());
+
         CreateProductCommand command = ProductRequestMapper.toCommand(data);
 
         Product product = createProductService.execute(command, authenticatedUser.id());
@@ -114,9 +120,24 @@ public class UserController {
     @GetMapping("/products")
     public ResponseEntity<Page<ProductResponse>> getProductsByUserId(
             @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
-            Pageable pageable
+            Pageable pageable,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) String sort
     ) {
-        getUserService.executeById(authenticatedUser.id());
+        validateUserExists(authenticatedUser.id());
+
+        Pageable resolvedPageable;
+
+        if (page == null && size == null && sort == null) {
+            resolvedPageable = PageRequest.of(
+                    0,
+                    10,
+                    Sort.by("createdAt").descending()
+            );
+        } else {
+            resolvedPageable = pageable;
+        }
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -128,7 +149,7 @@ public class UserController {
             @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
             @Valid @RequestBody CreateOrderRequest request
             ) {
-        getUserService.executeById(authenticatedUser.id());
+        validateUserExists(authenticatedUser.id());
 
         CreateOrderCommand command = new CreateOrderCommand(request);
 
@@ -140,12 +161,31 @@ public class UserController {
     @GetMapping("/orders")
     public ResponseEntity<Page<OrderResponse>> getOrdersByUserId(
         @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
-        Pageable pageable
+        Pageable pageable,
+        @RequestParam(required = false) Integer page,
+        @RequestParam(required = false) Integer size,
+        @RequestParam(required = false) String sort
     ) {
-        getUserService.executeById(authenticatedUser.id());
+        validateUserExists(authenticatedUser.id());
+
+        Pageable resolvedPageable;
+
+        if (page == null && size == null && sort == null) {
+            resolvedPageable = PageRequest.of(
+                    0,
+                    10,
+                    Sort.by("createdAt").descending()
+            );
+        } else {
+            resolvedPageable = pageable;
+        }
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(getOrderService.executeByUserId(authenticatedUser.id(), pageable).map(OrderResponseMapper::toResponse));
+                .body(getOrderService.executeByUserId(authenticatedUser.id(), resolvedPageable).map(OrderResponseMapper::toResponse));
+    }
+
+    private void validateUserExists(String id) {
+        getUserService.executeById(id);
     }
 }

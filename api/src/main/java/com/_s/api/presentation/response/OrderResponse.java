@@ -23,12 +23,15 @@ public class OrderResponse {
 
     private String costumerId;
 
+    private String userId;
+
     public OrderResponse(Order order) {
         this.id = order.getId();
         this.createdAt = order.getCreatedAt();
         this.status = order.getStatus();
         this.total = order.getTotal();
         this.costumerId = order.getCostumerId();
+        this.userId = order.getUserId();
         this.items = order.getItems().stream().map(OrderItemResponse::new).toList();
     }
 }
