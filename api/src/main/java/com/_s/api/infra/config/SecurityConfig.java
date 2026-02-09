@@ -25,14 +25,14 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
+                    .requestMatchers(HttpMethod.HEAD, "/", "/api/health").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/health").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/users/create").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/auth/refresh").permitAll()
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                    .requestMatchers("/swagger-ui/**").permitAll()
-                    .requestMatchers("/v3/api-docs/**").permitAll()
-                    .requestMatchers("/api/health").permitAll()
+                    .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/error").permitAll()
                     .requestMatchers("/error").permitAll()
                     .anyRequest().authenticated()
             ).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
