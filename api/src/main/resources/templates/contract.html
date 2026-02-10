@@ -1,78 +1,310 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
 <head>
+
     <meta charset="UTF-8"/>
+
+    <title>Contrato aluguel e prestação de serviços</title>
+
+
+
     <style>
+
         body {
+
             font-family: Arial, sans-serif;
+
             font-size: 12px;
+
             line-height: 1.6;
+
         }
+
+
 
         h1, h2 {
+
             text-align: center;
+
         }
 
-        .clause {
-            margin-top: 20px;
+
+
+        .section {
+
+            margin-top: 24px;
+
         }
 
-        .items-table {
+
+
+        table {
+
             width: 100%;
+
             border-collapse: collapse;
-            margin-top: 20px;
+
+            margin-top: 12px;
+
         }
 
-        .items-table th, .items-table td {
+
+
+        th, td {
+
             border: 1px solid #000;
+
             padding: 6px;
+
         }
+
+
+
+        th {
+
+            background-color: #f2f2f2;
+
+        }
+
+
+
+        .right {
+
+            text-align: right;
+
+        }
+
     </style>
+
 </head>
+
 <body>
-<h1>CONTRATO DE PRESTAÇÃO DE SERVIÇOS</h1>
 
-<p>
-    Pedido nº <span th:text="${order.id}"></span><br/>
-    Data: <span th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy')}"></span>
+<h1>CONTRATO DE COMPRA E VENDA</h1>
+
+<p style="text-align: center; margin-top: -10px;">
+    Código do contrato:
+    <strong th:text="${code}">0000</strong>
 </p>
 
-<p>
-    Cliente: <span th:text="${order.costumer.name}"></span><br/>
-    Valor total: R$ <span th:text="${order.total}"></span>
-</p>
-<h2>Itens do Pedido</h2>
+<div class="section">
 
-<table class="items-table">
-    <thead>
-    <tr>
-        <th>Produto</th>
-        <th>Qtd</th>
-        <th>Valor Unit.</th>
-        <th>Subtotal</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="item : ${order.items}">
-        <td th:text="${item.product.name}"></td>
-        <td th:text="${item.quantity}"></td>
-        <td th:text="${item.unitValue}"></td>
-        <td th:text="${item.subTotal}"></td>
-    </tr>
-    </tbody>
-</table>
-<div th:each="clause : ${clauses}" class="clause">
-    <h2 th:text="${clause.title}"></h2>
+    <p>
 
-    <p th:text="${clause.mainText}"></p>
+        Pelo presente instrumento particular, de um lado
 
-    <p th:each="paragraph : ${clause.paragraphs}"
-       th:text="${paragraph}">
+        <strong th:text="${costumer.name + ' ' + costumer.lastName}">
+
+            Nome do Cliente
+
+        </strong>,
+
+        inscrito no CPF sob o nº
+
+        <strong th:text="${costumer.cpf}">
+
+            CPF
+
+        </strong>,
+
+        endereço eletrônico
+
+        <strong th:text="${costumer.email}">
+
+            email@exemplo.com
+
+        </strong>,
+
+        doravante denominado <strong>CONTRATANTE</strong>.
+
     </p>
+
 </div>
-<br/><br/>
-<p>__________________________________________</p>
-<p>Assinatura do Cliente</p>
+
+
+
+<!-- IDENTIFICAÇÃO DO PEDIDO -->
+
+<div class="section">
+
+    <p>
+
+        Pedido nº
+
+        <strong th:text="${order.id}">ID</strong>,
+
+        realizado em
+
+        <strong th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}">
+
+            data
+
+        </strong>.
+
+    </p>
+
+</div>
+
+
+
+<!-- ITENS DO PEDIDO -->
+
+<div class="section">
+
+    <h2>Itens do Pedido</h2>
+
+
+
+    <table>
+
+        <thead>
+
+        <tr>
+
+            <th>Item</th>
+
+            <th>Quantidade</th>
+
+            <th>Valor Unitário (R$)</th>
+
+            <th>Subtotal (R$)</th>
+
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        <tr th:each="item : ${order.items}">
+
+            <td th:text="${item.product.getName()}">
+
+                Produto
+
+            </td>
+
+            <td th:text="${item.quantity}">
+
+                1
+
+            </td>
+
+            <td th:text="${#numbers.formatDecimal(item.unitValue, 1, 'POINT', 2, 'COMMA')}">
+
+                0,00
+
+            </td>
+
+            <td th:text="${#numbers.formatDecimal(item.subTotal, 1, 'POINT', 2, 'COMMA')}">
+
+                0,00
+
+            </td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+
+
+    <p class="right">
+
+        <strong>
+
+            Total: R$
+
+            <span th:text="${#numbers.formatDecimal(order.total, 1, 'POINT', 2, 'COMMA')}">
+
+0,00
+
+</span>
+
+        </strong>
+
+    </p>
+
+</div>
+
+
+
+<!-- CLÁUSULAS -->
+
+<div class="section">
+
+    <h2>Cláusulas</h2>
+
+
+
+    <div th:each="clause, stat : ${clauses}">
+
+        <p>
+
+            <strong th:text="${'Cláusula ' + stat.count + ' — ' + clause.title}">
+
+                Cláusula
+
+            </strong>
+
+        </p>
+
+
+
+        <p th:text="${clause.mainText}">
+
+            Texto principal da cláusula.
+
+        </p>
+
+
+
+        <p th:each="paragraph : ${clause.paragraphs}"
+
+           th:text="${paragraph}">
+
+            Parágrafo adicional.
+
+        </p>
+
+    </div>
+
+</div>
+
+
+
+<!-- ENCERRAMENTO -->
+
+<div class="section">
+
+    <p>
+
+        E por estarem assim justas e acordadas, as partes firmam o presente contrato,
+
+        para que produza seus efeitos legais.
+
+    </p>
+
+
+
+    <p>
+
+        Data da assinatura:
+
+        <strong th:text="${#temporals.format(#temporals.createNow(), 'dd/MM/yyyy')}">
+
+            data
+
+        </strong>
+
+    </p>
+
+</div>
+
+
 
 </body>
+
 </html>

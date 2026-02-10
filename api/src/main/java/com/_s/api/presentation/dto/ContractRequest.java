@@ -1,13 +1,21 @@
 package com._s.api.presentation.dto;
 
-import com._s.api.domain.order.Order;
-import com._s.api.infra.repositories.entity.OrderEntity;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
 public class ContractRequest {
-    private OrderEntity order;
+    @NotBlank
+    private String orderId;
+
+    @NotNull
+    @Valid
     private List<ClauseRequest> clauses;
+
+    @NotBlank
+    private String costumerId;
 }
