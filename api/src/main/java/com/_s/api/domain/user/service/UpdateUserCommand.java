@@ -15,4 +15,6 @@ public class UpdateUserCommand {
     private String email;
     private String cpf;
     private Address address;
+    private String socialName;
+    private String instagram;
 }

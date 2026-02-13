@@ -15,4 +15,6 @@ public class CreateUserCommand {
     private String cpf;
     private String password;
     private Address address;
+    private String socialName;
+    private String instagram;
 }

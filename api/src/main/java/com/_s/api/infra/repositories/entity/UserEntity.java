@@ -1,7 +1,12 @@
 package com._s.api.infra.repositories.entity;
 
+import com._s.api.domain.valueobject.Cpf;
+import com._s.api.infra.persistence.CpfConverter;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -13,7 +18,9 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class UserEntity {
 
     @Id
@@ -29,8 +36,9 @@ public class UserEntity {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
+    @Convert(converter = CpfConverter.class)
     @Column(name = "cpf", unique = true, nullable = false)
-    private String cpf;
+    private Cpf cpf;
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -42,6 +50,12 @@ public class UserEntity {
     @LastModifiedDate
     @Column(name = "updatedAt")
     private LocalDateTime updatedAt;
+
+    @Column(name = "instagram")
+    private String instagram;
+
+    @Column(name = "socialName")
+    private String socialName;
 
     @Embedded
     private AddressEntity address;

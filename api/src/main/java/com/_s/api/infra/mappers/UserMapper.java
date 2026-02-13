@@ -30,7 +30,9 @@ public class UserMapper {
             entity.getUpdatedAt(),
             entity.getOrders().stream().map(OrderMapper::toDomain).toList(),
             AddressMapper.toDomain(entity.getAddress()),
-            entity.getCostumers().stream().map(CostumerMapper::toDomain).toList()
+            entity.getCostumers().stream().map(CostumerMapper::toDomain).toList(),
+            entity.getSocialName(),
+            entity.getInstagram()
         );
     }
 
@@ -49,6 +51,8 @@ public class UserMapper {
         entity.setCreatedAt(user.getCreatedAt());
         entity.setUpdatedAt(user.getUpdatedAt());
         entity.setAddress(AddressMapper.toEntity(user.getAddress()));
+        entity.setSocialName(user.getSocialName());
+        entity.setInstagram(user.getInstagram());
         entity.setOrders(new ArrayList<>());
 
         user.getOrders().forEach(order -> {

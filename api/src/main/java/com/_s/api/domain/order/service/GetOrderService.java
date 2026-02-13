@@ -3,6 +3,7 @@ package com._s.api.domain.order.service;
 import com._s.api.domain.exception.EntityNotFoundException;
 import com._s.api.domain.order.Order;
 import com._s.api.domain.order.OrderRepository;
+import com._s.api.domain.order.exception.OrderNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,9 +28,10 @@ public class GetOrderService {
     }
 
     public Order execute(String id) {
+        System.out.println(id);
         Optional<Order> optionalOrder = repository.findById(id);
 
-        if (optionalOrder.isEmpty()) throw new EntityNotFoundException("Pedido não encontrado.");
+        if (optionalOrder.isEmpty()) throw new OrderNotFoundException("Pedido não encontrado.");
 
         return optionalOrder.get();
     }

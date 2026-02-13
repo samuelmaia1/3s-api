@@ -1,310 +1,334 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
-
 <head>
-
     <meta charset="UTF-8"/>
-
-    <title>Contrato aluguel e prestação de serviços</title>
-
-
+    <title>Contrato</title>
 
     <style>
+        @page {
+            size: A4;
+            margin: 20mm 18mm;
+        }
 
         body {
-
             font-family: Arial, sans-serif;
+            font-size: 12.5px;
+            margin: 0;
+        }
 
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .left-block {
+            width: 70%;
+            vertical-align: top;
+        }
+
+        .logo-cell {
+            width: 120px;
+            vertical-align: top;
+        }
+
+        .logo-cell img {
+            width: 110px;
+        }
+
+        .company-cell {
+            vertical-align: top;
+            padding-left: 10px;
+        }
+
+        .contact-block {
+            width: 30%;
+            text-align: right;
+            vertical-align: top;
             font-size: 12px;
-
-            line-height: 1.6;
-
         }
 
-
-
-        h1, h2 {
-
-            text-align: center;
-
+        .logo img {
+            width: 110px;
         }
 
+        .contact-block {
+            text-align: right;
+            font-size: 12px;
+        }
 
+        .gray-bar {
+            background: #d9d9d9;
+            padding: 6px 8px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
 
         .section {
-
-            margin-top: 24px;
-
+            margin-top: 8px;
         }
 
-
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+        }
 
         table {
-
             width: 100%;
-
             border-collapse: collapse;
-
-            margin-top: 12px;
-
+            margin-top: 5px;
         }
-
-
-
-        th, td {
-
-            border: 1px solid #000;
-
-            padding: 6px;
-
-        }
-
-
 
         th {
-
-            background-color: #f2f2f2;
-
+            text-align: left;
+            font-size: 12px;
+            padding: 4px 2px;
+            color: #555;
         }
 
+        td {
+            padding: 6px 2px;
+            vertical-align: top;
+        }
 
-
-        .right {
-
+        .text-right {
             text-align: right;
-
         }
 
-    </style>
+        .summary {
+            width: 280px;
+            margin-left: auto;
+            margin-top: 10px;
+        }
 
+        .summary td {
+            padding: 3px 0;
+        }
+
+        .total {
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .clause-title {
+            font-weight: bold;
+            margin-top: 18px;
+        }
+
+        .clause-item {
+            margin-left: 10px;
+            margin-top: 4px;
+            text-align: justify;
+        }
+
+        .signature-area {
+            margin-top: 60px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .signature-box {
+            width: 45%;
+            text-align: center;
+        }
+
+        .signature-line {
+            border-top: 1px solid #000;
+            margin-top: 60px;
+            padding-top: 4px;
+        }
+    </style>
 </head>
 
 <body>
 
-<h1>CONTRATO DE COMPRA E VENDA</h1>
-
-<p style="text-align: center; margin-top: -10px;">
-    Código do contrato:
-    <strong th:text="${code}">0000</strong>
-</p>
-
-<div class="section">
-
-    <p>
-
-        Pelo presente instrumento particular, de um lado
-
-        <strong th:text="${costumer.name + ' ' + costumer.lastName}">
-
-            Nome do Cliente
-
-        </strong>,
-
-        inscrito no CPF sob o nº
-
-        <strong th:text="${costumer.cpf}">
-
-            CPF
-
-        </strong>,
-
-        endereço eletrônico
-
-        <strong th:text="${costumer.email}">
-
-            email@exemplo.com
-
-        </strong>,
-
-        doravante denominado <strong>CONTRATANTE</strong>.
-
-    </p>
-
-</div>
-
-
-
-<!-- IDENTIFICAÇÃO DO PEDIDO -->
-
-<div class="section">
-
-    <p>
-
-        Pedido nº
-
-        <strong th:text="${order.id}">ID</strong>,
-
-        realizado em
-
-        <strong th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}">
-
-            data
-
-        </strong>.
-
-    </p>
-
-</div>
-
-
-
-<!-- ITENS DO PEDIDO -->
-
-<div class="section">
-
-    <h2>Itens do Pedido</h2>
-
-
-
-    <table>
-
-        <thead>
-
+<div class="header">
+    <table class="header-table">
         <tr>
+            <td class="left-block">
+                <table>
+                    <tr>
+                        <td class="logo-cell">
+                            <img th:src="${logoUrl}" />
+                        </td>
+                        <td class="company-cell">
+                            <strong>3S Letreiros</strong><br />
+                            50.422.509 SILAS DANIEL MAIA DE OLIVEIRA<br />
+                            CNPJ: 50.422.509/0001-09<br />
+                            Rua Cosme Damião, 440<br />
+                            Universitário, Belo Horizonte-MG<br />
+                            CEP 31255-320
+                        </td>
+                    </tr>
+                </table>
+            </td>
 
-            <th>Item</th>
-
-            <th>Quantidade</th>
-
-            <th>Valor Unitário (R$)</th>
-
-            <th>Subtotal (R$)</th>
-
+            <td class="contact-block">
+                <span th:text="${#temporals.format(order.createdAt,'dd/MM/yyyy')}"></span><br /><br />
+                silasmaia.negocios@gmail.com<br />
+                +55 (31) 8542-0844<br />
+                31985420844<br />
+                @3s.letreiros
+            </td>
         </tr>
-
-        </thead>
-
-        <tbody>
-
-        <tr th:each="item : ${order.items}">
-
-            <td th:text="${item.product.getName()}">
-
-                Produto
-
-            </td>
-
-            <td th:text="${item.quantity}">
-
-                1
-
-            </td>
-
-            <td th:text="${#numbers.formatDecimal(item.unitValue, 1, 'POINT', 2, 'COMMA')}">
-
-                0,00
-
-            </td>
-
-            <td th:text="${#numbers.formatDecimal(item.subTotal, 1, 'POINT', 2, 'COMMA')}">
-
-                0,00
-
-            </td>
-
-        </tr>
-
-        </tbody>
-
     </table>
-
-
-
-    <p class="right">
-
-        <strong>
-
-            Total: R$
-
-            <span th:text="${#numbers.formatDecimal(order.total, 1, 'POINT', 2, 'COMMA')}">
-
-0,00
-
-</span>
-
-        </strong>
-
-    </p>
-
 </div>
 
 
-
-<!-- CLÁUSULAS -->
+<div class="gray-bar">
+    Contrato <span th:text="${code}"></span>
+</div>
 
 <div class="section">
+    <strong>Cliente:</strong>
+    <span th:text="${costumer.name + ' ' + costumer.lastName}"></span><br />
 
-    <h2>Cláusulas</h2>
+    CPF:
+    <span th:text="${costumer.cpf}"></span><br />
 
+    <span th:text="${costumer.address.street}"></span>,
+    <span th:text="${costumer.address.number}"></span><br />
 
+    <span th:text="${costumer.address.city}"></span> -
+    <br />
 
-    <div th:each="clause, stat : ${clauses}">
+    CEP <span th:text="${costumer.address.cep}"></span>
+</div>
 
-        <p>
+<div class="gray-bar">Informações básicas</div>
 
-            <strong th:text="${'Cláusula ' + stat.count + ' — ' + clause.title}">
-
-                Cláusula
-
-            </strong>
-
-        </p>
-
-
-
-        <p th:text="${clause.mainText}">
-
-            Texto principal da cláusula.
-
-        </p>
-
-
-
-        <p th:each="paragraph : ${clause.paragraphs}"
-
-           th:text="${paragraph}">
-
-            Parágrafo adicional.
-
-        </p>
-
+<div class="section flex-between">
+    <div>
+        <strong>Data da entrega</strong><br />
+        <span th:text="${deliveryDate}"></span>
     </div>
 
+    <div>
+        <strong>Local do evento</strong><br />
+        <span th:text="${eventLocation}"></span>
+    </div>
 </div>
 
+<div class="gray-bar">Produtos</div>
 
+<table>
+    <thead>
+    <tr>
+        <th>Descrição</th>
+        <th class="text-right">Preço unitário</th>
+        <th class="text-right">Qtd.</th>
+        <th class="text-right">Preço</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${order.items}">
+        <td>
+            <strong th:text="${item.product.name}"></strong><br />
+            <span th:text="${item.product.description}"></span>
+        </td>
 
-<!-- ENCERRAMENTO -->
+        <td class="text-right"
+            th:text="${#numbers.formatDecimal(item.unitValue,1,'POINT',2,'COMMA')}">
+        </td>
+
+        <td class="text-right"
+            th:text="${item.quantity}">
+        </td>
+
+        <td class="text-right"
+            th:text="${#numbers.formatDecimal(item.subTotal,1,'POINT',2,'COMMA')}">
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="summary">
+    <table>
+        <tr>
+            <td>Produtos</td>
+            <td class="text-right"
+                th:text="${#numbers.formatDecimal(order.total,1,'POINT',2,'COMMA')}">
+            </td>
+        </tr>
+
+        <tr>
+            <td><strong>Subtotal</strong></td>
+            <td class="text-right"
+                th:text="${#numbers.formatDecimal(order.total,1,'POINT',2,'COMMA')}">
+            </td>
+        </tr>
+
+        <tr>
+            <td>Desconto sobre produtos</td>
+            <td class="text-right"
+                th:text="${discount}">
+            </td>
+        </tr>
+
+        <tr class="total">
+            <td>Total</td>
+            <td class="text-right"
+                th:text="${finalTotal}">
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="gray-bar">Pagamento</div>
 
 <div class="section">
+    <strong>Meios de pagamento</strong><br />
+    Transferência bancária, dinheiro, cartão de crédito, cartão de débito ou pix.
+    <br /><br />
 
-    <p>
+    <strong>PIX</strong><br />
+    50.422.509/0001-09
+    <br /><br />
 
-        E por estarem assim justas e acordadas, as partes firmam o presente contrato,
+    <strong>Dados bancários</strong><br />
+    Banco: Nubank<br />
+    Agência: 0001<br />
+    Conta: 508139842-2<br />
+    Tipo de conta: Corrente<br />
+    Titular da conta (CPF/CNPJ): 50.422.509/0001-09
+    <br /><br />
 
-        para que produza seus efeitos legais.
-
-    </p>
-
-
-
-    <p>
-
-        Data da assinatura:
-
-        <strong th:text="${#temporals.format(#temporals.createNow(), 'dd/MM/yyyy')}">
-
-            data
-
-        </strong>
-
-    </p>
-
+    <strong>Condições de pagamento</strong><br />
+    À vista.
 </div>
 
+<div class="gray-bar">Cláusulas contratuais</div>
 
+<div class="section">
+    <div th:each="clause, cStat : ${clauses}">
+        <div class="clause-title"
+             th:text="${clause.title}">
+        </div>
+
+        <div th:each="paragraph, pStat : ${clause.paragraphs}"
+             class="clause-item"
+             th:text="${cStat.count + '.' + pStat.count + '. ' + paragraph}">
+        </div>
+    </div>
+</div>
+
+<div class="section" style="margin-top:30px;">
+    Belo Horizonte,
+    <span th:text="${#temporals.format(order.createdAt,'dd/MM/yyyy')}"></span>
+</div>
+
+<div class="signature-area">
+    <div class="signature-box">
+        <div class="signature-line"></div>
+        3S Letreiros<br />
+        <strong th:text="${user.name + ' ' + user.lastName}">Silas Daniel Maia De Oliveira</strong>
+    </div>
+
+    <div class="signature-box">
+        <div class="signature-line"></div>
+        <strong th:text="${costumer.name + ' ' + costumer.lastName}"></strong><br />
+        CPF <span th:text="${costumer.cpf}"></span>
+    </div>
+</div>
 
 </body>
-
 </html>

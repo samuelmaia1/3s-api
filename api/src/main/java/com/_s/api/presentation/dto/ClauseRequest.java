@@ -3,6 +3,8 @@ package com._s.api.presentation.dto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class ClauseRequest {
     @NotBlank
@@ -11,5 +13,5 @@ public class ClauseRequest {
     @NotBlank
     private String mainText;
 
-    private String[] paragraphs;
+    private List<String> paragraphs;
 }

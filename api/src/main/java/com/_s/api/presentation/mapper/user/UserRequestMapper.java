@@ -15,7 +15,9 @@ public class UserRequestMapper {
                 request.getEmail(),
                 request.getCpf(),
                 request.getPassword(),
-                AddressRequestMapper.toDomain(request.getAddress())
+                AddressRequestMapper.toDomain(request.getAddress()),
+                request.getSocialName(),
+                request.getInstagram()
         );
     }
 
@@ -26,7 +28,9 @@ public class UserRequestMapper {
                 request.getLastName(),
                 request.getEmail(),
                 request.getCpf(),
-                AddressRequestMapper.toDomain(request.getAddress())
+                AddressRequestMapper.toDomain(request.getAddress()),
+                request.getSocialName(),
+                request.getInstagram()
         );
     }
 }

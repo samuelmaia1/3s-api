@@ -14,7 +14,7 @@ public class ContractRequest {
 
     @NotNull
     @Valid
-    private List<ClauseRequest> clauses;
+    private List<String> clausesIds;
 
     @NotBlank
     private String costumerId;

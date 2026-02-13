@@ -5,6 +5,7 @@ import com._s.api.domain.order.Order;
 import com._s.api.domain.shared.Address;
 import com._s.api.domain.user.service.CreateUserCommand;
 import com._s.api.domain.user.service.UpdateUserCommand;
+import com._s.api.domain.valueobject.Cpf;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -19,11 +20,13 @@ public class User {
     private String name;
     private String lastName;
     private String email;
-    private String cpf;
+    private Cpf cpf;
     private String password;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Address address;
+    private String socialName;
+    private String instagram;
 
     private final List<Order> orders = new ArrayList<>();
     private final List<Costumer> costumers = new ArrayList<>();
@@ -33,11 +36,13 @@ public class User {
             String name,
             String lastName,
             String email,
-            String cpf,
+            Cpf cpf,
             String password,
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
-            Address address
+            Address address,
+            String socialName,
+            String instagram
     ) {
         this.id = id;
         this.name = name;
@@ -48,22 +53,29 @@ public class User {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.address = address;
+        this.socialName = socialName;
+        this.instagram = instagram;
     }
+
 
     public User(CreateUserCommand data) {
         this.name = data.getName();
         this.lastName = data.getLastName();
         this.email = data.getEmail();
-        this.cpf = data.getCpf();
+        this.cpf = new Cpf(data.getCpf());
         this.password = data.getPassword();
         this.address = data.getAddress();
+        this.socialName = data.getSocialName();
+        this.instagram = data.getInstagram();
     }
 
     public void updateProfile(UpdateUserCommand command) {
         if (command.getName() != null) this.name = command.getName();
         if (command.getLastName() != null) this.lastName = command.getLastName();
         if (command.getEmail() != null) this.email = command.getEmail();
-        if (command.getCpf() != null) this.cpf = command.getCpf();
+        if (command.getCpf() != null) this.cpf = new Cpf(command.getCpf());
+        if (command.getSocialName() != null) this.socialName = command.getSocialName();
+        if (command.getInstagram() != null) this.instagram = command.getInstagram();
     }
 
     public void updatePassword(String password) {
@@ -81,16 +93,18 @@ public class User {
             String name,
             String lastName,
             String email,
-            String cpf,
+            Cpf cpf,
             String password,
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
             List<Order> orders,
             Address address,
-            List<Costumer> costumers
+            List<Costumer> costumers,
+            String socialName,
+            String instagram
     ) {
         User user = new User(
-                id, name, lastName, email, cpf, password, createdAt, updatedAt, address
+                id, name, lastName, email, cpf, password, createdAt, updatedAt, address, socialName, instagram
         );
 
         if (orders != null) {

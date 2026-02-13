@@ -15,6 +15,8 @@ public class UserResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Address address;
+    private String socialName;
+    private String instagram;
 
     public UserResponse(User user) {
         this.id = user.getId();
@@ -24,5 +26,7 @@ public class UserResponse {
         this.createdAt = user.getCreatedAt();
         this.updatedAt = user.getUpdatedAt();
         this.address = user.getAddress();
+        this.socialName = user.getSocialName();
+        this.instagram = user.getInstagram();
     }
 }

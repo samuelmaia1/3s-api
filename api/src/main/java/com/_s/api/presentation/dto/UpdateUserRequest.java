@@ -21,4 +21,8 @@ public class UpdateUserRequest {
     private String name;
 
     private AddressRequest address;
+
+    private String socialName;
+
+    private String instagram;
 }

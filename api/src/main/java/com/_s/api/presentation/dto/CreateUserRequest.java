@@ -27,4 +27,10 @@ public class CreateUserRequest {
 
     @NotNull
     private AddressRequest address;
+
+    @NotBlank
+    private String socialName;
+
+    @NotBlank
+    private String instagram;
 }
