@@ -2,27 +2,24 @@ package com._s.api.presentation.controllers;
 
 import com._s.api.domain.contract.service.CreateContractCommand;
 import com._s.api.domain.contract.service.CreateContractService;
+import com._s.api.domain.contract.service.UpdateContractService;
 import com._s.api.infra.security.AuthenticatedUser;
 import com._s.api.presentation.dto.ContractRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/contracts")
 public class ContractController {
 
     private final CreateContractService createContractService;
-
-    public ContractController(CreateContractService createContractService) {
-        this.createContractService = createContractService;
-    }
+    private final UpdateContractService updateContractService;
 
     @PostMapping(value = "/generate", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> generateContract(
@@ -35,5 +32,11 @@ public class ContractController {
             .status(HttpStatus.CREATED)
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=contrato.pdf")
             .body(createContractService.execute(command, user.id()));
+    }
+
+    @PutMapping("/{id}/sign")
+    private ResponseEntity<Void> signContract(@PathVariable String id) {
+        updateContractService.signContract(id);
+        return ResponseEntity.ok().build();
     }
 }

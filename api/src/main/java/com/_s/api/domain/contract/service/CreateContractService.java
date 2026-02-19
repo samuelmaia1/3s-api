@@ -38,19 +38,18 @@ public class CreateContractService {
         Order order = getOrderService.execute(data.getOrderId());
         Costumer costumer = getCostumerService.execute(data.getCostumerId());
         User user = getUserService.executeById(userId);
-        System.out.println("cpf: " + user.getCpf().toString());
 
         List<Clause> clauses = data
-                .getClausesIds()
-                .stream()
-                .map(id -> clauseRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cláusula não encontrada")))
-                .toList();
+            .getClausesIds()
+            .stream()
+            .map(id -> clauseRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cláusula não encontrada")))
+            .toList();
         ;
 
         Contract contract = new Contract(
-                costumer.getId(),
-                order.getId(),
-                clauses
+            costumer.getId(),
+            order.getId(),
+            clauses
         );
 
         Contract saveContract = contractRepository.save(contract);
@@ -59,10 +58,10 @@ public class CreateContractService {
     }
 
     private byte[] generatePdf(
-            Contract contract,
-            Order order,
-            Costumer costumer,
-            User user
+        Contract contract,
+        Order order,
+        Costumer costumer,
+        User user
     ) {
 
         Context context = new Context();

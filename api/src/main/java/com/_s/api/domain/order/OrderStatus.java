@@ -3,7 +3,7 @@ package com._s.api.domain.order;
 public enum OrderStatus {
     REALIZADO,
     AGUARDANDO_ASSINATURA_CLIENTE,
-    ASSINADO,
+    CONTRATO_ASSINADO,
     AGUARDANDO_PAGAMENTO,
     PAGAMENTO_APROVADO,
     AGUARDANDO_ENTREGA,
