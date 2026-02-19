@@ -2,11 +2,15 @@ package com._s.api.infra.repositories.adapters;
 
 import com._s.api.domain.product.Product;
 import com._s.api.domain.product.ProductRepository;
+import com._s.api.domain.product.exception.InsufficientStockException;
+import com._s.api.domain.product.exception.ProductNotFoundException;
 import com._s.api.domain.user.exception.UserNotFoundException;
 import com._s.api.infra.mappers.ProductMapper;
 import com._s.api.infra.repositories.ProductJpaRepository;
 import com._s.api.infra.repositories.UserJpaRepository;
+import com._s.api.infra.repositories.entity.ProductEntity;
 import com._s.api.infra.repositories.entity.UserEntity;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -49,5 +53,28 @@ public class ProductRepositoryAdapter implements ProductRepository {
     @Override
     public List<Product> findAllByIdIn(List<String> ids) {
         return repository.findAllByIdIn(ids).stream().map(ProductMapper::toDomain).toList();
+    }
+
+    @Override
+    public void saveAll(List<Product> products, String userId) {
+        Optional<UserEntity> user = userRepository.findById(userId);
+
+        if (user.isEmpty())
+            throw new UserNotFoundException("Usuário não encontrado");
+
+        repository.saveAll(products
+            .stream()
+            .map(product -> ProductMapper.toEntity(product, user.get()))
+            .toList());
+    }
+
+    @Override
+    @Transactional
+    public void decreaseStock(String id, Integer quantity) {
+        int updated = repository.decreaseStockIfAvailable(id, quantity);
+
+        if (updated == 0) {
+            throw new InsufficientStockException("Estoque insuficiente.");
+        }
     }
 }

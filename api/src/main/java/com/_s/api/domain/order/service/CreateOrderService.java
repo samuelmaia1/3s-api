@@ -21,6 +21,7 @@ import com._s.api.infra.repositories.entity.CostumerEntity;
 import com._s.api.infra.repositories.entity.OrderEntity;
 import com._s.api.infra.repositories.entity.UserEntity;
 import com._s.api.presentation.dto.CreateOrderItemRequest;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ public class CreateOrderService {
         this.costumerRepository = costumerRepository;
     }
 
+    @Transactional
     public Order execute(CreateOrderCommand command, String userId) {
         Optional<User> user = userRepository.findById(userId);
 
@@ -88,6 +90,10 @@ public class CreateOrderService {
                 item.getQuantity(),
                 product
             );
+
+            productRepository.decreaseStock(product.getId(), item.getQuantity());
+
+            product.setStock(product.getStock() - item.getQuantity());
 
             OrderItem orderItem = new OrderItem(product, product.getPrice(), item.getQuantity());
 

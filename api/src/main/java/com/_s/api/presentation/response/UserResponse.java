@@ -2,6 +2,7 @@ package com._s.api.presentation.response;
 
 import com._s.api.domain.shared.Address;
 import com._s.api.domain.user.User;
+import com._s.api.domain.valueobject.Cpf;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ public class UserResponse {
     private Address address;
     private String socialName;
     private String instagram;
+    private String cpf;
 
     public UserResponse(User user) {
         this.id = user.getId();
@@ -28,5 +30,6 @@ public class UserResponse {
         this.address = user.getAddress();
         this.socialName = user.getSocialName();
         this.instagram = user.getInstagram();
+        this.cpf = user.getCpf().getFormatted();
     }
 }

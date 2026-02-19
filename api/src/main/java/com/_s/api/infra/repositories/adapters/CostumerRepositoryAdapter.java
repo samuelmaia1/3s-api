@@ -3,6 +3,7 @@ package com._s.api.infra.repositories.adapters;
 import com._s.api.domain.costumer.Costumer;
 import com._s.api.domain.costumer.CostumerRepository;
 import com._s.api.domain.user.exception.UserNotFoundException;
+import com._s.api.domain.valueobject.Cpf;
 import com._s.api.infra.mappers.CostumerMapper;
 import com._s.api.infra.repositories.CostumerJpaRepository;
 import com._s.api.infra.repositories.UserJpaRepository;
@@ -37,6 +38,11 @@ public class CostumerRepositoryAdapter implements CostumerRepository {
 
     @Override
     public Optional<Costumer> findByCpf(String cpf) {
-        return repository.findByCpf(cpf).map(CostumerMapper::toDomain);
+        return repository.findByCpf(new Cpf(cpf)).map(CostumerMapper::toDomain);
+    }
+
+    @Override
+    public Boolean existsByCpf(Cpf cpf) {
+        return repository.existsByCpf(cpf);
     }
 }

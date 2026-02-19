@@ -1,5 +1,7 @@
 package com._s.api.infra.repositories.entity;
 
+import com._s.api.domain.valueobject.Cpf;
+import com._s.api.infra.persistence.CpfConverter;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -30,8 +32,9 @@ public class CostumerEntity {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
+    @Convert(converter = CpfConverter.class)
     @Column(name = "cpf", unique = true, nullable = false)
-    private String cpf;
+    private Cpf cpf;
 
     @CreatedDate
     @Column(name = "createdAt")

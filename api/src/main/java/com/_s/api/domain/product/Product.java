@@ -30,4 +30,8 @@ public class Product {
         this.stock = command.getStock();
         this.imageUri = command.getImageUri();
     }
+
+    public void decreaseStock(Integer quantity) {
+        this.stock = this.stock - quantity;
+    }
 }

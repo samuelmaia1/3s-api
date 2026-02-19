@@ -27,7 +27,7 @@ public class CostumerResponse {
         this.name = costumer.getName();
         this.lastName = costumer.getLastName();
         this.email = costumer.getEmail();
-        this.cpf = costumer.getCpf();
+        this.cpf = costumer.getCpf().getFormatted();
         this.createdAt = costumer.getCreatedAt();
         this.updatedAt = costumer.getUpdatedAt();
         this.address = costumer.getAddress();

@@ -4,7 +4,9 @@ import com._s.api.domain.costumer.Costumer;
 import com._s.api.domain.costumer.CostumerRepository;
 import com._s.api.domain.user.User;
 import com._s.api.domain.user.UserRepository;
+import com._s.api.domain.user.exception.IdentityAlreadyInUseException;
 import com._s.api.domain.user.exception.UserNotFoundException;
+import com._s.api.domain.valueobject.Cpf;
 import com._s.api.infra.mappers.CostumerMapper;
 import com._s.api.infra.mappers.UserMapper;
 import com._s.api.infra.repositories.entity.CostumerEntity;
@@ -23,6 +25,9 @@ public class CreateCostumerService {
     }
 
     public Costumer execute(CreateCostumerCommand command, String userId) {
+        if (repository.existsByCpf(new Cpf(command.getCpf())))
+            throw new IdentityAlreadyInUseException("CPF já cadastrado para outro cliente.");
+
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Usuário não encontrado."));
 
         UserEntity userEntity = UserMapper.toEntity(user);
@@ -33,4 +38,6 @@ public class CreateCostumerService {
 
         return repository.save(CostumerMapper.toDomain(costumerEntity));
     }
+
+
 }

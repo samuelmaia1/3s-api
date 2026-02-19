@@ -3,6 +3,7 @@ package com._s.api.domain.costumer;
 import com._s.api.domain.costumer.service.CreateCostumerCommand;
 import com._s.api.domain.order.Order;
 import com._s.api.domain.shared.Address;
+import com._s.api.domain.valueobject.Cpf;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public class Costumer {
     private String name;
     private String lastName;
     private String email;
-    private String cpf;
+    private Cpf cpf;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -32,7 +33,7 @@ public class Costumer {
         this.name = data.getName();
         this.lastName = data.getLastName();
         this.email = data.getEmail();
-        this.cpf = data.getCpf();
+        this.cpf = new Cpf(data.getCpf());
         this.userId = userId;
         this.address = data.getAddress();
     }
@@ -47,7 +48,7 @@ public class Costumer {
             String name,
             String lastName,
             String email,
-            String cpf,
+            Cpf cpf,
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
             List<Order> orders,

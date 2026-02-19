@@ -21,14 +21,15 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
-    private static final String ISSUER = "3s-api";
+    @Value("${api.security.token.issuer}")
+    private String issuer;
 
     public String generateToken(User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
             return JWT.create()
-                    .withIssuer(ISSUER)
+                    .withIssuer(issuer)
                     .withSubject(user.getId())
                     .withClaim("email", user.getEmail())
                     .withExpiresAt(generateExpirationDate())
@@ -44,7 +45,7 @@ public class TokenService {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
             JWT.require(algorithm)
-                    .withIssuer(ISSUER)
+                    .withIssuer(issuer)
                     .build()
                     .verify(token);
 
@@ -73,7 +74,7 @@ public class TokenService {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
             return JWT.require(algorithm)
-                    .withIssuer(ISSUER)
+                    .withIssuer(issuer)
                     .build()
                     .verify(token);
 
@@ -84,7 +85,7 @@ public class TokenService {
 
     private Instant generateExpirationDate() {
         return LocalDateTime.now()
-                .plusMinutes(30)
+                .plusMinutes(60 * 6)
                 .toInstant(ZoneOffset.of("-03:00"));
     }
 }

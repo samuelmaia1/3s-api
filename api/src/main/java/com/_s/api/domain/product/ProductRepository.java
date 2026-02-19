@@ -11,4 +11,6 @@ public interface ProductRepository {
     Optional<Product> findById(String id);
     Page<Product> findAllByUserId(String userId, Pageable pageable);
     List<Product> findAllByIdIn(List<String> ids);
+    void saveAll(List<Product> products, String userId);
+    void decreaseStock(String id, Integer quantity);
 }
