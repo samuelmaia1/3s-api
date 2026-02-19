@@ -1,5 +1,6 @@
 package com._s.api.presentation.controllers;
 
+import com._s.api.domain.order.OrderStatus;
 import com._s.api.domain.order.service.GetOrderService;
 import com._s.api.domain.order.service.UpdateOrderService;
 import com._s.api.presentation.dto.UpdateStatusRequest;
@@ -30,5 +31,15 @@ public class OrderController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(OrderResponseMapper.toResponse(updateOrderService.updateStatus(id, data.action())));
+    }
+
+    @PutMapping("/{id}/finish")
+    public ResponseEntity<OrderResponse> finishOrder(
+            @PathVariable String id,
+            @Valid @RequestBody UpdateStatusRequest data
+    ) {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(OrderResponseMapper.toResponse(updateOrderService.updateStatus(id, OrderStatus.CONCLUIDO)));
     }
 }

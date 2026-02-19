@@ -31,6 +31,13 @@ public class OrderEntity {
     @Column(nullable = false)
     private BigDecimal total;
 
+    @Embedded
+    private AddressEntity deliveryAddress;
+
+    private LocalDateTime deliveryDate;
+
+    private LocalDateTime returnDate;
+
     @OneToMany(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<OrderItemEntity> items = new ArrayList<>();
 

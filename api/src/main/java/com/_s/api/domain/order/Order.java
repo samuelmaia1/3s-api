@@ -1,6 +1,7 @@
 package com._s.api.domain.order;
 
 import com._s.api.domain.orderItem.OrderItem;
+import com._s.api.domain.shared.Address;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,17 +28,45 @@ public class Order {
 
     private BigDecimal total;
 
+    private Address deliveryAddress;
+
+    private LocalDateTime deliveryDate;
+
+    private LocalDateTime returnDate;
+
     private List<OrderItem> items = new ArrayList<>();
 
-    public Order(String userId, String costumerId, OrderStatus status, List<OrderItem> items) {
+    public Order(
+            String userId,
+            String costumerId,
+            OrderStatus status,
+            List<OrderItem> items,
+            Address deliveryAddress,
+            LocalDateTime deliveryDate,
+            LocalDateTime returnDate
+    ) {
         this.userId = userId;
         this.costumerId = costumerId;
         this.status = status;
         this.items = items;
+        this.deliveryAddress = deliveryAddress;
+        this.deliveryDate = deliveryDate;
+        this.returnDate = returnDate;
     }
 
-    public static Order mount(String id, String userId, String costumerId, LocalDateTime createdAt, OrderStatus status, BigDecimal total, List<OrderItem> items) {
-        return new Order(id, userId, costumerId, createdAt, status, total, items);
+    public static Order mount(
+            String id,
+            String userId,
+            String costumerId,
+            LocalDateTime createdAt,
+            OrderStatus status,
+            BigDecimal total,
+            List<OrderItem> items,
+            Address deliveryAddress,
+            LocalDateTime deliveryDate,
+            LocalDateTime returnDate
+            ) {
+        return new Order(id, userId, costumerId, createdAt, status, total, deliveryAddress, deliveryDate, returnDate, items);
     }
 
     public void calculateTotal() {
@@ -51,9 +80,4 @@ public class Order {
                 .filter(subTotal -> subTotal != null)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
-
-    public void updateStatus(OrderStatus status) {
-        this.status = status;
-    }
-
 }

@@ -29,7 +29,10 @@ public class OrderMapper {
                 entity.getCreatedAt(),
                 entity.getStatus(),
                 entity.getTotal(),
-                items
+                items,
+                AddressMapper.toDomain(entity.getDeliveryAddress()),
+                entity.getDeliveryDate(),
+                entity.getReturnDate()
         );
     }
 
@@ -72,6 +75,9 @@ public class OrderMapper {
         entity.setStatus(order.getStatus());
         entity.setTotal(order.getTotal());
         entity.setCreatedAt(order.getCreatedAt());
+        entity.setDeliveryAddress(AddressMapper.toEntity(order.getDeliveryAddress()));
+        entity.setDeliveryDate(order.getDeliveryDate());
+        entity.setReturnDate(order.getReturnDate());
         return entity;
     }
 

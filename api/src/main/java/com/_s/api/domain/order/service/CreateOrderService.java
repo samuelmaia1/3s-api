@@ -14,6 +14,7 @@ import com._s.api.domain.product.exception.ProductNotFoundException;
 import com._s.api.domain.user.User;
 import com._s.api.domain.user.UserRepository;
 import com._s.api.domain.user.exception.UserNotFoundException;
+import com._s.api.infra.mappers.AddressMapper;
 import com._s.api.infra.mappers.CostumerMapper;
 import com._s.api.infra.mappers.OrderMapper;
 import com._s.api.infra.mappers.UserMapper;
@@ -21,6 +22,8 @@ import com._s.api.infra.repositories.entity.CostumerEntity;
 import com._s.api.infra.repositories.entity.OrderEntity;
 import com._s.api.infra.repositories.entity.UserEntity;
 import com._s.api.presentation.dto.CreateOrderItemRequest;
+import com._s.api.presentation.dto.CreateOrderRequest;
+import com._s.api.presentation.mapper.shared.AddressRequestMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -56,9 +59,11 @@ public class CreateOrderService {
 
     @Transactional
     public Order execute(CreateOrderCommand command, String userId) {
+        CreateOrderRequest request = command.getRequest();
+
         Optional<User> user = userRepository.findById(userId);
 
-        Optional<Costumer> costumer = costumerRepository.findById(command.getRequest().getCostumerId());
+        Optional<Costumer> costumer = costumerRepository.findById(request.getCostumerId());
 
         if (user.isEmpty())
             throw new UserNotFoundException("Usuário não encontrado");
@@ -66,7 +71,7 @@ public class CreateOrderService {
         if (costumer.isEmpty())
             throw new CostumerNotFoundException("Cliente não encontrado");
 
-        List<String> productIds = command.getRequest()
+        List<String> productIds = request
                 .getItems()
                 .stream()
                 .map(CreateOrderItemRequest::getProductId)
@@ -79,7 +84,7 @@ public class CreateOrderService {
 
         List<OrderItem> items = new ArrayList<>();
 
-        command.getRequest().getItems().forEach(item -> {
+        request.getItems().forEach(item -> {
             Product product = productsById.get(item.getProductId());
 
             if (product == null) {
@@ -105,7 +110,15 @@ public class CreateOrderService {
         UserEntity userEntity = UserMapper.toEntity(user.get());
         CostumerEntity costumerEntity = CostumerMapper.toEntity(costumer.get(), userEntity);
 
-        Order order = new Order(userEntity.getId(), costumerEntity.getId(), OrderStatus.REALIZADO, items);
+        Order order = new Order(
+                userEntity.getId(),
+                costumerEntity.getId(),
+                OrderStatus.REALIZADO,
+                items,
+                AddressRequestMapper.toDomain(request.getDeliveryAddress()),
+                request.getDeliveryDate(),
+                request.getReturnDate()
+        );
 
         order.calculateTotal();
 
