@@ -50,10 +50,17 @@ public class AuthController {
         User user = loginUserService.execute(credentials);
 
         String accessToken = tokenService.generateToken(user);
+        String rawRefreshToken = createRefreshTokenService
+                .execute(new CreateRefreshTokenCommand(user.getId()));
 
-        String rawRefreshToken = createRefreshTokenService.execute(new CreateRefreshTokenCommand(user.getId()));
+        ResponseCookie refreshCookie = ResponseCookie.from("refresh_token", rawRefreshToken)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .sameSite("None")
+                .build();
 
-        ResponseCookie cookie = ResponseCookie.from("refresh_token", rawRefreshToken)
+        ResponseCookie accessCookie = ResponseCookie.from("access-token", accessToken)
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
@@ -62,7 +69,8 @@ public class AuthController {
 
         return ResponseEntity
                 .ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
                 .body(new LoginResponse(UserResponseMapper.toResponse(user), accessToken));
     }
 
