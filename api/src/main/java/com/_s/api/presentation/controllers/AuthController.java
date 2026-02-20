@@ -8,10 +8,12 @@ import com._s.api.domain.refreshToken.service.ValidateRefreshTokenService;
 import com._s.api.domain.user.User;
 import com._s.api.domain.user.service.GetUserService;
 import com._s.api.domain.user.service.LoginUserService;
+import com._s.api.infra.auth.InvalidTokenException;
 import com._s.api.infra.security.TokenService;
 import com._s.api.presentation.dto.LoginRequest;
 import com._s.api.presentation.mapper.user.UserResponseMapper;
 import com._s.api.presentation.response.LoginResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -62,6 +64,15 @@ public class AuthController {
                 .ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(new LoginResponse(UserResponseMapper.toResponse(user), accessToken));
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<Void> validate(HttpServletRequest request) {
+        if (!tokenService.isValid(tokenService.recoverToken(request))) {
+         throw new InvalidTokenException("Token inválido ou expirado");
+        }
+
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/refresh")
