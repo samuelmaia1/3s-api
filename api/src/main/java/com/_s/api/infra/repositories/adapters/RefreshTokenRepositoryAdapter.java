@@ -25,4 +25,9 @@ public class RefreshTokenRepositoryAdapter implements RefreshTokenRepository {
     public Optional<RefreshToken> findById(String id) {
         return repository.findById(id).map(RefreshTokenMapper::toDomain);
     }
+
+    @Override
+    public void delete(RefreshToken refreshToken) {
+        repository.delete(RefreshTokenMapper.toEntity(refreshToken));
+    }
 }

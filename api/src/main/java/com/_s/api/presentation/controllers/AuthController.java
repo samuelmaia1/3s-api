@@ -105,4 +105,31 @@ public class AuthController {
                 .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
                 .body(new LoginResponse(UserResponseMapper.toResponse(user), accessToken));
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@CookieValue("refresh_token") String refreshToken) {
+        invalidateRefreshTokenService.execute(refreshToken);
+
+        ResponseCookie cleanRefreshCookie = ResponseCookie.from("refresh_token", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .sameSite("None")
+                .maxAge(0)
+                .build();
+
+        ResponseCookie cleanAccessCookie = ResponseCookie.from("access-token", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .sameSite("None")
+                .maxAge(0)
+                .build();
+
+        return ResponseEntity
+                .noContent()
+                .header(HttpHeaders.SET_COOKIE, cleanRefreshCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, cleanAccessCookie.toString())
+                .build();
+    }
 }

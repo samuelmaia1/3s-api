@@ -12,8 +12,8 @@ public class InvalidateRefreshTokenService {
         this.repository = repository;
     }
 
-    public void execute(RefreshToken refreshToken) {
-        refreshToken.setIsActive(false);
-        repository.save(refreshToken);
+    public void execute(String token) {
+        String[] splitToken = token.split("\\.");
+        repository.findById(splitToken[0]).ifPresent(repository::delete);
     }
 }
