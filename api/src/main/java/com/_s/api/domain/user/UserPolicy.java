@@ -19,6 +19,6 @@ public class UserPolicy {
 
     public void validateIdentityIsUnique(String cpf) {
         if (repository.findByCpf(cpf).isPresent())
-            throw new IdentityAlreadyInUseException("O cpf " + cpf + " já está em uso.");
+            throw new IdentityAlreadyInUseException("O CPF " + cpf + " já está em uso.");
     }
 }

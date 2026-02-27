@@ -17,4 +17,5 @@ public class CreateUserCommand {
     private Address address;
     private String socialName;
     private String instagram;
+    private String logo;
 }

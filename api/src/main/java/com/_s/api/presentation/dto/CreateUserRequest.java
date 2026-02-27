@@ -33,4 +33,6 @@ public class CreateUserRequest {
 
     @NotBlank
     private String instagram;
+
+    private String logo;
 }

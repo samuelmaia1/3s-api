@@ -27,6 +27,7 @@ public class User {
     private Address address;
     private String socialName;
     private String instagram;
+    private String logo;
 
     private final List<Order> orders = new ArrayList<>();
     private final List<Costumer> costumers = new ArrayList<>();
@@ -42,7 +43,8 @@ public class User {
             LocalDateTime updatedAt,
             Address address,
             String socialName,
-            String instagram
+            String instagram,
+            String logo
     ) {
         this.id = id;
         this.name = name;
@@ -55,6 +57,7 @@ public class User {
         this.address = address;
         this.socialName = socialName;
         this.instagram = instagram;
+        this.logo = logo;
     }
 
 
@@ -67,6 +70,7 @@ public class User {
         this.address = data.getAddress();
         this.socialName = data.getSocialName();
         this.instagram = data.getInstagram();
+        this.logo = data.getLogo();
     }
 
     public void updateProfile(UpdateUserCommand command) {
@@ -76,6 +80,7 @@ public class User {
         if (command.getCpf() != null) this.cpf = new Cpf(command.getCpf());
         if (command.getSocialName() != null) this.socialName = command.getSocialName();
         if (command.getInstagram() != null) this.instagram = command.getInstagram();
+        if (command.getLogo() != null) this.logo = command.getLogo();
     }
 
     public void updatePassword(String password) {
@@ -101,10 +106,11 @@ public class User {
             Address address,
             List<Costumer> costumers,
             String socialName,
-            String instagram
+            String instagram,
+            String logo
     ) {
         User user = new User(
-                id, name, lastName, email, cpf, password, createdAt, updatedAt, address, socialName, instagram
+                id, name, lastName, email, cpf, password, createdAt, updatedAt, address, socialName, instagram, logo
         );
 
         if (orders != null) {

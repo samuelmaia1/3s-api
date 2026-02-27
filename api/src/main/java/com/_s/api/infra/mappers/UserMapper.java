@@ -32,7 +32,8 @@ public class UserMapper {
             AddressMapper.toDomain(entity.getAddress()),
             entity.getCostumers().stream().map(CostumerMapper::toDomain).toList(),
             entity.getSocialName(),
-            entity.getInstagram()
+            entity.getInstagram(),
+            entity.getLogo()
         );
     }
 
@@ -54,6 +55,7 @@ public class UserMapper {
         entity.setSocialName(user.getSocialName());
         entity.setInstagram(user.getInstagram());
         entity.setOrders(new ArrayList<>());
+        entity.setLogo(user.getLogo());
 
         user.getOrders().forEach(order -> {
             OrderEntity orderEntity = OrderMapper.toEntity(order, entity);

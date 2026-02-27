@@ -19,6 +19,7 @@ public class UserResponse {
     private String socialName;
     private String instagram;
     private String cpf;
+    private String logo;
 
     public UserResponse(User user) {
         this.id = user.getId();
@@ -31,5 +32,6 @@ public class UserResponse {
         this.socialName = user.getSocialName();
         this.instagram = user.getInstagram();
         this.cpf = user.getCpf().getFormatted();
+        this.logo = user.getLogo();
     }
 }

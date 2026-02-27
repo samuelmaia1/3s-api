@@ -57,6 +57,9 @@ public class UserEntity {
     @Column(name = "socialName")
     private String socialName;
 
+    @Column(name = "logo")
+    private String logo;
+
     @Embedded
     private AddressEntity address;
 

@@ -25,4 +25,6 @@ public class UpdateUserRequest {
     private String socialName;
 
     private String instagram;
+
+    private String logo;
 }

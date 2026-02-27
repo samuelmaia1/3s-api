@@ -17,7 +17,8 @@ public class UserRequestMapper {
                 request.getPassword(),
                 AddressRequestMapper.toDomain(request.getAddress()),
                 request.getSocialName(),
-                request.getInstagram()
+                request.getInstagram(),
+                request.getLogo()
         );
     }
 
@@ -30,7 +31,8 @@ public class UserRequestMapper {
                 request.getCpf(),
                 AddressRequestMapper.toDomain(request.getAddress()),
                 request.getSocialName(),
-                request.getInstagram()
+                request.getInstagram(),
+                request.getLogo()
         );
     }
 }
