@@ -14,7 +14,8 @@ public enum OrderStatus {
     PAGAMENTO_APROVADO("Pagamento Aprovado"),
     AGUARDANDO_ENTREGA("Aguardando Entrega"),
     ENTREGUE("Entregue"),
-    CONCLUIDO("Concluído");
+    CONCLUIDO("Concluído"),
+    CANCELADO("Cancelado");
 
     private final String label;
 

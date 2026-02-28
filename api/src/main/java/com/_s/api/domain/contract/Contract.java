@@ -37,7 +37,7 @@ public class Contract {
     }
 
     private String generateCode() {
-        int code = (int) (Math.random() * 900000) + 100000;
+        int code = (int) (Math.random() * 9000) + 1000;
         return String.valueOf(code);
     }
 
