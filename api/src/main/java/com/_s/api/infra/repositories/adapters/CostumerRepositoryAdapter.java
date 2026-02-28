@@ -11,6 +11,7 @@ import com._s.api.infra.repositories.entity.CostumerEntity;
 import com._s.api.infra.repositories.entity.UserEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -44,5 +45,10 @@ public class CostumerRepositoryAdapter implements CostumerRepository {
     @Override
     public Boolean existsByCpf(Cpf cpf) {
         return repository.existsByCpf(cpf);
+    }
+
+    @Override
+    public List<Costumer> findByIdIn(List<String> ids) {
+        return repository.findByIdIn(ids).stream().map(CostumerMapper::toDomain).toList();
     }
 }

@@ -43,4 +43,9 @@ public interface OrderJpaRepository extends JpaRepository<OrderEntity, String> {
             @Param("year") int year,
             @Param("month") int month
     );
+
+    List<OrderEntity> findByUserIdOrderByCreatedAtDesc(
+            String userId,
+            Pageable pageable
+    );
 }

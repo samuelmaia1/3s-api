@@ -5,8 +5,10 @@ import com._s.api.domain.contract.ContractRepository;
 import com._s.api.infra.mappers.ContractMapper;
 import com._s.api.infra.repositories.ContractJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -30,6 +32,11 @@ public class ContractRepositoryAdapter implements ContractRepository {
     @Override
     public Optional<Contract> findByCode(String code) {
         return repository.findByCode(code).map(ContractMapper::toDomain);
+    }
+
+    @Override
+    public List<Contract> findLastContractsByUser(String userId, Pageable pageable) {
+        return repository.findLastContractsByUser(userId, pageable).stream().map(ContractMapper::toDomain).toList();
     }
 }
 

@@ -2,6 +2,7 @@ package com._s.api.infra.repositories;
 
 import com._s.api.domain.contract.ContractStatus;
 import com._s.api.infra.repositories.entity.ContractEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,5 +21,17 @@ public interface ContractJpaRepository extends JpaRepository<ContractEntity, Str
     WHERE c.status IN :statuses
 """)
     long countOpenContracts(@Param("statuses") List<ContractStatus> statuses);
+
+    @Query("""
+    SELECT c
+    FROM ContractEntity c
+    JOIN OrderEntity o ON o.id = c.orderId
+    WHERE o.user.id = :userId
+    ORDER BY c.createdAt DESC
+""")
+    List<ContractEntity> findLastContractsByUser(
+            @Param("userId") String userId,
+            Pageable pageable
+    );
 }
 
