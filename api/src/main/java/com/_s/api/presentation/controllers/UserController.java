@@ -140,7 +140,7 @@ public class UserController {
         }
 
         return ResponseEntity
-                .status(HttpStatus.CREATED)
+                .status(HttpStatus.OK)
                 .body(getProductsService.executeByUserId(authenticatedUser.id(), pageable).map(ProductResponseMapper::toResponse));
     }
 
