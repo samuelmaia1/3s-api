@@ -77,4 +77,9 @@ public class ProductRepositoryAdapter implements ProductRepository {
             throw new InsufficientStockException("Estoque insuficiente.");
         }
     }
+
+    @Override
+    public void delete(String id) {
+        repository.deleteById(id);
+    }
 }

@@ -13,4 +13,5 @@ public interface ProductRepository {
     List<Product> findAllByIdIn(List<String> ids);
     void saveAll(List<Product> products, String userId);
     void decreaseStock(String id, Integer quantity);
+    void delete(String id);
 }
