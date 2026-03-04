@@ -19,6 +19,7 @@ public class ProductMapper{
         product.setPrice(entity.getPrice());
         product.setStock(entity.getStock());
         product.setImageUri(entity.getImageUri());
+        product.setCreatedAt(entity.getCreatedAt());
 
         return product;
     }
@@ -34,6 +35,7 @@ public class ProductMapper{
         entity.setPrice(product.getPrice());
         entity.setStock(product.getStock());
         entity.setImageUri(product.getImageUri());
+        entity.setCreatedAt(product.getCreatedAt());
         entity.setUser(user);
 
         return entity;

@@ -4,6 +4,7 @@ import com._s.api.domain.product.Product;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 public class ProductResponse {
@@ -19,6 +20,8 @@ public class ProductResponse {
 
     private String imageUri;
 
+    private LocalDateTime createdAt;
+
     public ProductResponse(Product product) {
         this.id = product.getId();
         this.name = product.getName();
@@ -26,5 +29,6 @@ public class ProductResponse {
         this.price = product.getPrice();
         this.stock = product.getStock();
         this.imageUri = product.getImageUri();
+        this.createdAt = product.getCreatedAt();
     }
 }
