@@ -18,7 +18,12 @@ public class GetProductsService {
         this.repository = repository;
     }
 
-    public Page<Product> executeByUserId(String userId, Pageable pageable) {
+    public Page<Product> executeByUserId(String userId, String name, Pageable pageable) {
+
+        if (name != null && !name.isBlank()) {
+            return repository.findByUserIdAndNameContainingIgnoreCase(userId, name, pageable);
+        }
+
         return repository.findAllByUserId(userId, pageable);
     }
 

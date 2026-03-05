@@ -21,5 +21,5 @@ public interface ProductJpaRepository extends JpaRepository<ProductEntity, Strin
         WHERE p.id = :id AND p.stock >= :quantity
     """)
     int decreaseStockIfAvailable(String id, Integer quantity);
-
+    Page<ProductEntity>findByUserIdAndNameContainingIgnoreCase(String userId, String name, Pageable pageable);
 }

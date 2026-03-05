@@ -14,4 +14,9 @@ public interface ProductRepository {
     void saveAll(List<Product> products, String userId);
     void decreaseStock(String id, Integer quantity);
     void delete(String id);
+    Page<Product> findByUserIdAndNameContainingIgnoreCase(
+            String userId,
+            String name,
+            Pageable pageable
+    );
 }

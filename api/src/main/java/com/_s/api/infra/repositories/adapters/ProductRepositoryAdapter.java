@@ -82,4 +82,9 @@ public class ProductRepositoryAdapter implements ProductRepository {
     public void delete(String id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public Page<Product> findByUserIdAndNameContainingIgnoreCase(String userId, String name, Pageable pageable) {
+        return repository.findByUserIdAndNameContainingIgnoreCase(userId, name, pageable).map(ProductMapper::toDomain);
+    }
 }

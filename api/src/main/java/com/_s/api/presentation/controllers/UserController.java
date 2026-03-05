@@ -123,7 +123,8 @@ public class UserController {
             Pageable pageable,
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size,
-            @RequestParam(required = false) String sort
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) String name
     ) {
         validateUserExists(authenticatedUser.id());
 
@@ -141,7 +142,11 @@ public class UserController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(getProductsService.executeByUserId(authenticatedUser.id(), pageable).map(ProductResponseMapper::toResponse));
+                .body(
+                        getProductsService
+                                .executeByUserId(authenticatedUser.id(), name, resolvedPageable)
+                                .map(ProductResponseMapper::toResponse)
+                );
     }
 
     @PostMapping("/orders")
