@@ -11,6 +11,8 @@ import com._s.api.infra.mappers.CostumerMapper;
 import com._s.api.infra.mappers.UserMapper;
 import com._s.api.infra.repositories.entity.CostumerEntity;
 import com._s.api.infra.repositories.entity.UserEntity;
+import com._s.api.presentation.mapper.costumer.CostumerResponseMapper;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,10 +20,16 @@ public class CreateCostumerService {
 
     private final CostumerRepository repository;
     private final UserRepository userRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
-    public CreateCostumerService(CostumerRepository repository, UserRepository userRepository) {
+    public CreateCostumerService(
+            CostumerRepository repository,
+            UserRepository userRepository,
+            SimpMessagingTemplate messagingTemplate
+    ) {
         this.repository = repository;
         this.userRepository = userRepository;
+        this.messagingTemplate = messagingTemplate;
     }
 
     public Costumer execute(CreateCostumerCommand command, String userId) {
@@ -35,6 +43,8 @@ public class CreateCostumerService {
         Costumer costumer = new Costumer(command, userEntity.getId());
 
         CostumerEntity costumerEntity = CostumerMapper.toEntity(costumer, userEntity);
+
+        messagingTemplate.convertAndSend("/topic/costumers", CostumerResponseMapper.toResponse(costumer));
 
         return repository.save(CostumerMapper.toDomain(costumerEntity));
     }

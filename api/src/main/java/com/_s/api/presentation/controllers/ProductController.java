@@ -54,7 +54,7 @@ public class ProductController {
             @PathVariable String id,
             @RequestBody @Valid UpdateProductRequest request,
             @AuthenticationPrincipal AuthenticatedUser user
-            ) {
+    ) {
         getProductsService.executeById(id);
 
         UpdateProductCommand command = ProductRequestMapper.toUpdateCommand(request, id);

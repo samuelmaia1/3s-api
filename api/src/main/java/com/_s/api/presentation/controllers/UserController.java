@@ -1,5 +1,6 @@
 package com._s.api.presentation.controllers;
 
+import com._s.api.domain.costumer.service.GetCostumerService;
 import com._s.api.domain.order.service.CreateOrderCommand;
 import com._s.api.domain.order.service.CreateOrderService;
 import com._s.api.domain.order.service.GetOrderService;
@@ -14,11 +15,13 @@ import com._s.api.presentation.dto.CreateOrderRequest;
 import com._s.api.presentation.dto.CreateProductRequest;
 import com._s.api.presentation.dto.CreateUserRequest;
 import com._s.api.presentation.dto.UpdateUserRequest;
+import com._s.api.presentation.mapper.costumer.CostumerResponseMapper;
 import com._s.api.presentation.mapper.order.OrderResponseMapper;
 import com._s.api.presentation.mapper.product.ProductRequestMapper;
 import com._s.api.presentation.mapper.product.ProductResponseMapper;
 import com._s.api.presentation.mapper.user.UserRequestMapper;
 import com._s.api.presentation.mapper.user.UserResponseMapper;
+import com._s.api.presentation.response.CostumerResponse;
 import com._s.api.presentation.response.OrderResponse;
 import com._s.api.presentation.response.ProductResponse;
 import com._s.api.presentation.response.UserResponse;
@@ -43,6 +46,7 @@ public class UserController {
     private final UpdateUserService updateUserService;
     private final GetOrderService getOrderService;
     private final CreateOrderService createOrderService;
+    private final GetCostumerService getCostumerService;
 
     public UserController(CreateUserService createUserService,
                           GetUserService getUserService,
@@ -50,7 +54,8 @@ public class UserController {
                           GetProductsService getProductsService,
                           UpdateUserService updateUserService,
                           GetOrderService getOrderService,
-                          CreateOrderService createOrderService
+                          CreateOrderService createOrderService,
+                          GetCostumerService getCostumerService
     )
     {
         this.createUserService = createUserService;
@@ -60,6 +65,7 @@ public class UserController {
         this.updateUserService = updateUserService;
         this.getOrderService = getOrderService;
         this.createOrderService = createOrderService;
+        this.getCostumerService = getCostumerService;
     }
 
     @PostMapping("/create")
@@ -189,6 +195,34 @@ public class UserController {
                 .status(HttpStatus.OK)
                 .body(getOrderService.executeByUserId(authenticatedUser.id(), resolvedPageable).map(OrderResponseMapper::toResponse));
     }
+
+    @GetMapping("/costumers")
+    public ResponseEntity<Page<CostumerResponse>> getCostumersByUserId(
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+            Pageable pageable,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) String sort
+    ) {
+        validateUserExists(authenticatedUser.id());
+
+        Pageable resolvedPageable;
+
+        if (page == null && size == null && sort == null) {
+            resolvedPageable = PageRequest.of(
+                    0,
+                    10,
+                    Sort.by("createdAt").descending()
+            );
+        } else {
+            resolvedPageable = pageable;
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(getCostumerService.executeByUserId(authenticatedUser.id(), resolvedPageable).map(CostumerResponseMapper::toResponse));
+    }
+
 
     private void validateUserExists(String id) {
         getUserService.executeById(id);

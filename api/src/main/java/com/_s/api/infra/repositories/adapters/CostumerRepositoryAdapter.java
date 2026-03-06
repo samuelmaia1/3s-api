@@ -9,6 +9,8 @@ import com._s.api.infra.repositories.CostumerJpaRepository;
 import com._s.api.infra.repositories.UserJpaRepository;
 import com._s.api.infra.repositories.entity.CostumerEntity;
 import com._s.api.infra.repositories.entity.UserEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -50,5 +52,10 @@ public class CostumerRepositoryAdapter implements CostumerRepository {
     @Override
     public List<Costumer> findByIdIn(List<String> ids) {
         return repository.findByIdIn(ids).stream().map(CostumerMapper::toDomain).toList();
+    }
+
+    @Override
+    public Page<Costumer> findAllByUserId(String userId, Pageable pageable) {
+        return repository.findAllByUserId(userId, pageable).map(CostumerMapper::toDomain);
     }
 }

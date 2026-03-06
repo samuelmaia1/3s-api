@@ -33,6 +33,7 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.POST, "/api/auth/refresh").permitAll()
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                     .requestMatchers("/ws-products/**").permitAll()
+                    .requestMatchers("/ws-costumers/**").permitAll()
                     .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/error").permitAll()
                     .requestMatchers("/error").permitAll()
                     .anyRequest().authenticated()
