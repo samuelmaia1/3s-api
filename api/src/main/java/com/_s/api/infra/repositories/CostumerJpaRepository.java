@@ -26,4 +26,6 @@ public interface CostumerJpaRepository extends JpaRepository<CostumerEntity, Str
     List<CostumerEntity> findByIdIn(List<String> ids);
 
     Page<CostumerEntity> findByUserIdAndNameContainingIgnoreCase(String userId, String name, Pageable pageable);
+
+    Boolean existsByEmail(String email);
 }

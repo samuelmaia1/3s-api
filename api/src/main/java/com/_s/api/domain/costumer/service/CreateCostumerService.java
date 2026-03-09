@@ -16,6 +16,9 @@ import com._s.api.presentation.mapper.costumer.CostumerResponseMapper;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class CreateCostumerService {
 
@@ -34,11 +37,22 @@ public class CreateCostumerService {
     }
 
     public Costumer execute(CreateCostumerCommand command, String userId) {
+        Map<String, String> errorFields = new HashMap<>();
+        Boolean hasErrorFields = false;
+
         if (repository.existsByCpf(new Cpf(command.getCpf()))) {
-            System.out.println("Caiu aqui ó");
-            throw new CostumerAlreadyExistsException("CPF já cadastrado para outro cliente.");
+            errorFields.put("cpf", "Já existe um cliente com este CPF.");
+            hasErrorFields = true;
         }
 
+        if (repository.existsByEmail(command.getEmail())) {
+            errorFields.put("email", "Já existe um cliente com este e-mail.");
+            hasErrorFields = true;
+        }
+
+        if (hasErrorFields) {
+            throw new CostumerAlreadyExistsException("CPF já cadastrado para outro cliente.", errorFields);
+        }
 
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Usuário não encontrado."));
 

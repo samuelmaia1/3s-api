@@ -24,6 +24,6 @@ public class CostumerExceptionHandler {
     public ResponseEntity<ErrorResponse> handleCostumerAlreadyExists(CostumerAlreadyExistsException exception) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body(ErrorResponse.buildError(HttpStatus.CONFLICT, exception.getMessage()));
+                .body(ErrorResponse.buildValidationError(HttpStatus.CONFLICT, exception.getMessage(), exception.getFields()));
     }
 }

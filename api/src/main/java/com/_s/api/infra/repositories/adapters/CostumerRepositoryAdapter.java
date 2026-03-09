@@ -50,6 +50,11 @@ public class CostumerRepositoryAdapter implements CostumerRepository {
     }
 
     @Override
+    public Boolean existsByEmail(String email) {
+        return repository.existsByEmail(email);
+    }
+
+    @Override
     public List<Costumer> findByIdIn(List<String> ids) {
         return repository.findByIdIn(ids).stream().map(CostumerMapper::toDomain).toList();
     }

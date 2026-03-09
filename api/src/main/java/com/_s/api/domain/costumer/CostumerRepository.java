@@ -12,6 +12,7 @@ public interface CostumerRepository {
     Optional<Costumer> findById(String id);
     Optional<Costumer> findByCpf(String cpf);
     Boolean existsByCpf(Cpf cpf);
+    Boolean existsByEmail(String email);
     List<Costumer> findByIdIn(List<String> ids);
     Page<Costumer> findAllByUserId(String userId, Pageable pageable);
     Page<Costumer> findByUserIdAndNameContainingIgnoreCase(String userId, String name, Pageable pageable);
