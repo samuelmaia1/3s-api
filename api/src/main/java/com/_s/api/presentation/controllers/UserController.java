@@ -30,6 +30,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -126,33 +127,23 @@ public class UserController {
     @GetMapping("/products")
     public ResponseEntity<Page<ProductResponse>> getProductsByUserId(
             @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+            @PageableDefault(
+                    page = 0,
+                    size = 10,
+                    sort = "createdAt",
+                    direction = Sort.Direction.DESC
+            )
             Pageable pageable,
-            @RequestParam(required = false) Integer page,
-            @RequestParam(required = false) Integer size,
-            @RequestParam(required = false) String sort,
             @RequestParam(required = false) String name
     ) {
+
         validateUserExists(authenticatedUser.id());
 
-        Pageable resolvedPageable;
+        Page<ProductResponse> response = getProductsService
+                .executeByUserId(authenticatedUser.id(), name, pageable)
+                .map(ProductResponseMapper::toResponse);
 
-        if (page == null && size == null && sort == null) {
-            resolvedPageable = PageRequest.of(
-                    0,
-                    10,
-                    Sort.by("createdAt").descending()
-            );
-        } else {
-            resolvedPageable = pageable;
-        }
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(
-                        getProductsService
-                                .executeByUserId(authenticatedUser.id(), name, resolvedPageable)
-                                .map(ProductResponseMapper::toResponse)
-                );
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/orders")
@@ -199,28 +190,21 @@ public class UserController {
     @GetMapping("/costumers")
     public ResponseEntity<Page<CostumerResponse>> getCostumersByUserId(
             @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+            @PageableDefault(
+                    page = 0,
+                    size = 10,
+                    sort = "createdAt",
+                    direction = Sort.Direction.DESC
+            )
             Pageable pageable,
-            @RequestParam(required = false) Integer page,
-            @RequestParam(required = false) Integer size,
-            @RequestParam(required = false) String sort
+            @RequestParam(name = "name", required = false) String name
     ) {
         validateUserExists(authenticatedUser.id());
 
-        Pageable resolvedPageable;
-
-        if (page == null && size == null && sort == null) {
-            resolvedPageable = PageRequest.of(
-                    0,
-                    10,
-                    Sort.by("createdAt").descending()
-            );
-        } else {
-            resolvedPageable = pageable;
-        }
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(getCostumerService.executeByUserId(authenticatedUser.id(), resolvedPageable).map(CostumerResponseMapper::toResponse));
+                .body(getCostumerService.executeByUserId(authenticatedUser.id(), name, pageable).map(CostumerResponseMapper::toResponse));
     }
 
 

@@ -24,4 +24,6 @@ public interface CostumerJpaRepository extends JpaRepository<CostumerEntity, Str
     long countByUserId(@Param("userId") String userId);
 
     List<CostumerEntity> findByIdIn(List<String> ids);
+
+    Page<CostumerEntity> findByUserIdAndNameContainingIgnoreCase(String userId, String name, Pageable pageable);
 }

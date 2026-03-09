@@ -2,6 +2,7 @@ package com._s.api.domain.costumer.service;
 
 import com._s.api.domain.costumer.Costumer;
 import com._s.api.domain.costumer.CostumerRepository;
+import com._s.api.domain.costumer.exception.CostumerAlreadyExistsException;
 import com._s.api.domain.user.User;
 import com._s.api.domain.user.UserRepository;
 import com._s.api.domain.user.exception.IdentityAlreadyInUseException;
@@ -33,8 +34,11 @@ public class CreateCostumerService {
     }
 
     public Costumer execute(CreateCostumerCommand command, String userId) {
-        if (repository.existsByCpf(new Cpf(command.getCpf())))
-            throw new IdentityAlreadyInUseException("CPF já cadastrado para outro cliente.");
+        if (repository.existsByCpf(new Cpf(command.getCpf()))) {
+            System.out.println("Caiu aqui ó");
+            throw new CostumerAlreadyExistsException("CPF já cadastrado para outro cliente.");
+        }
+
 
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Usuário não encontrado."));
 

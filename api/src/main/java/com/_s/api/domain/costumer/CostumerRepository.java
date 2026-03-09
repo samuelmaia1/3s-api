@@ -1,6 +1,5 @@
 package com._s.api.domain.costumer;
 
-import com._s.api.domain.order.Order;
 import com._s.api.domain.valueobject.Cpf;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,4 +14,5 @@ public interface CostumerRepository {
     Boolean existsByCpf(Cpf cpf);
     List<Costumer> findByIdIn(List<String> ids);
     Page<Costumer> findAllByUserId(String userId, Pageable pageable);
+    Page<Costumer> findByUserIdAndNameContainingIgnoreCase(String userId, String name, Pageable pageable);
 }

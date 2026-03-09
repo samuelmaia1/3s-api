@@ -58,4 +58,9 @@ public class CostumerRepositoryAdapter implements CostumerRepository {
     public Page<Costumer> findAllByUserId(String userId, Pageable pageable) {
         return repository.findAllByUserId(userId, pageable).map(CostumerMapper::toDomain);
     }
+
+    @Override
+    public Page<Costumer> findByUserIdAndNameContainingIgnoreCase(String userId, String name, Pageable pageable) {
+        return repository.findByUserIdAndNameContainingIgnoreCase(userId, name, pageable).map(CostumerMapper::toDomain);
+    }
 }

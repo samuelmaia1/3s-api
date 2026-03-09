@@ -1,6 +1,7 @@
 package com._s.api.presentation.exception;
 
 import com._s.api.domain.costumer.CostumerNotFoundException;
+import com._s.api.domain.costumer.exception.CostumerAlreadyExistsException;
 import com._s.api.presentation.response.ErrorResponse;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -17,5 +18,12 @@ public class CostumerExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.buildError(HttpStatus.NOT_FOUND, exception.getMessage()));
+    }
+
+    @ExceptionHandler(CostumerAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleCostumerAlreadyExists(CostumerAlreadyExistsException exception) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ErrorResponse.buildError(HttpStatus.CONFLICT, exception.getMessage()));
     }
 }

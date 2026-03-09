@@ -24,8 +24,13 @@ public class GetCostumerService {
         return repository.findById(id)
                 .orElseThrow(() -> new CostumerNotFoundException());
     }
-    public Page<Costumer> executeByUserId(String id, Pageable pageable) {
-        return repository.findAllByUserId(id, pageable);
+    public Page<Costumer> executeByUserId(String userId, String name, Pageable pageable) {
+
+        if (name != null && !name.isBlank()) {
+            return repository.findByUserIdAndNameContainingIgnoreCase(userId, name, pageable);
+        }
+
+        return repository.findAllByUserId(userId, pageable);
     }
 
 }
