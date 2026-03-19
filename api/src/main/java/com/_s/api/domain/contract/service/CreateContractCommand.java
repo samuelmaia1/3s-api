@@ -1,6 +1,5 @@
 package com._s.api.domain.contract.service;
 
-import com._s.api.presentation.dto.ClauseRequest;
 import com._s.api.presentation.dto.ContractRequest;
 import lombok.Getter;
 

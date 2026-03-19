@@ -1,6 +1,5 @@
 package com._s.api.domain.orderItem;
 
-import com._s.api.domain.order.Order;
 import com._s.api.domain.product.Product;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

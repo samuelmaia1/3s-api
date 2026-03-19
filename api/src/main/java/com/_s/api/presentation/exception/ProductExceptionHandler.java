@@ -3,7 +3,6 @@ package com._s.api.presentation.exception;
 import com._s.api.domain.orderItem.exception.InsufficientStockException;
 import com._s.api.domain.orderItem.exception.InvalidOrderItemQuantityException;
 import com._s.api.domain.product.exception.ProductNotFoundException;
-import com._s.api.domain.user.exception.UserNotFoundException;
 import com._s.api.presentation.response.ErrorResponse;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

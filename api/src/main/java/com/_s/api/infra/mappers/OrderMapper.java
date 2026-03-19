@@ -1,6 +1,5 @@
 package com._s.api.infra.mappers;
 
-import com._s.api.domain.costumer.Costumer;
 import com._s.api.domain.order.Order;
 import com._s.api.domain.orderItem.OrderItem;
 import com._s.api.infra.repositories.entity.CostumerEntity;

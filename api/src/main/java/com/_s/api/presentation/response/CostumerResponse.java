@@ -1,13 +1,10 @@
 package com._s.api.presentation.response;
 
 import com._s.api.domain.costumer.Costumer;
-import com._s.api.domain.order.Order;
 import com._s.api.domain.shared.Address;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 public class CostumerResponse {

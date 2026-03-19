@@ -2,7 +2,6 @@ package com._s.api.presentation.response;
 
 import com._s.api.domain.shared.Address;
 import com._s.api.domain.user.User;
-import com._s.api.domain.valueobject.Cpf;
 import lombok.Data;
 
 import java.time.LocalDateTime;

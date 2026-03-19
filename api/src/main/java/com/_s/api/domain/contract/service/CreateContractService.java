@@ -9,10 +9,7 @@ import com._s.api.domain.costumer.service.GetCostumerService;
 import com._s.api.domain.order.Order;
 import com._s.api.domain.order.service.GetOrderService;
 import com._s.api.domain.user.User;
-import com._s.api.domain.user.UserRepository;
 import com._s.api.domain.user.service.GetUserService;
-import com._s.api.infra.mappers.OrderMapper;
-import com._s.api.presentation.dto.ContractRequest;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +17,6 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

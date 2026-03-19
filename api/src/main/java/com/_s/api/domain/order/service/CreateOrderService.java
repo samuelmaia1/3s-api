@@ -14,7 +14,6 @@ import com._s.api.domain.product.exception.ProductNotFoundException;
 import com._s.api.domain.user.User;
 import com._s.api.domain.user.UserRepository;
 import com._s.api.domain.user.exception.UserNotFoundException;
-import com._s.api.infra.mappers.AddressMapper;
 import com._s.api.infra.mappers.CostumerMapper;
 import com._s.api.infra.mappers.OrderMapper;
 import com._s.api.infra.mappers.UserMapper;

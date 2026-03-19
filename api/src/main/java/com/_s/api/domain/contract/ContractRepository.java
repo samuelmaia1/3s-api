@@ -1,8 +1,6 @@
 package com._s.api.domain.contract;
 
-import com._s.api.infra.repositories.entity.ContractEntity;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;

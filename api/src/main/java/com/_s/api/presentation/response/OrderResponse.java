@@ -2,7 +2,6 @@ package com._s.api.presentation.response;
 
 import com._s.api.domain.order.Order;
 import com._s.api.domain.order.OrderStatus;
-import com._s.api.domain.orderItem.OrderItem;
 import lombok.Data;
 
 import java.math.BigDecimal;

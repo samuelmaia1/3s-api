@@ -1,6 +1,5 @@
 package com._s.api.domain.refreshToken.service;
 
-import com._s.api.domain.refreshToken.RefreshToken;
 import com._s.api.domain.refreshToken.RefreshTokenRepository;
 import org.springframework.stereotype.Service;
 

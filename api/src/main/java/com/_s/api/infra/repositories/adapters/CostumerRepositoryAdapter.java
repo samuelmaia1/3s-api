@@ -2,12 +2,10 @@ package com._s.api.infra.repositories.adapters;
 
 import com._s.api.domain.costumer.Costumer;
 import com._s.api.domain.costumer.CostumerRepository;
-import com._s.api.domain.user.exception.UserNotFoundException;
 import com._s.api.domain.valueobject.Cpf;
 import com._s.api.infra.mappers.CostumerMapper;
 import com._s.api.infra.repositories.CostumerJpaRepository;
 import com._s.api.infra.repositories.UserJpaRepository;
-import com._s.api.infra.repositories.entity.CostumerEntity;
 import com._s.api.infra.repositories.entity.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

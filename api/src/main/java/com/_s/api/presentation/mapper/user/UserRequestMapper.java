@@ -2,7 +2,6 @@ package com._s.api.presentation.mapper.user;
 
 import com._s.api.domain.user.service.CreateUserCommand;
 import com._s.api.domain.user.service.UpdateUserCommand;
-import com._s.api.presentation.dto.AddressRequest;
 import com._s.api.presentation.dto.CreateUserRequest;
 import com._s.api.presentation.dto.UpdateUserRequest;
 import com._s.api.presentation.mapper.shared.AddressRequestMapper;

@@ -1,6 +1,5 @@
 package com._s.api.domain.order.service;
 
-import com._s.api.domain.exception.EntityNotFoundException;
 import com._s.api.domain.order.Order;
 import com._s.api.domain.order.OrderRepository;
 import com._s.api.domain.order.exception.OrderNotFoundException;

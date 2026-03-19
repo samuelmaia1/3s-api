@@ -1,12 +1,10 @@
 package com._s.api.infra.repositories.adapters;
 
-import com._s.api.domain.costumer.CostumerRepository;
 import com._s.api.domain.order.Order;
 import com._s.api.domain.order.OrderRepository;
 import com._s.api.domain.order.OrderStatus;
 import com._s.api.domain.order.exception.OrderNotFoundException;
 import com._s.api.infra.mappers.OrderMapper;
-import com._s.api.infra.mappers.ProductMapper;
 import com._s.api.infra.repositories.CostumerJpaRepository;
 import com._s.api.infra.repositories.OrderJpaRepository;
 import com._s.api.infra.repositories.UserJpaRepository;

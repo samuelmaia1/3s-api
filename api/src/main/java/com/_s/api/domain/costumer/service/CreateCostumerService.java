@@ -5,7 +5,6 @@ import com._s.api.domain.costumer.CostumerRepository;
 import com._s.api.domain.costumer.exception.CostumerAlreadyExistsException;
 import com._s.api.domain.user.User;
 import com._s.api.domain.user.UserRepository;
-import com._s.api.domain.user.exception.IdentityAlreadyInUseException;
 import com._s.api.domain.user.exception.UserNotFoundException;
 import com._s.api.domain.valueobject.Cpf;
 import com._s.api.infra.mappers.CostumerMapper;

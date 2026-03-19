@@ -1,7 +1,6 @@
 package com._s.api.presentation.controllers;
 
 import com._s.api.domain.order.OrderStatus;
-import com._s.api.domain.order.service.GetOrderService;
 import com._s.api.domain.order.service.UpdateOrderService;
 import com._s.api.presentation.dto.UpdateStatusRequest;
 import com._s.api.presentation.mapper.order.OrderResponseMapper;
@@ -16,11 +15,9 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
 
     private final UpdateOrderService updateOrderService;
-    private final GetOrderService getOrderService;
 
-    public OrderController(UpdateOrderService updateOrderService, GetOrderService getOrderService) {
+    public OrderController(UpdateOrderService updateOrderService) {
         this.updateOrderService = updateOrderService;
-        this.getOrderService = getOrderService;
     }
 
     @PutMapping("/{id}/status")

@@ -3,7 +3,6 @@ package com._s.api.infra.repositories.entity;
 import com._s.api.domain.valueobject.Cpf;
 import com._s.api.infra.persistence.CpfConverter;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

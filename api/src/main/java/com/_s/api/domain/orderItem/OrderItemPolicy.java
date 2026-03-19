@@ -4,7 +4,6 @@ import com._s.api.domain.orderItem.exception.InsufficientStockException;
 import com._s.api.domain.orderItem.exception.InvalidOrderItemQuantityException;
 import com._s.api.domain.product.Product;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Component
 public class OrderItemPolicy {
