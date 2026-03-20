@@ -19,12 +19,9 @@ public class CreateOrderRequest {
     private List<CreateOrderItemRequest> items;
 
     @Valid
-    @NotNull
     private AddressRequest deliveryAddress;
 
-    @NotNull
     private LocalDateTime deliveryDate;
 
-    @NotNull
     private LocalDateTime returnDate;
 }

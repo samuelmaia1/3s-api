@@ -152,6 +152,7 @@ public class UserController {
             @Valid @RequestBody CreateOrderRequest request
             ) {
         validateUserExists(authenticatedUser.id());
+        System.out.println(request.getDeliveryAddress().getCity());
 
         CreateOrderCommand command = new CreateOrderCommand(request);
 
