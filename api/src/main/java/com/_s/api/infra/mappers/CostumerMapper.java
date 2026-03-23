@@ -23,6 +23,21 @@ public class CostumerMapper {
         );
     }
 
+    public static Costumer toDomainWithoutOrders(CostumerEntity entity) {
+        return Costumer.mount(
+                entity.getId(),
+                entity.getUser().getId(),
+                entity.getName(),
+                entity.getLastName(),
+                entity.getEmail(),
+                entity.getCpf(),
+                entity.getCreatedAt(),
+                entity.getUpdatedAt(),
+                null,
+                AddressMapper.toDomain(entity.getAddress())
+        );
+    }
+
     public static CostumerEntity toEntity(Costumer costumer, UserEntity userEntity) {
         CostumerEntity entity = new CostumerEntity();
 

@@ -24,6 +24,8 @@ public class OrderResponse {
 
     private String userId;
 
+    private CostumerSummaryResponse costumer;
+
     public OrderResponse(Order order) {
         this.id = order.getId();
         this.createdAt = order.getCreatedAt();
@@ -32,5 +34,6 @@ public class OrderResponse {
         this.costumerId = order.getCostumerId();
         this.userId = order.getUserId();
         this.items = order.getItems().stream().map(OrderItemResponse::new).toList();
+        this.costumer = new CostumerSummaryResponse(order.getCostumer());
     }
 }

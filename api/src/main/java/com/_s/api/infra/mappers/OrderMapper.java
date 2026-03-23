@@ -31,7 +31,8 @@ public class OrderMapper {
                 items,
                 AddressMapper.toDomain(entity.getDeliveryAddress()),
                 entity.getDeliveryDate(),
-                entity.getReturnDate()
+                entity.getReturnDate(),
+                CostumerMapper.toDomainWithoutOrders(entity.getCostumer())
         );
     }
 

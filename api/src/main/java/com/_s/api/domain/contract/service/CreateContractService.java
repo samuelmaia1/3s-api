@@ -18,6 +18,7 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +32,11 @@ public class CreateContractService {
     private final GetUserService getUserService;
 
     public byte[] execute(CreateContractCommand data, String userId) {
+        Optional<Contract> optionalContract = contractRepository.findByOrderId(data.getOrderId());
+        if (optionalContract.isPresent()) {
+            contractRepository.delete(optionalContract.get());
+        }
+
         Order order = getOrderService.execute(data.getOrderId());
         Costumer costumer = getCostumerService.execute(data.getCostumerId());
         User user = getUserService.executeById(userId);

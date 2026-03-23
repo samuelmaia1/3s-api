@@ -38,5 +38,20 @@ public class ContractRepositoryAdapter implements ContractRepository {
     public List<Contract> findLastContractsByUser(String userId, Pageable pageable) {
         return repository.findLastContractsByUser(userId, pageable).stream().map(ContractMapper::toDomain).toList();
     }
+
+    @Override
+    public Boolean existsByOrderId(String orderId) {
+        return repository.existsByOrderId(orderId);
+    }
+
+    @Override
+    public void delete(Contract contract) {
+        repository.delete(ContractMapper.toEntity(contract));
+    }
+
+    @Override
+    public Optional<Contract> findByOrderId(String orderId) {
+        return repository.findByOrderId(orderId).map(ContractMapper::toDomain);
+    }
 }
 

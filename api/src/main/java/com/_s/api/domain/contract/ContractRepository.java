@@ -8,9 +8,12 @@ import java.util.Optional;
 public interface ContractRepository {
     Contract save(Contract contract);
     Optional<Contract> findById(String id);
+    Optional<Contract> findByOrderId(String orderId);
     Optional<Contract> findByCode(String code);
     List<Contract> findLastContractsByUser(
             String userId,
             Pageable pageable
     );
+    Boolean existsByOrderId(String orderId);
+    void delete(Contract contract);
 }

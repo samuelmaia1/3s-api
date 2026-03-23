@@ -33,5 +33,11 @@ public interface ContractJpaRepository extends JpaRepository<ContractEntity, Str
             @Param("userId") String userId,
             Pageable pageable
     );
+
+    Boolean existsByOrderId(String orderId);
+
+    void delete(ContractEntity contract);
+
+    Optional<ContractEntity> findByOrderId(String orderId);
 }
 

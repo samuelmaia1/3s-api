@@ -1,5 +1,6 @@
 package com._s.api.domain.order;
 
+import com._s.api.domain.costumer.Costumer;
 import com._s.api.domain.orderItem.OrderItem;
 import com._s.api.domain.shared.Address;
 import lombok.AccessLevel;
@@ -37,6 +38,8 @@ public class Order {
 
     private List<OrderItem> items = new ArrayList<>();
 
+    private Costumer costumer;
+
     public Order(
             String userId,
             String costumerId,
@@ -65,9 +68,10 @@ public class Order {
             List<OrderItem> items,
             Address deliveryAddress,
             LocalDateTime deliveryDate,
-            LocalDateTime returnDate
+            LocalDateTime returnDate,
+            Costumer costumer
             ) {
-        return new Order(id, userId, costumerId, createdAt, status, total, deliveryAddress, deliveryDate, returnDate, items);
+        return new Order(id, userId, costumerId, createdAt, status, total, deliveryAddress, deliveryDate, returnDate, items, costumer);
     }
 
     public void calculateTotal() {

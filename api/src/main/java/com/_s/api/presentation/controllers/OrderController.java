@@ -20,7 +20,7 @@ public class OrderController {
         this.updateOrderService = updateOrderService;
     }
 
-    @PutMapping("/{id}/status")
+    @PutMapping("/status/{id}")
     public ResponseEntity<OrderResponse> updateOrderStatus(
             @PathVariable String id,
             @Valid @RequestBody UpdateStatusRequest data
@@ -30,7 +30,7 @@ public class OrderController {
                 .body(OrderResponseMapper.toResponse(updateOrderService.updateStatus(id, data.action())));
     }
 
-    @PutMapping("/{id}/finish")
+    @PutMapping("/finish/{id}")
     public ResponseEntity<OrderResponse> finishOrder(
             @PathVariable String id,
             @Valid @RequestBody UpdateStatusRequest data
