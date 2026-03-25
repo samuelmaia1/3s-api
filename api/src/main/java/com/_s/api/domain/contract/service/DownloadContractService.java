@@ -12,6 +12,7 @@ import com._s.api.domain.order.Order;
 import com._s.api.domain.order.service.GetOrderService;
 import com._s.api.domain.user.User;
 import com._s.api.domain.user.service.GetUserService;
+import com._s.api.presentation.dto.CreatedContract;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +26,7 @@ public class DownloadContractService {
     private final GetUserService getUserService;
     private final GenerateService generateService;
 
-    public byte[] execute(String code, String userId) {
+    public CreatedContract execute(String code, String userId) {
 
         Optional<Contract> optionalContract = contractRepository.findByCode(code);
 
@@ -39,7 +40,9 @@ public class DownloadContractService {
         Costumer costumer = getCostumerService.execute(contract.getCostumerId());
         User user = getUserService.executeById(userId);
 
+        byte[] pdf = generateService.generatePdf(contract, order, costumer, user);
 
-        return generateService.generatePdf(contract, order, costumer, user);
+
+        return new CreatedContract(pdf, contract);
     }
 }

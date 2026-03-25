@@ -6,6 +6,8 @@ import com._s.api.domain.contract.service.DownloadContractService;
 import com._s.api.domain.contract.service.UpdateContractService;
 import com._s.api.infra.security.AuthenticatedUser;
 import com._s.api.presentation.dto.ContractRequest;
+import com._s.api.presentation.dto.CreatedContract;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RequiredArgsConstructor
@@ -32,15 +33,25 @@ public class ContractController {
     ) {
         CreateContractCommand command = new CreateContractCommand(request);
 
+        CreatedContract createdContract = createContractService.execute(command, user.id());
+
+        String filename = "contrato(" + createdContract.contract().getCode() + ").pdf";
+
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=contrato.pdf")
-            .body(createContractService.execute(command, user.id()));
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+            .body(createdContract.pdf());
     }
 
     @GetMapping("/download/{code}")
     public ResponseEntity<byte[]> getMethodName(@PathVariable String code, @AuthenticationPrincipal AuthenticatedUser user) {
-        return ResponseEntity.ok(downloadContractService.execute(code, user.id()));
+        CreatedContract createdContract = downloadContractService.execute(code, user.id());
+
+        String filename = "contrato(" + createdContract.contract().getCode() + ").pdf";
+
+        return ResponseEntity.status(HttpStatus.OK)
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+            .body(createdContract.pdf());
     }
     
 

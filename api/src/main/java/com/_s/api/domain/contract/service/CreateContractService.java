@@ -10,6 +10,8 @@ import com._s.api.domain.order.Order;
 import com._s.api.domain.order.service.GetOrderService;
 import com._s.api.domain.user.User;
 import com._s.api.domain.user.service.GetUserService;
+import com._s.api.presentation.dto.CreatedContract;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +29,7 @@ public class CreateContractService {
     private final GetUserService getUserService;
     private final GenerateService generateService;
 
-    public byte[] execute(CreateContractCommand data, String userId) {
+    public CreatedContract execute(CreateContractCommand data, String userId) {
         Optional<Contract> optionalContract = contractRepository.findByOrderId(data.getOrderId());
         if (optionalContract.isPresent()) {
             contractRepository.delete(optionalContract.get());
@@ -52,7 +54,9 @@ public class CreateContractService {
 
         Contract saveContract = contractRepository.save(contract);
 
-        return generateService.generatePdf(saveContract, order, costumer, user);
+        byte[] pdf = generateService.generatePdf(saveContract, order, costumer, user);
+
+        return new CreatedContract(pdf, saveContract);
     }
 
     
