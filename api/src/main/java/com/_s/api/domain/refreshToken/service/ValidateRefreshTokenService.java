@@ -23,8 +23,6 @@ public class ValidateRefreshTokenService {
 
     public RefreshToken execute(String token) {
         String[] splitToken = token.split("\\.");
-        System.out.println(splitToken[0]);
-        System.out.println(splitToken[1]);
         if (splitToken.length != 2) {
             throw new InvalidTokenException("Token inválido ou expirado.");
         }

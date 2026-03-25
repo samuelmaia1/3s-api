@@ -39,5 +39,7 @@ public interface ContractJpaRepository extends JpaRepository<ContractEntity, Str
     void delete(ContractEntity contract);
 
     Optional<ContractEntity> findByOrderId(String orderId);
+
+    void deleteByOrderId(String orderId);
 }
 

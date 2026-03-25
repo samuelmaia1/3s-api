@@ -53,5 +53,10 @@ public class ContractRepositoryAdapter implements ContractRepository {
     public Optional<Contract> findByOrderId(String orderId) {
         return repository.findByOrderId(orderId).map(ContractMapper::toDomain);
     }
+
+    @Override
+    public void deleteByOrderId(String orderId) {
+        repository.deleteByOrderId(orderId);
+    }
 }
 

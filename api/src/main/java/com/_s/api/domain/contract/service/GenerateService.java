@@ -1,0 +1,57 @@
+package com._s.api.domain.contract.service;
+
+import java.io.ByteArrayOutputStream;
+
+import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+
+import com._s.api.domain.contract.Contract;
+import com._s.api.domain.costumer.Costumer;
+import com._s.api.domain.order.Order;
+import com._s.api.domain.user.User;
+import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class GenerateService {
+    private final SpringTemplateEngine engine;
+
+    public byte[] generatePdf(
+        Contract contract,
+        Order order,
+        Costumer costumer,
+        User user
+    ) {
+
+        Context context = new Context();
+
+        context.setVariable("order", order);
+        context.setVariable("costumer", costumer);
+        context.setVariable("clauses", contract.getClauses());
+        context.setVariable("code", contract.getCode());
+        context.setVariable("user", user);
+        context.setVariable("logoUrl", "https://res.cloudinary.com/duxksghsb/image/upload/v1771003225/WhatsApp_Image_2026-02-13_at_14.19.16_q3aisl.jpg");
+
+        String html = engine.process("contract", context);
+
+        return generatePdfFromHtml(html);
+    }
+
+    static byte[] generatePdfFromHtml(String html) {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+
+            PdfRendererBuilder builder = new PdfRendererBuilder();
+            builder.withHtmlContent(html, null);
+            builder.toStream(outputStream);
+            builder.run();
+
+            return outputStream.toByteArray();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao gerar contrato em PDF", e);
+        }
+    }
+}

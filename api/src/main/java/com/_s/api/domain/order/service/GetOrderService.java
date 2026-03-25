@@ -27,7 +27,6 @@ public class GetOrderService {
     }
 
     public Order execute(String id) {
-        System.out.println(id);
         Optional<Order> optionalOrder = repository.findById(id);
 
         if (optionalOrder.isEmpty()) throw new OrderNotFoundException("Pedido não encontrado.");

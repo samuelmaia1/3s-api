@@ -14,7 +14,6 @@ public class GetUserService {
     }
 
     public User executeById(String id) {
-        System.out.println(id);
         return repository.findById(id).orElseThrow(() -> new UserNotFoundException("Usuário com este Id não encontrado"));
     }
 }

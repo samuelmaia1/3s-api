@@ -16,4 +16,5 @@ public interface ContractRepository {
     );
     Boolean existsByOrderId(String orderId);
     void delete(Contract contract);
+    void deleteByOrderId(String orderId);
 }
