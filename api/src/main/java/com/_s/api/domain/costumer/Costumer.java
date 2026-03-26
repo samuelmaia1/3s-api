@@ -37,6 +37,22 @@ public class Costumer {
         this.address = data.getAddress();
     }
 
+    @Override
+    public String toString() {
+        return "Costumer{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", cpf=" + cpf +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", orders=" + orders +
+                ", address=" + address +
+                '}';
+    }
+
     public void addOrder(Order order) {
         this.orders.add(order);
     }

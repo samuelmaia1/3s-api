@@ -16,8 +16,11 @@ public class GetCostumerService {
     }
 
     public Costumer execute(String id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new CostumerNotFoundException());
+        Costumer costumer = repository.findById(id)
+                .orElseThrow(CostumerNotFoundException::new);
+
+        System.out.println(costumer);
+        return costumer;
     }
     public Page<Costumer> executeByUserId(String userId, String name, Pageable pageable) {
 
