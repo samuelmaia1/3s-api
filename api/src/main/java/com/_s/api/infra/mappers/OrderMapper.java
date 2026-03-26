@@ -32,7 +32,8 @@ public class OrderMapper {
                 AddressMapper.toDomain(entity.getDeliveryAddress()),
                 entity.getDeliveryDate(),
                 entity.getReturnDate(),
-                CostumerMapper.toDomainWithoutOrders(entity.getCostumer())
+                CostumerMapper.toDomainWithoutOrders(entity.getCostumer()),
+                entity.getCode()
         );
     }
 
@@ -78,6 +79,7 @@ public class OrderMapper {
         entity.setDeliveryAddress(AddressMapper.toEntity(order.getDeliveryAddress()));
         entity.setDeliveryDate(order.getDeliveryDate());
         entity.setReturnDate(order.getReturnDate());
+        entity.setCode(order.getCode());
         return entity;
     }
 

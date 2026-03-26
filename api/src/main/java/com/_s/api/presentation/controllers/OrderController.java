@@ -2,12 +2,14 @@ package com._s.api.presentation.controllers;
 
 import com._s.api.domain.order.OrderStatus;
 import com._s.api.domain.order.service.UpdateOrderService;
+import com._s.api.infra.security.AuthenticatedUser;
 import com._s.api.presentation.dto.UpdateStatusRequest;
 import com._s.api.presentation.mapper.order.OrderResponseMapper;
 import com._s.api.presentation.response.OrderResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,20 +25,22 @@ public class OrderController {
     @PutMapping("/status/{id}")
     public ResponseEntity<OrderResponse> updateOrderStatus(
             @PathVariable String id,
-            @Valid @RequestBody UpdateStatusRequest data
+            @Valid @RequestBody UpdateStatusRequest data,
+            @AuthenticationPrincipal AuthenticatedUser user
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(OrderResponseMapper.toResponse(updateOrderService.updateStatus(id, data.action())));
+                .body(OrderResponseMapper.toResponse(updateOrderService.updateStatus(id, data.action(), user.id())));
     }
 
     @PutMapping("/finish/{id}")
     public ResponseEntity<OrderResponse> finishOrder(
             @PathVariable String id,
-            @Valid @RequestBody UpdateStatusRequest data
+            @Valid @RequestBody UpdateStatusRequest data,
+            @AuthenticationPrincipal AuthenticatedUser user
     ) {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(OrderResponseMapper.toResponse(updateOrderService.updateStatus(id, OrderStatus.CONCLUIDO)));
+            .body(OrderResponseMapper.toResponse(updateOrderService.updateStatus(id, OrderStatus.CONCLUIDO, user.id())));
     }
 }

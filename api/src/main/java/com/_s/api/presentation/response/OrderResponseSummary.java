@@ -25,6 +25,8 @@ public class OrderResponseSummary {
 
     private String userId;
 
+    private String code;
+
     private CostumerResponse costumer;
 
     public OrderResponseSummary(OrderResponse response, Costumer costumer) {
@@ -36,5 +38,6 @@ public class OrderResponseSummary {
         this.costumerId = response.getCostumerId();
         this.userId = response.getUserId();
         this.costumer = CostumerResponseMapper.toResponse(costumer);
+        this.code = response.getCode();
     }
 }

@@ -119,6 +119,8 @@ public class CreateOrderService {
                 request.getReturnDate()
         );
 
+        System.out.println(order);
+
         order.calculateTotal();
 
         OrderEntity entity = OrderMapper.toEntity(order, userEntity, costumerEntity);

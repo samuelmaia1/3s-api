@@ -52,6 +52,7 @@ public class CostumerEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @OrderBy("createdAt DESC")
     private List<OrderEntity> orders = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

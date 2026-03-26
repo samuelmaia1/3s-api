@@ -38,6 +38,8 @@ public class OrderEntity {
 
     private LocalDateTime returnDate;
 
+    private String code;
+
     @OneToMany(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<OrderItemEntity> items = new ArrayList<>();
 

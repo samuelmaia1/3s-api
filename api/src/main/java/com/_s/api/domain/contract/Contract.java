@@ -43,8 +43,8 @@ public class Contract {
         this.status = ContractStatus.CANCELADO;
     }
 
-    private String generateCode() {
-        int code = (int) (Math.random() * 9000) + 1000;
+    private static String generateCode() {
+        int code = (int) (Math.random() * 900_000) + 100_000;
         return String.valueOf(code);
     }
 

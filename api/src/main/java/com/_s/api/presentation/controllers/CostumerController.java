@@ -9,6 +9,7 @@ import com._s.api.presentation.dto.CreateCostumerRequest;
 import com._s.api.presentation.mapper.costumer.CostumerRequestMapper;
 import com._s.api.presentation.mapper.costumer.CostumerResponseMapper;
 import com._s.api.presentation.mapper.order.OrderResponseMapper;
+import com._s.api.presentation.response.CostumerResponseWithOrders;
 import com._s.api.presentation.response.OrderResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -51,12 +52,12 @@ public class CostumerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCostumerById(@PathVariable String id) {
+    public ResponseEntity<CostumerResponseWithOrders> getCostumerById(@PathVariable String id) {
         Costumer costumer = getCostumerService.execute(id);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(CostumerResponseMapper.toResponse(costumer));
+                .body(new CostumerResponseWithOrders(costumer));
     }
 
     @GetMapping("/{id}/orders")

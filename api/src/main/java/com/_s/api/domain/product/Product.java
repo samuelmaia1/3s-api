@@ -55,4 +55,8 @@ public class Product {
     public void decreaseStock(Integer quantity) {
         this.stock = this.stock - quantity;
     }
+
+    public void incrementStock(Integer quantity) {
+        this.stock = this.stock + quantity;
+    }
 }

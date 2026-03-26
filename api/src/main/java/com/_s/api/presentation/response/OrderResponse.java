@@ -24,9 +24,12 @@ public class OrderResponse {
 
     private String userId;
 
+    private String code;
+
     private CostumerSummaryResponse costumer;
 
     public OrderResponse(Order order) {
+        this.code = order.getCode();
         this.id = order.getId();
         this.createdAt = order.getCreatedAt();
         this.status = order.getStatus();

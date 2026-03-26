@@ -40,6 +40,8 @@ public class Order {
 
     private Costumer costumer;
 
+    private String code;
+
     public Order(
             String userId,
             String costumerId,
@@ -56,6 +58,7 @@ public class Order {
         this.deliveryAddress = deliveryAddress;
         this.deliveryDate = deliveryDate;
         this.returnDate = returnDate;
+        this.code = generateCode();
     }
 
     public static Order mount(
@@ -69,9 +72,15 @@ public class Order {
             Address deliveryAddress,
             LocalDateTime deliveryDate,
             LocalDateTime returnDate,
-            Costumer costumer
+            Costumer costumer,
+            String code
             ) {
-        return new Order(id, userId, costumerId, createdAt, status, total, deliveryAddress, deliveryDate, returnDate, items, costumer);
+        return new Order(id, userId, costumerId, createdAt, status, total, deliveryAddress, deliveryDate, returnDate, items, costumer, code);
+    }
+
+    private static String generateCode() {
+        int code = (int) (Math.random() * 900_000) + 100_000;
+        return String.valueOf(code);
     }
 
     public void calculateTotal() {
@@ -84,5 +93,5 @@ public class Order {
                 .map(OrderItem::getSubTotal)
                 .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
+    }    
 }
