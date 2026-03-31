@@ -47,6 +47,7 @@ public class CreateContractService {
         ;
 
         Contract contract = new Contract(
+            user.getId(),
             costumer.getId(),
             order.getId(),
             clauses

@@ -14,6 +14,7 @@ import java.util.Optional;
 @Repository
 public interface ContractJpaRepository extends JpaRepository<ContractEntity, String> {
     Optional<ContractEntity> findByCode(String code);
+    List<ContractEntity> findAllByUserIdOrderByCreatedAtDesc(String userId);
 
     @Query("""
     SELECT COUNT(c)
@@ -25,8 +26,7 @@ public interface ContractJpaRepository extends JpaRepository<ContractEntity, Str
     @Query("""
     SELECT c
     FROM ContractEntity c
-    JOIN OrderEntity o ON o.id = c.orderId
-    WHERE o.user.id = :userId
+    WHERE c.user.id = :userId
     ORDER BY c.createdAt DESC
 """)
     List<ContractEntity> findLastContractsByUser(
@@ -42,4 +42,3 @@ public interface ContractJpaRepository extends JpaRepository<ContractEntity, Str
 
     void deleteByOrderId(String orderId);
 }
-

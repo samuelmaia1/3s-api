@@ -15,6 +15,7 @@ import java.util.List;
 public class ContractResponseSummary {
     private String id;
     private String code;
+    private String userId;
     private String costumerId;
     private String orderId;
     private ContractStatus status;
@@ -27,6 +28,7 @@ public class ContractResponseSummary {
     public ContractResponseSummary(Contract contract, Costumer costumer) {
         this.id = contract.getId();
         this.code = contract.getCode();
+        this.userId = contract.getUserId();
         this.costumerId = contract.getCostumerId();
         this.orderId = contract.getOrderId();
         this.status = contract.getStatus();

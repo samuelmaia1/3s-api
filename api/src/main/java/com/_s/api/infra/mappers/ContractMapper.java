@@ -4,6 +4,7 @@ import com._s.api.domain.contract.Contract;
 import com._s.api.domain.clause.Clause;
 import com._s.api.infra.repositories.entity.ContractEntity;
 import com._s.api.infra.repositories.entity.ClauseEntity;
+import com._s.api.infra.repositories.entity.UserEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class ContractMapper {
         return Contract.mount(
                 entity.getId(),
                 entity.getCode(),
+                entity.getUser().getId(),
                 entity.getCostumerId(),
                 entity.getOrderId(),
                 entity.getStatus(),
@@ -34,6 +36,10 @@ public class ContractMapper {
     }
 
     public static ContractEntity toEntity(Contract contract) {
+        return toEntity(contract, null);
+    }
+
+    public static ContractEntity toEntity(Contract contract, UserEntity userEntity) {
         if (contract == null) {
             return null;
         }
@@ -42,6 +48,7 @@ public class ContractMapper {
 
         entity.setId(contract.getId());
         entity.setCode(contract.getCode());
+        entity.setUser(userEntity);
         entity.setCostumerId(contract.getCostumerId());
         entity.setOrderId(contract.getOrderId());
         entity.setStatus(contract.getStatus());

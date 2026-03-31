@@ -10,6 +10,7 @@ public interface ContractRepository {
     Optional<Contract> findById(String id);
     Optional<Contract> findByOrderId(String orderId);
     Optional<Contract> findByCode(String code);
+    List<Contract> findAllByUserId(String userId);
     List<Contract> findLastContractsByUser(
             String userId,
             Pageable pageable

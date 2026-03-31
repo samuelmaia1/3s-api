@@ -24,6 +24,10 @@ public class ContractEntity {
     @Column(unique = true, length = 6)
     private String code;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
+
     private String costumerId;
     private String orderId;
 
@@ -40,4 +44,3 @@ public class ContractEntity {
     )
     private List<ClauseEntity> clauses = new ArrayList<>();
 }
-

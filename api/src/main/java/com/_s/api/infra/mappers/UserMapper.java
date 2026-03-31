@@ -31,6 +31,7 @@ public class UserMapper {
             entity.getOrders().stream().map(OrderMapper::toDomain).toList(),
             AddressMapper.toDomain(entity.getAddress()),
             entity.getCostumers().stream().map(CostumerMapper::toDomain).toList(),
+            entity.getContracts().stream().map(ContractMapper::toDomain).toList(),
             entity.getSocialName(),
             entity.getInstagram(),
             entity.getLogo()
@@ -55,6 +56,8 @@ public class UserMapper {
         entity.setSocialName(user.getSocialName());
         entity.setInstagram(user.getInstagram());
         entity.setOrders(new ArrayList<>());
+        entity.setCostumers(new ArrayList<>());
+        entity.setContracts(new ArrayList<>());
         entity.setLogo(user.getLogo());
 
         user.getOrders().forEach(order -> {
@@ -62,6 +65,10 @@ public class UserMapper {
             orderEntity.setUser(entity);
 
             entity.getOrders().add(orderEntity);
+        });
+
+        user.getContracts().forEach(contract -> {
+            entity.getContracts().add(ContractMapper.toEntity(contract, entity));
         });
 
         return entity;

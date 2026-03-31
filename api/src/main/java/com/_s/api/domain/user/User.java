@@ -1,5 +1,6 @@
 package com._s.api.domain.user;
 
+import com._s.api.domain.contract.Contract;
 import com._s.api.domain.costumer.Costumer;
 import com._s.api.domain.order.Order;
 import com._s.api.domain.shared.Address;
@@ -31,6 +32,7 @@ public class User {
 
     private final List<Order> orders = new ArrayList<>();
     private final List<Costumer> costumers = new ArrayList<>();
+    private final List<Contract> contracts = new ArrayList<>();
 
     private User(
             String id,
@@ -93,6 +95,8 @@ public class User {
 
     public void addCostumer(Costumer costumer) { this.costumers.add(costumer); }
 
+    public void addContract(Contract contract) { this.contracts.add(contract); }
+
     public static User mount(
             String id,
             String name,
@@ -105,6 +109,7 @@ public class User {
             List<Order> orders,
             Address address,
             List<Costumer> costumers,
+            List<Contract> contracts,
             String socialName,
             String instagram,
             String logo
@@ -119,6 +124,10 @@ public class User {
 
         if (costumers != null) {
             costumers.forEach(user::addCostumer);
+        }
+
+        if (contracts != null) {
+            contracts.forEach(user::addContract);
         }
 
         return user;

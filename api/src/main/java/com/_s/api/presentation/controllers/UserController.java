@@ -1,5 +1,8 @@
 package com._s.api.presentation.controllers;
 
+import com._s.api.domain.contract.Contract;
+import com._s.api.domain.contract.service.GetContractService;
+import com._s.api.domain.costumer.Costumer;
 import com._s.api.domain.costumer.service.GetCostumerService;
 import com._s.api.domain.order.service.CreateOrderCommand;
 import com._s.api.domain.order.service.CreateOrderService;
@@ -21,6 +24,7 @@ import com._s.api.presentation.mapper.product.ProductRequestMapper;
 import com._s.api.presentation.mapper.product.ProductResponseMapper;
 import com._s.api.presentation.mapper.user.UserRequestMapper;
 import com._s.api.presentation.mapper.user.UserResponseMapper;
+import com._s.api.presentation.response.ContractResponseSummary;
 import com._s.api.presentation.response.CostumerResponse;
 import com._s.api.presentation.response.OrderResponse;
 import com._s.api.presentation.response.ProductResponse;
@@ -36,6 +40,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 @RequestMapping("/api/users")
 @RestController
 public class UserController {
@@ -48,6 +57,7 @@ public class UserController {
     private final GetOrderService getOrderService;
     private final CreateOrderService createOrderService;
     private final GetCostumerService getCostumerService;
+    private final GetContractService getContractService;
 
     public UserController(CreateUserService createUserService,
                           GetUserService getUserService,
@@ -56,7 +66,8 @@ public class UserController {
                           UpdateUserService updateUserService,
                           GetOrderService getOrderService,
                           CreateOrderService createOrderService,
-                          GetCostumerService getCostumerService
+                          GetCostumerService getCostumerService,
+                          GetContractService getContractService
     )
     {
         this.createUserService = createUserService;
@@ -67,6 +78,7 @@ public class UserController {
         this.getOrderService = getOrderService;
         this.createOrderService = createOrderService;
         this.getCostumerService = getCostumerService;
+        this.getContractService = getContractService;
     }
 
     @PostMapping("/create")
@@ -205,6 +217,35 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(getCostumerService.executeByUserId(authenticatedUser.id(), name, pageable).map(CostumerResponseMapper::toResponse));
+    }
+
+    @GetMapping("/contracts")
+    public ResponseEntity<List<ContractResponseSummary>> getContractsByUserId(
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser
+    ) {
+        validateUserExists(authenticatedUser.id());
+
+        List<Contract> contracts = getContractService.executeByUserId(authenticatedUser.id());
+
+        if (contracts.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(List.of());
+        }
+
+        List<String> costumerIds = contracts.stream().map(Contract::getCostumerId).distinct().toList();
+
+        Map<String, Costumer> costumersMap = getCostumerService.executeByIds(costumerIds)
+                .stream()
+                .collect(Collectors.toMap(Costumer::getId, Function.identity()));
+
+        List<ContractResponseSummary> response = contracts.stream()
+                .map(contract -> new ContractResponseSummary(contract, costumersMap.get(contract.getCostumerId())))
+                .toList();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
     }
 
 

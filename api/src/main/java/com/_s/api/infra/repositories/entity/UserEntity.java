@@ -82,4 +82,11 @@ public class UserEntity {
             orphanRemoval = true
     )
     private List<CostumerEntity> costumers = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<ContractEntity> contracts = new ArrayList<>();
 }

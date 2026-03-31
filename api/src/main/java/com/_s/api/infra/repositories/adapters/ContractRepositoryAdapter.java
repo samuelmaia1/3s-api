@@ -4,6 +4,8 @@ import com._s.api.domain.contract.Contract;
 import com._s.api.domain.contract.ContractRepository;
 import com._s.api.infra.mappers.ContractMapper;
 import com._s.api.infra.repositories.ContractJpaRepository;
+import com._s.api.infra.repositories.UserJpaRepository;
+import com._s.api.infra.repositories.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -16,11 +18,14 @@ import java.util.Optional;
 public class ContractRepositoryAdapter implements ContractRepository {
 
     private final ContractJpaRepository repository;
+    private final UserJpaRepository userRepository;
 
     @Override
     public Contract save(Contract contract) {
+        UserEntity userRef = userRepository.getReferenceById(contract.getUserId());
+
         return ContractMapper.toDomain(
-                repository.save(ContractMapper.toEntity(contract))
+                repository.save(ContractMapper.toEntity(contract, userRef))
         );
     }
 
@@ -35,6 +40,11 @@ public class ContractRepositoryAdapter implements ContractRepository {
     }
 
     @Override
+    public List<Contract> findAllByUserId(String userId) {
+        return repository.findAllByUserIdOrderByCreatedAtDesc(userId).stream().map(ContractMapper::toDomain).toList();
+    }
+
+    @Override
     public List<Contract> findLastContractsByUser(String userId, Pageable pageable) {
         return repository.findLastContractsByUser(userId, pageable).stream().map(ContractMapper::toDomain).toList();
     }
@@ -46,7 +56,7 @@ public class ContractRepositoryAdapter implements ContractRepository {
 
     @Override
     public void delete(Contract contract) {
-        repository.delete(ContractMapper.toEntity(contract));
+        repository.deleteById(contract.getId());
     }
 
     @Override
@@ -59,4 +69,3 @@ public class ContractRepositoryAdapter implements ContractRepository {
         repository.deleteByOrderId(orderId);
     }
 }
-

@@ -13,6 +13,7 @@ public class Contract {
 
     private String id;
     private String code;
+    private String userId;
     private String costumerId;
     private String orderId;
     private ContractStatus status;
@@ -20,8 +21,9 @@ public class Contract {
 
     private final List<Clause> clauses = new ArrayList<>();
 
-    public Contract(String costumerId, String orderId, List<Clause> clauses) {
+    public Contract(String userId, String costumerId, String orderId, List<Clause> clauses) {
         this.code = generateCode();
+        this.userId = userId;
         this.costumerId = costumerId;
         this.orderId = orderId;
         this.status = ContractStatus.ASSINATURA_PENDENTE;
@@ -51,6 +53,7 @@ public class Contract {
     public static Contract mount(
             String id,
             String code,
+            String userId,
             String costumerId,
             String orderId,
             ContractStatus status,
@@ -60,6 +63,7 @@ public class Contract {
         Contract contract = new Contract();
         contract.id = id;
         contract.code = code;
+        contract.userId = userId;
         contract.costumerId = costumerId;
         contract.orderId = orderId;
         contract.status = status;

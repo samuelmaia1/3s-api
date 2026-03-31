@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class GetCostumerService {
     private final CostumerRepository repository;
@@ -28,6 +30,10 @@ public class GetCostumerService {
         }
 
         return repository.findAllByUserId(userId, pageable);
+    }
+
+    public List<Costumer> executeByIds(List<String> ids) {
+        return repository.findByIdIn(ids);
     }
 
 }
