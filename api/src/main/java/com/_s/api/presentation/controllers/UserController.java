@@ -1,8 +1,6 @@
 package com._s.api.presentation.controllers;
 
-import com._s.api.domain.contract.Contract;
 import com._s.api.domain.contract.service.GetContractService;
-import com._s.api.domain.costumer.Costumer;
 import com._s.api.domain.costumer.service.GetCostumerService;
 import com._s.api.domain.order.service.CreateOrderCommand;
 import com._s.api.domain.order.service.CreateOrderService;
@@ -40,11 +38,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 @RequestMapping("/api/users")
 @RestController
 public class UserController {
@@ -59,15 +52,16 @@ public class UserController {
     private final GetCostumerService getCostumerService;
     private final GetContractService getContractService;
 
-    public UserController(CreateUserService createUserService,
-                          GetUserService getUserService,
-                          CreateProductService createProductService,
-                          GetProductsService getProductsService,
-                          UpdateUserService updateUserService,
-                          GetOrderService getOrderService,
-                          CreateOrderService createOrderService,
-                          GetCostumerService getCostumerService,
-                          GetContractService getContractService
+    public UserController(
+        CreateUserService createUserService,
+        GetUserService getUserService,
+        CreateProductService createProductService,
+        GetProductsService getProductsService,
+        UpdateUserService updateUserService,
+        GetOrderService getOrderService,
+        CreateOrderService createOrderService,
+        GetCostumerService getCostumerService,
+        GetContractService getContractService
     )
     {
         this.createUserService = createUserService;
@@ -220,32 +214,21 @@ public class UserController {
     }
 
     @GetMapping("/contracts")
-    public ResponseEntity<List<ContractResponseSummary>> getContractsByUserId(
-            @AuthenticationPrincipal AuthenticatedUser authenticatedUser
+    public ResponseEntity<Page<ContractResponseSummary>> getContractsByUserId(
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+            @PageableDefault(
+                    page = 0,
+                    size = 10,
+                    sort = "createdAt",
+                    direction = Sort.Direction.DESC
+            )
+            Pageable pageable
     ) {
         validateUserExists(authenticatedUser.id());
 
-        List<Contract> contracts = getContractService.executeByUserId(authenticatedUser.id());
-
-        if (contracts.isEmpty()) {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(List.of());
-        }
-
-        List<String> costumerIds = contracts.stream().map(Contract::getCostumerId).distinct().toList();
-
-        Map<String, Costumer> costumersMap = getCostumerService.executeByIds(costumerIds)
-                .stream()
-                .collect(Collectors.toMap(Costumer::getId, Function.identity()));
-
-        List<ContractResponseSummary> response = contracts.stream()
-                .map(contract -> new ContractResponseSummary(contract, costumersMap.get(contract.getCostumerId())))
-                .toList();
-
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(response);
+                .body(getContractService.executeByUserId(authenticatedUser.id(), pageable));
     }
 
 

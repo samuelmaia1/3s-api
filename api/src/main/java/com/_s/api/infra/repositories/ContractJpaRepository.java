@@ -2,6 +2,7 @@ package com._s.api.infra.repositories;
 
 import com._s.api.domain.contract.ContractStatus;
 import com._s.api.infra.repositories.entity.ContractEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +15,7 @@ import java.util.Optional;
 @Repository
 public interface ContractJpaRepository extends JpaRepository<ContractEntity, String> {
     Optional<ContractEntity> findByCode(String code);
-    List<ContractEntity> findAllByUserIdOrderByCreatedAtDesc(String userId);
+    Page<ContractEntity> findAllByUserIdOrderByCreatedAtDesc(String userId, Pageable pageable);
 
     @Query("""
     SELECT COUNT(c)

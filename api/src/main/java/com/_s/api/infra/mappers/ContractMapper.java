@@ -4,6 +4,7 @@ import com._s.api.domain.contract.Contract;
 import com._s.api.domain.clause.Clause;
 import com._s.api.infra.repositories.entity.ContractEntity;
 import com._s.api.infra.repositories.entity.ClauseEntity;
+import com._s.api.infra.repositories.entity.OrderEntity;
 import com._s.api.infra.repositories.entity.UserEntity;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class ContractMapper {
                 entity.getCode(),
                 entity.getUser().getId(),
                 entity.getCostumerId(),
-                entity.getOrderId(),
+                entity.getOrder().getId(),
                 entity.getStatus(),
                 entity.getCreatedAt(),
                 clauses
@@ -36,10 +37,14 @@ public class ContractMapper {
     }
 
     public static ContractEntity toEntity(Contract contract) {
-        return toEntity(contract, null);
+        return toEntity(contract, null, null);
     }
 
     public static ContractEntity toEntity(Contract contract, UserEntity userEntity) {
+        return toEntity(contract, userEntity, null);
+    }
+
+    public static ContractEntity toEntity(Contract contract, UserEntity userEntity, OrderEntity orderEntity) {
         if (contract == null) {
             return null;
         }
@@ -50,7 +55,7 @@ public class ContractMapper {
         entity.setCode(contract.getCode());
         entity.setUser(userEntity);
         entity.setCostumerId(contract.getCostumerId());
-        entity.setOrderId(contract.getOrderId());
+        entity.setOrder(orderEntity);
         entity.setStatus(contract.getStatus());
         entity.setCreatedAt(contract.getCreatedAt());
 

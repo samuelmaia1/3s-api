@@ -51,4 +51,7 @@ public class OrderEntity {
     @JoinColumn(name = "costumer_id", nullable = false)
     private CostumerEntity costumer;
 
+    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY)
+    private ContractEntity contract;
+
 }

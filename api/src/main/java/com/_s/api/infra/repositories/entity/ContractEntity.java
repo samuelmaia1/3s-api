@@ -29,7 +29,10 @@ public class ContractEntity {
     private UserEntity user;
 
     private String costumerId;
-    private String orderId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false, unique = true)
+    private OrderEntity order;
 
     @Enumerated(EnumType.STRING)
     private ContractStatus status;

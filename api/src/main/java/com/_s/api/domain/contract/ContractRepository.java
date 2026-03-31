@@ -1,6 +1,7 @@
 package com._s.api.domain.contract;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +11,7 @@ public interface ContractRepository {
     Optional<Contract> findById(String id);
     Optional<Contract> findByOrderId(String orderId);
     Optional<Contract> findByCode(String code);
-    List<Contract> findAllByUserId(String userId);
+    Page<Contract> findAllByUserId(String userId, Pageable pageable);
     List<Contract> findLastContractsByUser(
             String userId,
             Pageable pageable

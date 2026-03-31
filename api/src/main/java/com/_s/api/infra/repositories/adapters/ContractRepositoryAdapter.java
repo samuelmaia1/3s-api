@@ -4,9 +4,12 @@ import com._s.api.domain.contract.Contract;
 import com._s.api.domain.contract.ContractRepository;
 import com._s.api.infra.mappers.ContractMapper;
 import com._s.api.infra.repositories.ContractJpaRepository;
+import com._s.api.infra.repositories.OrderJpaRepository;
 import com._s.api.infra.repositories.UserJpaRepository;
+import com._s.api.infra.repositories.entity.OrderEntity;
 import com._s.api.infra.repositories.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
@@ -19,13 +22,15 @@ public class ContractRepositoryAdapter implements ContractRepository {
 
     private final ContractJpaRepository repository;
     private final UserJpaRepository userRepository;
+    private final OrderJpaRepository orderRepository;
 
     @Override
     public Contract save(Contract contract) {
         UserEntity userRef = userRepository.getReferenceById(contract.getUserId());
+        OrderEntity orderRef = orderRepository.getReferenceById(contract.getOrderId());
 
         return ContractMapper.toDomain(
-                repository.save(ContractMapper.toEntity(contract, userRef))
+                repository.save(ContractMapper.toEntity(contract, userRef, orderRef))
         );
     }
 
@@ -40,8 +45,8 @@ public class ContractRepositoryAdapter implements ContractRepository {
     }
 
     @Override
-    public List<Contract> findAllByUserId(String userId) {
-        return repository.findAllByUserIdOrderByCreatedAtDesc(userId).stream().map(ContractMapper::toDomain).toList();
+    public Page<Contract> findAllByUserId(String userId, Pageable pageable) {
+        return repository.findAllByUserIdOrderByCreatedAtDesc(userId, pageable).map(ContractMapper::toDomain);
     }
 
     @Override
