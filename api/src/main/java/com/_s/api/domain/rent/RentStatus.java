@@ -12,6 +12,7 @@ public enum RentStatus {
     PAGAMENTO_APROVADO("Pagamento Aprovado"),
     AGUARDANDO_ENTREGA("Aguardando Entrega"),
     ENTREGUE("Entregue"),
+    DEVOLUCAO_ATRASADA("Devolução Atrasada"),
     CONCLUIDO("Concluído"),
     CANCELADO("Cancelado");
 

@@ -39,9 +39,6 @@ public class Contract {
     }
 
     public void markAsCanceled() {
-        if (this.status != ContractStatus.ASSINATURA_PENDENTE) {
-            throw new IllegalStateException("Contrato nao pode ser cancelado.");
-        }
         this.status = ContractStatus.CANCELADO;
     }
 

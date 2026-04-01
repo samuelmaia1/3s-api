@@ -92,4 +92,24 @@ public class RentRepositoryAdapter implements RentRepository {
     ) {
         return repository.sumReservedQuantityByProductAndPeriod(productId, deliveryDate, returnDate, statuses);
     }
+
+    @Override
+    @Transactional
+    public int updateStatusToAguardandoEntrega(
+            LocalDateTime start,
+            LocalDateTime end,
+            List<RentStatus> currentStatuses
+    ) {
+        return repository.updateStatusToAguardandoEntrega(start, end, currentStatuses);
+    }
+
+    @Override
+    @Transactional
+    public int updateStatusToDevolucaoAtrasada(
+            LocalDateTime start,
+            LocalDateTime end,
+            RentStatus currentStatus
+    ) {
+        return repository.updateStatusToDevolucaoAtrasada(start, end, currentStatus);
+    }
 }

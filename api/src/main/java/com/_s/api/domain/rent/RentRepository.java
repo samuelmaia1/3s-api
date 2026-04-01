@@ -20,4 +20,14 @@ public interface RentRepository {
             LocalDateTime returnDate,
             List<RentStatus> statuses
     );
+    int updateStatusToAguardandoEntrega(
+            LocalDateTime start,
+            LocalDateTime end,
+            List<RentStatus> currentStatuses
+    );
+    int updateStatusToDevolucaoAtrasada(
+            LocalDateTime start,
+            LocalDateTime end,
+            RentStatus currentStatus
+    );
 }

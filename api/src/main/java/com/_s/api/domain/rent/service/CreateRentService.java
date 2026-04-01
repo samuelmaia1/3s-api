@@ -96,7 +96,7 @@ public class CreateRentService {
         Rent rent = new Rent(
                 user.get().getId(),
                 costumer.get().getId(),
-                RentStatus.REALIZADO,
+                resolveInitialStatus(request),
                 items,
                 request.getDeliveryTax(),
                 AddressRequestMapper.toDomain(request.getDeliveryAddress()),
@@ -109,6 +109,16 @@ public class CreateRentService {
         return repository.save(rent);
     }
 
+    private RentStatus resolveInitialStatus(CreateRentRequest request) {
+        if (request.getDeliveryDate() == null) {
+            return RentStatus.REALIZADO;
+        }
+
+        return request.getDeliveryDate().toLocalDate().isEqual(java.time.LocalDate.now())
+                ? RentStatus.AGUARDANDO_ENTREGA
+                : RentStatus.REALIZADO;
+    }
+
     private void validateProductStockByPeriod(
             CreateRentRequest request,
             Map<String, Product> productsById
@@ -118,7 +128,8 @@ public class CreateRentService {
                 RentStatus.REALIZADO,
                 RentStatus.AGUARDANDO_ENTREGA,
                 RentStatus.ENTREGUE,
-                RentStatus.CONTRATO_ASSINADO
+                RentStatus.CONTRATO_ASSINADO,
+                RentStatus.DEVOLUCAO_ATRASADA
         );
 
         request.getItems().forEach(item -> {
