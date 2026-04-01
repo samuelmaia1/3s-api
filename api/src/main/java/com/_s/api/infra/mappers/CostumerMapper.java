@@ -3,6 +3,7 @@ package com._s.api.infra.mappers;
 import com._s.api.domain.costumer.Costumer;
 import com._s.api.infra.repositories.entity.CostumerEntity;
 import com._s.api.infra.repositories.entity.OrderEntity;
+import com._s.api.infra.repositories.entity.RentEntity;
 import com._s.api.infra.repositories.entity.UserEntity;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class CostumerMapper {
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
                 entity.getOrders().stream().map(OrderMapper::toDomain).toList(),
+                entity.getRents().stream().map(RentMapper::toDomain).toList(),
                 AddressMapper.toDomain(entity.getAddress())
         );
     }
@@ -33,6 +35,7 @@ public class CostumerMapper {
                 entity.getCpf(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
+                null,
                 null,
                 AddressMapper.toDomain(entity.getAddress())
         );
@@ -49,6 +52,7 @@ public class CostumerMapper {
         entity.setCreatedAt(costumer.getCreatedAt());
         entity.setUpdatedAt(costumer.getUpdatedAt());
         entity.setOrders(new ArrayList<>());
+        entity.setRents(new ArrayList<>());
         entity.setUser(userEntity);
         entity.setAddress(AddressMapper.toEntity(costumer.getAddress()));
 
@@ -57,6 +61,13 @@ public class CostumerMapper {
             orderEntity.setCostumer(entity);
 
             entity.getOrders().add(orderEntity);
+        });
+
+        costumer.getRents().forEach(rent -> {
+            RentEntity rentEntity = RentMapper.toEntity(rent, entity);
+            rentEntity.setCostumer(entity);
+
+            entity.getRents().add(rentEntity);
         });
 
         return entity;

@@ -2,6 +2,7 @@ package com._s.api.infra.mappers;
 
 import com._s.api.domain.user.User;
 import com._s.api.infra.repositories.entity.OrderEntity;
+import com._s.api.infra.repositories.entity.RentEntity;
 import com._s.api.infra.repositories.entity.UserEntity;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +30,7 @@ public class UserMapper {
             entity.getCreatedAt(),
             entity.getUpdatedAt(),
             entity.getOrders().stream().map(OrderMapper::toDomain).toList(),
+            entity.getRents().stream().map(RentMapper::toDomain).toList(),
             AddressMapper.toDomain(entity.getAddress()),
             entity.getCostumers().stream().map(CostumerMapper::toDomain).toList(),
             entity.getContracts().stream().map(ContractMapper::toDomain).toList(),
@@ -56,6 +58,7 @@ public class UserMapper {
         entity.setSocialName(user.getSocialName());
         entity.setInstagram(user.getInstagram());
         entity.setOrders(new ArrayList<>());
+        entity.setRents(new ArrayList<>());
         entity.setCostumers(new ArrayList<>());
         entity.setContracts(new ArrayList<>());
         entity.setLogo(user.getLogo());
@@ -65,6 +68,13 @@ public class UserMapper {
             orderEntity.setUser(entity);
 
             entity.getOrders().add(orderEntity);
+        });
+
+        user.getRents().forEach(rent -> {
+            RentEntity rentEntity = RentMapper.toEntity(rent, entity);
+            rentEntity.setUser(entity);
+
+            entity.getRents().add(rentEntity);
         });
 
         user.getContracts().forEach(contract -> {

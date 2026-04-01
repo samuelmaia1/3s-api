@@ -55,6 +55,14 @@ public class CostumerEntity {
     @OrderBy("createdAt DESC")
     private List<OrderEntity> orders = new ArrayList<>();
 
+    @OneToMany(
+            mappedBy = "costumer",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @OrderBy("createdAt DESC")
+    private List<RentEntity> rents = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;

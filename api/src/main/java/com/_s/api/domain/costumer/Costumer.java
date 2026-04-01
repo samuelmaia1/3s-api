@@ -2,6 +2,7 @@ package com._s.api.domain.costumer;
 
 import com._s.api.domain.costumer.service.CreateCostumerCommand;
 import com._s.api.domain.order.Order;
+import com._s.api.domain.rent.Rent;
 import com._s.api.domain.shared.Address;
 import com._s.api.domain.valueobject.Cpf;
 import lombok.AccessLevel;
@@ -25,6 +26,8 @@ public class Costumer {
     private LocalDateTime updatedAt;
 
     private final List<Order> orders = new ArrayList<>();
+
+    private final List<Rent> rents = new ArrayList<>();
 
     private Address address;
 
@@ -57,6 +60,10 @@ public class Costumer {
         this.orders.add(order);
     }
 
+    public void addRent(Rent rent) {
+        this.rents.add(rent);
+    }
+
     public static Costumer mount(
             String id,
             String userId,
@@ -67,12 +74,17 @@ public class Costumer {
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
             List<Order> orders,
+            List<Rent> rents,
             Address address
     ) {
         Costumer costumer = new Costumer(id, userId, name, lastName, email, cpf, createdAt, updatedAt, address);
 
         if (orders != null) {
             orders.forEach(costumer::addOrder);
+        }
+
+        if (rents != null) {
+            rents.forEach(costumer::addRent);
         }
 
         return costumer;

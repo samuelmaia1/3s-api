@@ -3,6 +3,7 @@ package com._s.api.domain.user;
 import com._s.api.domain.contract.Contract;
 import com._s.api.domain.costumer.Costumer;
 import com._s.api.domain.order.Order;
+import com._s.api.domain.rent.Rent;
 import com._s.api.domain.shared.Address;
 import com._s.api.domain.user.service.CreateUserCommand;
 import com._s.api.domain.user.service.UpdateUserCommand;
@@ -31,6 +32,7 @@ public class User {
     private String logo;
 
     private final List<Order> orders = new ArrayList<>();
+    private final List<Rent> rents = new ArrayList<>();
     private final List<Costumer> costumers = new ArrayList<>();
     private final List<Contract> contracts = new ArrayList<>();
 
@@ -93,6 +95,10 @@ public class User {
         this.orders.add(order);
     }
 
+    public void addRent(Rent rent) {
+        this.rents.add(rent);
+    }
+
     public void addCostumer(Costumer costumer) { this.costumers.add(costumer); }
 
     public void addContract(Contract contract) { this.contracts.add(contract); }
@@ -107,6 +113,7 @@ public class User {
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
             List<Order> orders,
+            List<Rent> rents,
             Address address,
             List<Costumer> costumers,
             List<Contract> contracts,
@@ -120,6 +127,10 @@ public class User {
 
         if (orders != null) {
             orders.forEach(user::addOrder);
+        }
+
+        if (rents != null) {
+            rents.forEach(user::addRent);
         }
 
         if (costumers != null) {
