@@ -114,9 +114,11 @@ public class CreateRentService {
             Map<String, Product> productsById
     ) {
         List<RentStatus> activeStatuses = List.of(
-                RentStatus.PENDENTE,
+                RentStatus.PAGAMENTO_APROVADO,
                 RentStatus.REALIZADO,
-                RentStatus.EM_ANDAMENTO
+                RentStatus.AGUARDANDO_ENTREGA,
+                RentStatus.ENTREGUE,
+                RentStatus.CONTRATO_ASSINADO
         );
 
         request.getItems().forEach(item -> {

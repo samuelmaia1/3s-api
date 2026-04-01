@@ -8,9 +8,7 @@ import java.util.Arrays;
 public enum OrderStatus {
 
     REALIZADO("Realizado"),
-    AGUARDANDO_ASSINATURA_CLIENTE("Aguardando Assinatura"),
     CONTRATO_ASSINADO("Contrato Assinado"),
-    AGUARDANDO_PAGAMENTO("Aguardando Pagamento"),
     PAGAMENTO_APROVADO("Pagamento Aprovado"),
     AGUARDANDO_ENTREGA("Aguardando Entrega"),
     ENTREGUE("Entregue"),
@@ -37,7 +35,7 @@ public enum OrderStatus {
                 )
                 .findFirst()
                 .orElseThrow(() ->
-                        new IllegalArgumentException("OrderStatus inválido: " + value)
+                        new IllegalArgumentException("Status inválido: " + value)
                 );
     }
 }
