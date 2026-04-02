@@ -1,6 +1,8 @@
 package com._s.api.domain.contract;
 
 import com._s.api.domain.clause.Clause;
+import com._s.api.domain.contract.exception.ContractIllegalSignException;
+
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -32,8 +34,8 @@ public class Contract {
     }
 
     public void markAsSigned() {
-        if (this.status != ContractStatus.ASSINATURA_PENDENTE) {
-            throw new IllegalStateException("Contrato não pode ser assinado.");
+        if (this.status == ContractStatus.CANCELADO) {
+            throw new ContractIllegalSignException("Um contrato cancelado não pode ser assinado.");
         }
         this.status = ContractStatus.ASSINADO;
     }
