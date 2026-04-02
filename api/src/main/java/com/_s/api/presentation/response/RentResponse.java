@@ -20,6 +20,8 @@ public class RentResponse {
 
     private BigDecimal deliveryTax;
 
+    private AddressResponse deliveryAddress;
+
     private LocalDateTime deliveryDate;
 
     private LocalDateTime returnDate;
@@ -41,6 +43,7 @@ public class RentResponse {
         this.status = rent.getStatus();
         this.total = rent.getTotal();
         this.deliveryTax = rent.getDeliveryTax();
+        this.deliveryAddress = new AddressResponse(rent.getDeliveryAddress());
         this.deliveryDate = rent.getDeliveryDate();
         this.returnDate = rent.getReturnDate();
         this.costumerId = rent.getCostumerId();
