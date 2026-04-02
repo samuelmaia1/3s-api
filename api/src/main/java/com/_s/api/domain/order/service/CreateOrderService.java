@@ -22,8 +22,10 @@ import com._s.api.infra.repositories.entity.OrderEntity;
 import com._s.api.infra.repositories.entity.UserEntity;
 import com._s.api.presentation.dto.CreateOrderItemRequest;
 import com._s.api.presentation.dto.CreateOrderRequest;
+import com._s.api.presentation.mapper.order.OrderResponseMapper;
 import com._s.api.presentation.mapper.shared.AddressRequestMapper;
 import jakarta.transaction.Transactional;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -41,19 +43,22 @@ public class CreateOrderService {
     private final UserRepository userRepository;
     private final CostumerRepository costumerRepository;
     private final OrderItemPolicy orderItemPolicy;
+    private final SimpMessagingTemplate messagingTemplate;
 
     public CreateOrderService(
             OrderRepository repository,
             ProductRepository productRepository,
             UserRepository userRepository,
             OrderItemPolicy orderItemPolicy,
-            CostumerRepository costumerRepository
+            CostumerRepository costumerRepository,
+            SimpMessagingTemplate messagingTemplate
     ) {
         this.repository = repository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
         this.orderItemPolicy = orderItemPolicy;
         this.costumerRepository = costumerRepository;
+        this.messagingTemplate = messagingTemplate;
     }
 
     @Transactional
@@ -123,6 +128,10 @@ public class CreateOrderService {
 
         OrderEntity entity = OrderMapper.toEntity(order, userEntity, costumerEntity);
 
-        return repository.save(OrderMapper.toDomain(entity));
+        Order createdOrder = repository.save(OrderMapper.toDomain(entity));
+
+        messagingTemplate.convertAndSend("/topic/orders", OrderResponseMapper.toResponse(createdOrder));
+
+        return createdOrder;
     }
 }

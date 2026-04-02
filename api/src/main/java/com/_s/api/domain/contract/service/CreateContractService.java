@@ -14,8 +14,10 @@ import com._s.api.domain.rent.service.GetRentService;
 import com._s.api.domain.user.User;
 import com._s.api.domain.user.service.GetUserService;
 import com._s.api.presentation.dto.CreatedContract;
+import com._s.api.presentation.response.ContractResponseWithReference;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +34,7 @@ public class CreateContractService {
     private final ClauseRepository clauseRepository;
     private final GetUserService getUserService;
     private final GenerateService generateService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     public CreatedContract execute(CreateContractCommand data, String userId) {
         Optional<Contract> optionalContract = contractRepository.findByReferenceIdAndReferenceType(
@@ -64,6 +67,11 @@ public class CreateContractService {
         Contract saveContract = contractRepository.save(contract);
 
         byte[] pdf = generateService.generatePdf(saveContract, reference, costumer, user);
+
+        messagingTemplate.convertAndSend(
+                "/topic/contracts",
+                new ContractResponseWithReference(saveContract, costumer, reference)
+        );
 
         return new CreatedContract(pdf, saveContract);
     }

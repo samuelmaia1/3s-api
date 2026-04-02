@@ -16,9 +16,11 @@ import com._s.api.domain.user.User;
 import com._s.api.domain.user.UserRepository;
 import com._s.api.domain.user.exception.UserNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import com._s.api.presentation.dto.CreateRentItemRequest;
 import com._s.api.presentation.dto.CreateRentRequest;
+import com._s.api.presentation.mapper.rent.RentResponseMapper;
 import com._s.api.presentation.mapper.shared.AddressRequestMapper;
 
 import java.util.ArrayList;
@@ -36,19 +38,22 @@ public class CreateRentService {
     private final UserRepository userRepository;
     private final CostumerRepository costumerRepository;
     private final RentItemPolicy rentItemPolicy;
+    private final SimpMessagingTemplate messagingTemplate;
 
     public CreateRentService(
             RentRepository repository,
             ProductRepository productRepository,
             UserRepository userRepository,
             CostumerRepository costumerRepository,
-            RentItemPolicy rentItemPolicy
+            RentItemPolicy rentItemPolicy,
+            SimpMessagingTemplate messagingTemplate
     ) {
         this.repository = repository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
         this.costumerRepository = costumerRepository;
         this.rentItemPolicy = rentItemPolicy;
+        this.messagingTemplate = messagingTemplate;
     }
 
     @Transactional
@@ -106,7 +111,11 @@ public class CreateRentService {
 
         rent.calculateTotal();
 
-        return repository.save(rent);
+        Rent createdRent = repository.save(rent);
+
+        messagingTemplate.convertAndSend("/topic/rents", RentResponseMapper.toResponse(createdRent));
+
+        return createdRent;
     }
 
     private RentStatus resolveInitialStatus(CreateRentRequest request) {
