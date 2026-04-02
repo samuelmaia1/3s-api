@@ -1,12 +1,11 @@
 package com._s.api.infra.repositories.adapters;
 
 import com._s.api.domain.contract.Contract;
+import com._s.api.domain.contract.ContractReferenceType;
 import com._s.api.domain.contract.ContractRepository;
 import com._s.api.infra.mappers.ContractMapper;
 import com._s.api.infra.repositories.ContractJpaRepository;
-import com._s.api.infra.repositories.OrderJpaRepository;
 import com._s.api.infra.repositories.UserJpaRepository;
-import com._s.api.infra.repositories.entity.OrderEntity;
 import com._s.api.infra.repositories.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,15 +21,13 @@ public class ContractRepositoryAdapter implements ContractRepository {
 
     private final ContractJpaRepository repository;
     private final UserJpaRepository userRepository;
-    private final OrderJpaRepository orderRepository;
 
     @Override
     public Contract save(Contract contract) {
         UserEntity userRef = userRepository.getReferenceById(contract.getUserId());
-        OrderEntity orderRef = orderRepository.getReferenceById(contract.getOrderId());
 
         return ContractMapper.toDomain(
-                repository.save(ContractMapper.toEntity(contract, userRef, orderRef))
+                repository.save(ContractMapper.toEntity(contract, userRef))
         );
     }
 
@@ -55,8 +52,8 @@ public class ContractRepositoryAdapter implements ContractRepository {
     }
 
     @Override
-    public Boolean existsByOrderId(String orderId) {
-        return repository.existsByOrderId(orderId);
+    public Boolean existsByReferenceIdAndReferenceType(String referenceId, ContractReferenceType referenceType) {
+        return repository.existsByReferenceIdAndReferenceType(referenceId, referenceType);
     }
 
     @Override
@@ -65,12 +62,12 @@ public class ContractRepositoryAdapter implements ContractRepository {
     }
 
     @Override
-    public Optional<Contract> findByOrderId(String orderId) {
-        return repository.findByOrderId(orderId).map(ContractMapper::toDomain);
+    public Optional<Contract> findByReferenceIdAndReferenceType(String referenceId, ContractReferenceType referenceType) {
+        return repository.findByReferenceIdAndReferenceType(referenceId, referenceType).map(ContractMapper::toDomain);
     }
 
     @Override
-    public void deleteByOrderId(String orderId) {
-        repository.deleteByOrderId(orderId);
+    public void deleteByReferenceIdAndReferenceType(String referenceId, ContractReferenceType referenceType) {
+        repository.deleteByReferenceIdAndReferenceType(referenceId, referenceType);
     }
 }

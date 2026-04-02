@@ -1,6 +1,7 @@
 package com._s.api.domain.order.service;
 
 import com._s.api.domain.contract.Contract;
+import com._s.api.domain.contract.ContractReferenceType;
 import com._s.api.domain.contract.ContractRepository;
 import com._s.api.domain.contract.service.UpdateContractService;
 import com._s.api.domain.order.Order;
@@ -56,7 +57,7 @@ public class UpdateOrderService {
         if (optionalOrder.isEmpty())
             throw new OrderNotFoundException("Pedido nao encontrado.");
 
-        Optional<Contract> contract = contractRepository.findByOrderId(id);
+        Optional<Contract> contract = contractRepository.findByReferenceIdAndReferenceType(id, ContractReferenceType.ORDER);
 
         if (contract.isPresent())
             updateContractService.cancelContract(contract.get().getId());

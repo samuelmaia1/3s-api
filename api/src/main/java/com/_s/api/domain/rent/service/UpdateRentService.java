@@ -1,5 +1,9 @@
 package com._s.api.domain.rent.service;
 
+import com._s.api.domain.contract.Contract;
+import com._s.api.domain.contract.ContractReferenceType;
+import com._s.api.domain.contract.ContractRepository;
+import com._s.api.domain.contract.service.UpdateContractService;
 import com._s.api.domain.rent.Rent;
 import com._s.api.domain.rent.RentRepository;
 import com._s.api.domain.rent.RentStatus;
@@ -13,9 +17,17 @@ import java.util.Optional;
 public class UpdateRentService {
 
     private final RentRepository repository;
+    private final ContractRepository contractRepository;
+    private final UpdateContractService updateContractService;
 
-    public UpdateRentService(RentRepository repository) {
+    public UpdateRentService(
+            RentRepository repository,
+            ContractRepository contractRepository,
+            UpdateContractService updateContractService
+    ) {
         this.repository = repository;
+        this.contractRepository = contractRepository;
+        this.updateContractService = updateContractService;
     }
 
     @Transactional
@@ -35,6 +47,13 @@ public class UpdateRentService {
 
         if (optionalRent.isEmpty()) {
             throw new RentNotFoundException("Aluguel não encontrado.");
+        }
+
+        Optional<Contract> contract =
+                contractRepository.findByReferenceIdAndReferenceType(id, ContractReferenceType.RENT);
+
+        if (contract.isPresent()) {
+            updateContractService.cancelContract(contract.get().getId());
         }
     }
 }

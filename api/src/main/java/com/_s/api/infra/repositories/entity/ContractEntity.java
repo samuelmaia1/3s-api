@@ -1,5 +1,6 @@
 package com._s.api.infra.repositories.entity;
 
+import com._s.api.domain.contract.ContractReferenceType;
 import com._s.api.domain.contract.ContractStatus;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -11,7 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "contracts")
+@Table(
+        name = "contracts",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"reference_id", "reference_type"})
+)
 @Data
 @Getter
 @EntityListeners(AuditingEntityListener.class)
@@ -30,9 +34,12 @@ public class ContractEntity {
 
     private String costumerId;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false, unique = true)
-    private OrderEntity order;
+    @Column(name = "reference_id", nullable = false)
+    private String referenceId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "reference_type", nullable = false)
+    private ContractReferenceType referenceType;
 
     @Enumerated(EnumType.STRING)
     private ContractStatus status;

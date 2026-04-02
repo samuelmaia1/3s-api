@@ -2,6 +2,7 @@ package com._s.api.presentation.response;
 
 import com._s.api.domain.clause.Clause;
 import com._s.api.domain.contract.Contract;
+import com._s.api.domain.contract.ContractReferenceType;
 import com._s.api.domain.contract.ContractStatus;
 import com._s.api.domain.costumer.Costumer;
 import com._s.api.presentation.mapper.costumer.CostumerResponseMapper;
@@ -17,7 +18,8 @@ public class ContractResponseSummary {
     private String code;
     private String userId;
     private String costumerId;
-    private String orderId;
+    private String referenceId;
+    private ContractReferenceType referenceType;
     private ContractStatus status;
     private LocalDateTime createdAt;
 
@@ -30,7 +32,8 @@ public class ContractResponseSummary {
         this.code = contract.getCode();
         this.userId = contract.getUserId();
         this.costumerId = contract.getCostumerId();
-        this.orderId = contract.getOrderId();
+        this.referenceId = contract.getReferenceId();
+        this.referenceType = contract.getReferenceType();
         this.status = contract.getStatus();
         this.createdAt = contract.getCreatedAt();
         this.clauses = contract.getClauses();

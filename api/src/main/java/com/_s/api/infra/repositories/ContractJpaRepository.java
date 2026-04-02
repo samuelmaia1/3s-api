@@ -1,6 +1,7 @@
 package com._s.api.infra.repositories;
 
 import com._s.api.domain.contract.ContractStatus;
+import com._s.api.domain.contract.ContractReferenceType;
 import com._s.api.infra.repositories.entity.ContractEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,11 +36,11 @@ public interface ContractJpaRepository extends JpaRepository<ContractEntity, Str
             Pageable pageable
     );
 
-    Boolean existsByOrderId(String orderId);
+    Boolean existsByReferenceIdAndReferenceType(String referenceId, ContractReferenceType referenceType);
 
     void delete(ContractEntity contract);
 
-    Optional<ContractEntity> findByOrderId(String orderId);
+    Optional<ContractEntity> findByReferenceIdAndReferenceType(String referenceId, ContractReferenceType referenceType);
 
-    void deleteByOrderId(String orderId);
+    void deleteByReferenceIdAndReferenceType(String referenceId, ContractReferenceType referenceType);
 }

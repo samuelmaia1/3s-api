@@ -17,17 +17,19 @@ public class Contract {
     private String code;
     private String userId;
     private String costumerId;
-    private String orderId;
+    private String referenceId;
+    private ContractReferenceType referenceType;
     private ContractStatus status;
     private LocalDateTime createdAt;
 
     private final List<Clause> clauses = new ArrayList<>();
 
-    public Contract(String userId, String costumerId, String orderId, List<Clause> clauses) {
+    public Contract(String userId, String costumerId, String referenceId, ContractReferenceType referenceType, List<Clause> clauses) {
         this.code = generateCode();
         this.userId = userId;
         this.costumerId = costumerId;
-        this.orderId = orderId;
+        this.referenceId = referenceId;
+        this.referenceType = referenceType;
         this.status = ContractStatus.ASSINATURA_PENDENTE;
         this.createdAt = LocalDateTime.now();
         this.clauses.addAll(clauses);
@@ -54,7 +56,8 @@ public class Contract {
             String code,
             String userId,
             String costumerId,
-            String orderId,
+            String referenceId,
+            ContractReferenceType referenceType,
             ContractStatus status,
             LocalDateTime createdAt,
             List<Clause> clauses
@@ -64,7 +67,8 @@ public class Contract {
         contract.code = code;
         contract.userId = userId;
         contract.costumerId = costumerId;
-        contract.orderId = orderId;
+        contract.referenceId = referenceId;
+        contract.referenceType = referenceType;
         contract.status = status;
         contract.createdAt = createdAt;
         contract.clauses.addAll(clauses);

@@ -175,7 +175,7 @@
             </td>
 
             <td class="contact-block">
-                <span th:text="${#temporals.format(order.createdAt,'dd/MM/yyyy')}"></span><br /><br />
+                <span th:text="${createdAt != null ? #temporals.format(createdAt,'dd/MM/yyyy') : ''}"></span><br /><br />
                 silasmaia.negocios@gmail.com<br />
                 +55 (31) 8542-0844<br />
                 31985420844<br />
@@ -232,7 +232,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="item : ${order.items}">
+    <tr th:each="item : ${items}">
         <td>
             <strong th:text="${item.product.name}"></strong><br />
             <span th:text="${item.product.description}"></span>
@@ -258,14 +258,14 @@
         <tr>
             <td>Produtos</td>
             <td class="text-right"
-                th:text="${#numbers.formatDecimal(order.total,1,'POINT',2,'COMMA')}">
+                th:text="${#numbers.formatDecimal(total,1,'POINT',2,'COMMA')}">
             </td>
         </tr>
 
         <tr>
             <td><strong>Subtotal</strong></td>
             <td class="text-right"
-                th:text="${#numbers.formatDecimal(order.total,1,'POINT',2,'COMMA')}">
+                th:text="${#numbers.formatDecimal(total,1,'POINT',2,'COMMA')}">
             </td>
         </tr>
 
@@ -325,7 +325,7 @@
 
 <div class="section" style="margin-top:30px;">
     Belo Horizonte,
-    <span th:text="${#temporals.format(order.createdAt,'dd/MM/yyyy')}"></span>
+    <span th:text="${createdAt != null ? #temporals.format(createdAt,'dd/MM/yyyy') : ''}"></span>
 </div>
 
 <div class="signature-area">

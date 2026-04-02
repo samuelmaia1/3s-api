@@ -3,11 +3,14 @@ package com._s.api.domain.contract.service;
 import com._s.api.domain.clause.Clause;
 import com._s.api.domain.clause.ClauseRepository;
 import com._s.api.domain.contract.Contract;
+import com._s.api.domain.contract.ContractReferenceType;
 import com._s.api.domain.contract.ContractRepository;
 import com._s.api.domain.costumer.Costumer;
 import com._s.api.domain.costumer.service.GetCostumerService;
 import com._s.api.domain.order.Order;
 import com._s.api.domain.order.service.GetOrderService;
+import com._s.api.domain.rent.Rent;
+import com._s.api.domain.rent.service.GetRentService;
 import com._s.api.domain.user.User;
 import com._s.api.domain.user.service.GetUserService;
 import com._s.api.presentation.dto.CreatedContract;
@@ -23,6 +26,7 @@ import java.util.Optional;
 public class CreateContractService {
 
     private final GetOrderService getOrderService;
+    private final GetRentService getRentService;
     private final GetCostumerService getCostumerService;
     private final ContractRepository contractRepository;
     private final ClauseRepository clauseRepository;
@@ -30,14 +34,17 @@ public class CreateContractService {
     private final GenerateService generateService;
 
     public CreatedContract execute(CreateContractCommand data, String userId) {
-        Optional<Contract> optionalContract = contractRepository.findByOrderId(data.getOrderId());
+        Optional<Contract> optionalContract = contractRepository.findByReferenceIdAndReferenceType(
+                data.getReferenceId(),
+                data.getReferenceType()
+        );
         if (optionalContract.isPresent()) {
             contractRepository.delete(optionalContract.get());
         }
 
-        Order order = getOrderService.execute(data.getOrderId());
         Costumer costumer = getCostumerService.execute(data.getCostumerId());
         User user = getUserService.executeById(userId);
+        Object reference = resolveReference(data.getReferenceId(), data.getReferenceType());
 
         List<Clause> clauses = data
             .getClausesIds()
@@ -49,17 +56,26 @@ public class CreateContractService {
         Contract contract = new Contract(
             user.getId(),
             costumer.getId(),
-            order.getId(),
+            data.getReferenceId(),
+            data.getReferenceType(),
             clauses
         );
 
         Contract saveContract = contractRepository.save(contract);
 
-        byte[] pdf = generateService.generatePdf(saveContract, order, costumer, user);
+        byte[] pdf = generateService.generatePdf(saveContract, reference, costumer, user);
 
         return new CreatedContract(pdf, saveContract);
     }
 
-    
+    private Object resolveReference(String referenceId, ContractReferenceType referenceType) {
+        if (referenceType == ContractReferenceType.ORDER) {
+            Order order = getOrderService.execute(referenceId);
+            return order;
+        }
+
+        Rent rent = getRentService.execute(referenceId);
+        return rent;
+    }
 
 }
