@@ -1,6 +1,7 @@
 package com._s.api.infra.repositories.adapters;
 
 import com._s.api.domain.order.Order;
+import com._s.api.domain.order.OrderFilter;
 import com._s.api.domain.order.OrderRepository;
 import com._s.api.domain.order.OrderStatus;
 import com._s.api.domain.order.exception.OrderNotFoundException;
@@ -8,6 +9,7 @@ import com._s.api.infra.mappers.OrderMapper;
 import com._s.api.infra.repositories.CostumerJpaRepository;
 import com._s.api.infra.repositories.OrderJpaRepository;
 import com._s.api.infra.repositories.UserJpaRepository;
+import com._s.api.infra.repositories.specification.OrderSpecifications;
 import com._s.api.infra.repositories.entity.CostumerEntity;
 import com._s.api.infra.repositories.entity.OrderEntity;
 import com._s.api.infra.repositories.entity.UserEntity;
@@ -43,6 +45,11 @@ public class OrderRepositoryAdapter implements OrderRepository {
 
     public Page<Order> findAllByUserId(String userId, Pageable pageable) {
         return repository.findAllByUserId(userId, pageable).map(OrderMapper::toDomain);
+    }
+
+    @Override
+    public Page<Order> findAllByUserId(String userId, OrderFilter filter, Pageable pageable) {
+        return repository.findAll(OrderSpecifications.withFilters(userId, filter), pageable).map(OrderMapper::toDomain);
     }
 
     @Override

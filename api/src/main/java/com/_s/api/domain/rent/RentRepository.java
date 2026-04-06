@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface RentRepository {
     Rent save(Rent rent);
     Page<Rent> findAllByUserId(String userId, Pageable pageable);
+    Page<Rent> findAllByUserId(String userId, RentFilter filter, Pageable pageable);
     Page<Rent> findAllByCostumerId(String costumerId, Pageable pageable);
     Optional<Rent> findById(String id);
     void updateStatus(String id, RentStatus status);

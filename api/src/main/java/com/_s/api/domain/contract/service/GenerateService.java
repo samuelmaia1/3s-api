@@ -19,6 +19,9 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class GenerateService {
+    private static final String DEFAULT_LOGO_URL =
+            "https://res.cloudinary.com/duxksghsb/image/upload/v1771003225/WhatsApp_Image_2026-02-13_at_14.19.16_q3aisl.jpg";
+
     private final SpringTemplateEngine engine;
 
     public byte[] generatePdf(
@@ -43,7 +46,7 @@ public class GenerateService {
         context.setVariable("user", user);
         context.setVariable("discount", "0,00");
         context.setVariable("finalTotal", templateData.total());
-        context.setVariable("logoUrl", "https://res.cloudinary.com/duxksghsb/image/upload/v1771003225/WhatsApp_Image_2026-02-13_at_14.19.16_q3aisl.jpg");
+        context.setVariable("logoUrl", resolveLogoUrl(user));
 
         String html = engine.process("contract", context);
 
@@ -95,6 +98,14 @@ public class GenerateService {
         }
 
         return "%s, %s - %s".formatted(address.getStreet(), address.getNumber(), address.getCity());
+    }
+
+    private String resolveLogoUrl(User user) {
+        if (user.getLogo() != null && !user.getLogo().isBlank()) {
+            return user.getLogo();
+        }
+
+        return DEFAULT_LOGO_URL;
     }
 
     private record ReferenceTemplateData(

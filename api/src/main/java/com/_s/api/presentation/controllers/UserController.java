@@ -2,6 +2,7 @@ package com._s.api.presentation.controllers;
 
 import com._s.api.domain.contract.service.GetContractService;
 import com._s.api.domain.costumer.service.GetCostumerService;
+import com._s.api.domain.order.OrderFilter;
 import com._s.api.domain.order.service.CreateOrderCommand;
 import com._s.api.domain.order.service.CreateOrderService;
 import com._s.api.domain.order.service.GetOrderService;
@@ -9,6 +10,7 @@ import com._s.api.domain.product.Product;
 import com._s.api.domain.product.service.CreateProductCommand;
 import com._s.api.domain.product.service.CreateProductService;
 import com._s.api.domain.product.service.GetProductsService;
+import com._s.api.domain.rent.RentFilter;
 import com._s.api.domain.rent.service.CreateRentCommand;
 import com._s.api.domain.rent.service.CreateRentService;
 import com._s.api.domain.rent.service.GetRentService;
@@ -19,6 +21,8 @@ import com._s.api.presentation.dto.CreateOrderRequest;
 import com._s.api.presentation.dto.CreateProductRequest;
 import com._s.api.presentation.dto.CreateRentRequest;
 import com._s.api.presentation.dto.CreateUserRequest;
+import com._s.api.presentation.dto.OrderFilterRequest;
+import com._s.api.presentation.dto.RentFilterRequest;
 import com._s.api.presentation.dto.UpdateUserRequest;
 import com._s.api.presentation.mapper.costumer.CostumerResponseMapper;
 import com._s.api.presentation.mapper.order.OrderResponseMapper;
@@ -36,7 +40,6 @@ import com._s.api.presentation.response.RentResponse;
 import com._s.api.presentation.response.UserResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -196,55 +199,50 @@ public class UserController {
     @GetMapping("/orders")
     public ResponseEntity<Page<OrderResponse>> getOrdersByUserId(
         @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+        @PageableDefault(
+                page = 0,
+                size = 10,
+                sort = "createdAt",
+                direction = Sort.Direction.DESC
+        )
         Pageable pageable,
-        @RequestParam(required = false) Integer page,
-        @RequestParam(required = false) Integer size,
-        @RequestParam(required = false) String sort
+        @ModelAttribute OrderFilterRequest filters
     ) {
         validateUserExists(authenticatedUser.id());
-
-        Pageable resolvedPageable;
-
-        if (page == null && size == null && sort == null) {
-            resolvedPageable = PageRequest.of(
-                    0,
-                    10,
-                    Sort.by("createdAt").descending()
-            );
-        } else {
-            resolvedPageable = pageable;
-        }
+        OrderFilter filter = new OrderFilter(
+                filters.getStatus(),
+                filters.getCreatedAt(),
+                filters.getDeliveryDate()
+        );
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(getOrderService.executeByUserId(authenticatedUser.id(), resolvedPageable).map(OrderResponseMapper::toResponse));
+                .body(getOrderService.executeByUserId(authenticatedUser.id(), filter, pageable).map(OrderResponseMapper::toResponse));
     }
 
     @GetMapping("/rents")
     public ResponseEntity<Page<RentResponse>> getRentsByUserId(
         @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+        @PageableDefault(
+                page = 0,
+                size = 10,
+                sort = "createdAt",
+                direction = Sort.Direction.DESC
+        )
         Pageable pageable,
-        @RequestParam(required = false) Integer page,
-        @RequestParam(required = false) Integer size,
-        @RequestParam(required = false) String sort
+        @ModelAttribute RentFilterRequest filters
     ) {
         validateUserExists(authenticatedUser.id());
-
-        Pageable resolvedPageable;
-
-        if (page == null && size == null && sort == null) {
-            resolvedPageable = PageRequest.of(
-                    0,
-                    10,
-                    Sort.by("createdAt").descending()
-            );
-        } else {
-            resolvedPageable = pageable;
-        }
+        RentFilter filter = new RentFilter(
+                filters.getStatus(),
+                filters.getCreatedAt(),
+                filters.getDeliveryDate(),
+                filters.getReturnDate()
+        );
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(getRentService.executeByUserId(authenticatedUser.id(), resolvedPageable).map(RentResponseMapper::toResponse));
+                .body(getRentService.executeByUserId(authenticatedUser.id(), filter, pageable).map(RentResponseMapper::toResponse));
     }
 
     @GetMapping("/costumers")

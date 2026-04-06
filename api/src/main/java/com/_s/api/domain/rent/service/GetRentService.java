@@ -1,6 +1,7 @@
 package com._s.api.domain.rent.service;
 
 import com._s.api.domain.rent.Rent;
+import com._s.api.domain.rent.RentFilter;
 import com._s.api.domain.rent.RentRepository;
 import com._s.api.domain.rent.exception.RentNotFoundException;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,10 @@ public class GetRentService {
 
     public Page<Rent> executeByUserId(String id, Pageable pageable) {
         return repository.findAllByUserId(id, pageable);
+    }
+
+    public Page<Rent> executeByUserId(String id, RentFilter filter, Pageable pageable) {
+        return repository.findAllByUserId(id, filter, pageable);
     }
 
     public Page<Rent> executeByCostumerId(String id, Pageable pageable) {

@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface OrderRepository {
     Order save(Order order);
     Page<Order> findAllByUserId(String userId, Pageable pageable);
+    Page<Order> findAllByUserId(String userId, OrderFilter filter, Pageable pageable);
     Page<Order> findAllByCostumerId(String costumerId, Pageable pageable);
     Optional<Order> findById(String id);
     void updateStatus(String id, OrderStatus status);

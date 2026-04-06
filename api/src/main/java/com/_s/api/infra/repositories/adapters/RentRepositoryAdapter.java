@@ -1,6 +1,7 @@
 package com._s.api.infra.repositories.adapters;
 
 import com._s.api.domain.rent.Rent;
+import com._s.api.domain.rent.RentFilter;
 import com._s.api.domain.rent.RentRepository;
 import com._s.api.domain.rent.RentStatus;
 import com._s.api.domain.rent.exception.RentNotFoundException;
@@ -8,6 +9,7 @@ import com._s.api.infra.mappers.RentMapper;
 import com._s.api.infra.repositories.CostumerJpaRepository;
 import com._s.api.infra.repositories.RentJpaRepository;
 import com._s.api.infra.repositories.UserJpaRepository;
+import com._s.api.infra.repositories.specification.RentSpecifications;
 import com._s.api.infra.repositories.entity.CostumerEntity;
 import com._s.api.infra.repositories.entity.RentEntity;
 import com._s.api.infra.repositories.entity.UserEntity;
@@ -50,6 +52,11 @@ public class RentRepositoryAdapter implements RentRepository {
     @Override
     public Page<Rent> findAllByUserId(String userId, Pageable pageable) {
         return repository.findAllByUserId(userId, pageable).map(RentMapper::toDomain);
+    }
+
+    @Override
+    public Page<Rent> findAllByUserId(String userId, RentFilter filter, Pageable pageable) {
+        return repository.findAll(RentSpecifications.withFilters(userId, filter), pageable).map(RentMapper::toDomain);
     }
 
     @Override

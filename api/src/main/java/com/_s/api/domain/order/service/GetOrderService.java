@@ -1,6 +1,7 @@
 package com._s.api.domain.order.service;
 
 import com._s.api.domain.order.Order;
+import com._s.api.domain.order.OrderFilter;
 import com._s.api.domain.order.OrderRepository;
 import com._s.api.domain.order.exception.OrderNotFoundException;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,10 @@ public class GetOrderService {
 
     public Page<Order> executeByUserId(String id, Pageable pageable) {
         return repository.findAllByUserId(id, pageable);
+    }
+
+    public Page<Order> executeByUserId(String id, OrderFilter filter, Pageable pageable) {
+        return repository.findAllByUserId(id, filter, pageable);
     }
 
     public Page<Order> executeByCostumerId(String id, Pageable pageable) {

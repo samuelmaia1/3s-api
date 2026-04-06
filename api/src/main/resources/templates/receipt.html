@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Recibo</title>
+
+    <style>
+        @page {
+            size: A4;
+            margin: 18mm;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            margin: 0;
+            color: #222;
+        }
+
+        .header-table,
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .logo-cell {
+            width: 100px;
+            vertical-align: top;
+        }
+
+        .logo-cell img {
+            width: 90px;
+        }
+
+        .company-cell,
+        .meta-cell {
+            vertical-align: top;
+        }
+
+        .meta-cell {
+            text-align: right;
+            font-size: 11px;
+        }
+
+        .title {
+            background: #d9d9d9;
+            margin-top: 18px;
+            padding: 8px 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .section-title {
+            background: #efefef;
+            padding: 6px 8px;
+            font-weight: bold;
+            margin-top: 14px;
+        }
+
+        .section {
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .grid {
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .grid td {
+            width: 50%;
+            vertical-align: top;
+            padding: 0 0 8px;
+        }
+
+        th {
+            text-align: left;
+            padding: 7px 4px;
+            border-bottom: 1px solid #ccc;
+            font-size: 11px;
+            color: #555;
+        }
+
+        td {
+            padding: 8px 4px;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .summary {
+            width: 280px;
+            margin-left: auto;
+            margin-top: 12px;
+        }
+
+        .summary td {
+            border-bottom: none;
+            padding: 4px 0;
+        }
+
+        .total-row {
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .declaration {
+            margin-top: 24px;
+            text-align: justify;
+            line-height: 1.7;
+        }
+
+        .signature {
+            margin-top: 54px;
+            width: 280px;
+            text-align: center;
+        }
+
+        .signature-line {
+            border-top: 1px solid #000;
+            padding-top: 6px;
+        }
+    </style>
+</head>
+<body>
+<table class="header-table">
+    <tr>
+        <td class="logo-cell">
+            <img th:src="${logoUrl}" alt="Logo"/>
+        </td>
+        <td class="company-cell">
+            <strong th:text="${user.socialName != null and !#strings.isEmpty(user.socialName) ? user.socialName : user.name + ' ' + user.lastName}"></strong><br />
+            <span th:text="${user.email}"></span><br />
+            <span th:text="${user.cpf}"></span><br />
+            <span th:if="${user.instagram != null and !#strings.isEmpty(user.instagram)}" th:text="${user.instagram}"></span>
+        </td>
+        <td class="meta-cell">
+            Emitido em<br />
+            <strong th:text="${issuedAt != null ? #temporals.format(issuedAt, 'dd/MM/yyyy HH:mm') : ''}"></strong>
+        </td>
+    </tr>
+</table>
+
+<div class="title">
+    Recibo <span th:text="${referenceLabel}"></span> <span th:text="${referenceCode}"></span>
+</div>
+
+<div class="section-title">Partes</div>
+<table class="grid">
+    <tr>
+        <td>
+            <strong>Recebido de</strong><br />
+            <span th:text="${costumer.name + ' ' + costumer.lastName}"></span><br />
+            CPF: <span th:text="${costumer.cpf}"></span><br />
+            <th:block th:if="${costumer.email != null}">
+                <span th:text="${costumer.email}"></span><br />
+            </th:block>
+            <th:block th:if="${costumer.address != null}">
+                <span th:text="${costumer.address.street + ', ' + costumer.address.number}"></span><br />
+                <span th:text="${costumer.address.city + ' - CEP ' + costumer.address.cep}"></span>
+            </th:block>
+        </td>
+        <td>
+            <strong>Emitente</strong><br />
+            <span th:text="${user.name + ' ' + user.lastName}"></span><br />
+            CPF: <span th:text="${user.cpf}"></span><br />
+            <span th:text="${user.email}"></span>
+        </td>
+    </tr>
+</table>
+
+<div class="section-title">Referência</div>
+<table class="grid">
+    <tr>
+        <td>
+            <strong>Tipo</strong><br />
+            <span th:text="${referenceLabel}"></span>
+        </td>
+        <td>
+            <strong>Número</strong><br />
+            <span th:text="${referenceCode}"></span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <strong>Entrega</strong><br />
+            <span th:text="${deliveryDate != null ? #temporals.format(deliveryDate, 'dd/MM/yyyy HH:mm') : ''}"></span>
+        </td>
+        <td>
+            <strong>Devolução</strong><br />
+            <span th:text="${returnDate != null ? #temporals.format(returnDate, 'dd/MM/yyyy HH:mm') : ''}"></span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <strong>Local</strong><br />
+            <span th:text="${eventLocation}"></span>
+        </td>
+    </tr>
+</table>
+
+<div class="section-title">Itens</div>
+<table>
+    <thead>
+    <tr>
+        <th>Descrição</th>
+        <th class="text-right">Preço unitário</th>
+        <th class="text-right">Qtd.</th>
+        <th class="text-right">Subtotal</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${items}">
+        <td>
+            <strong th:text="${item.product.name}"></strong><br />
+            <span th:text="${item.product.description}"></span>
+        </td>
+        <td class="text-right" th:text="${#numbers.formatDecimal(item.unitValue,1,'POINT',2,'COMMA')}"></td>
+        <td class="text-right" th:text="${item.quantity}"></td>
+        <td class="text-right" th:text="${#numbers.formatDecimal(item.subTotal,1,'POINT',2,'COMMA')}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="summary">
+    <table>
+        <tr th:if="${isRent}">
+            <td>Taxa de entrega</td>
+            <td class="text-right" th:text="${#numbers.formatDecimal(deliveryTax,1,'POINT',2,'COMMA')}"></td>
+        </tr>
+        <tr class="total-row">
+            <td>Total recebido</td>
+            <td class="text-right" th:text="${#numbers.formatDecimal(total,1,'POINT',2,'COMMA')}"></td>
+        </tr>
+    </table>
+</div>
+
+<div class="declaration">
+    Declaro, para os devidos fins, que recebi de
+    <strong th:text="${costumer.name + ' ' + costumer.lastName}"></strong>
+    o valor referente ao
+    <span th:text="${#strings.toLowerCase(referenceLabel)}"></span>
+    <strong th:text="${referenceCode}"></strong>,
+    totalizando R$
+    <strong th:text="${#numbers.formatDecimal(total,1,'POINT',2,'COMMA')}"></strong>.
+</div>
+
+<div class="signature">
+    <div class="signature-line">
+        <strong th:text="${user.name + ' ' + user.lastName}"></strong><br />
+        Responsável pela emissão
+    </div>
+</div>
+</body>
+</html>
