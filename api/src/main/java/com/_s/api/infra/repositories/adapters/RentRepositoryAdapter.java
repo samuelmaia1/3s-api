@@ -9,6 +9,7 @@ import com._s.api.infra.mappers.RentMapper;
 import com._s.api.infra.repositories.CostumerJpaRepository;
 import com._s.api.infra.repositories.RentJpaRepository;
 import com._s.api.infra.repositories.UserJpaRepository;
+import com._s.api.infra.repositories.projection.MonthlyRevenueProjection;
 import com._s.api.infra.repositories.specification.RentSpecifications;
 import com._s.api.infra.repositories.entity.CostumerEntity;
 import com._s.api.infra.repositories.entity.RentEntity;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -91,6 +93,22 @@ public class RentRepositoryAdapter implements RentRepository {
     }
 
     @Override
+    public List<Rent> findRecentByProductId(String productId, Pageable pageable) {
+        return repository.findRecentByProductId(productId, pageable)
+                .stream()
+                .map(RentMapper::toDomain)
+                .toList();
+    }
+
+    @Override
+    public List<MonthlyRevenue> sumMonthlyRevenueByProductId(String productId, List<RentStatus> statuses) {
+        return repository.sumMonthlyRevenueByProductId(productId, statuses)
+                .stream()
+                .map(this::toMonthlyRevenue)
+                .toList();
+    }
+
+    @Override
     public Integer sumReservedQuantityByProductAndPeriod(
             String productId,
             LocalDateTime deliveryDate,
@@ -118,5 +136,13 @@ public class RentRepositoryAdapter implements RentRepository {
             RentStatus currentStatus
     ) {
         return repository.updateStatusToDevolucaoAtrasada(start, end, currentStatus);
+    }
+
+    private MonthlyRevenue toMonthlyRevenue(MonthlyRevenueProjection projection) {
+        return new MonthlyRevenue(
+                projection.getYear(),
+                projection.getMonth(),
+                projection.getTotal() == null ? BigDecimal.ZERO : projection.getTotal()
+        );
     }
 }

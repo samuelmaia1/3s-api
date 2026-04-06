@@ -3,6 +3,7 @@ package com._s.api.domain.rent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,8 @@ public interface RentRepository {
     Optional<Rent> findById(String id);
     void updateStatus(String id, RentStatus status);
     List<Rent> findByUserIdOrderByCreatedAtDesc(String userId, Pageable pageable);
+    List<Rent> findRecentByProductId(String productId, Pageable pageable);
+    List<MonthlyRevenue> sumMonthlyRevenueByProductId(String productId, List<RentStatus> statuses);
     Integer sumReservedQuantityByProductAndPeriod(
             String productId,
             LocalDateTime deliveryDate,
@@ -31,4 +34,6 @@ public interface RentRepository {
             LocalDateTime end,
             RentStatus currentStatus
     );
+
+    record MonthlyRevenue(Integer year, Integer month, BigDecimal total) {}
 }

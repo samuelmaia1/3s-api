@@ -2,14 +2,15 @@ package com._s.api.presentation.controllers;
 
 import com._s.api.domain.product.Product;
 import com._s.api.domain.product.service.DeleteProductService;
+import com._s.api.domain.product.service.GetProductDetailsService;
 import com._s.api.domain.product.service.GetProductsService;
 import com._s.api.domain.product.service.UpdateProductCommand;
 import com._s.api.domain.product.service.UpdateProductService;
 import com._s.api.infra.security.AuthenticatedUser;
 import com._s.api.presentation.dto.UpdateProductRequest;
+import com._s.api.presentation.mapper.product.ProductDetailsResponseMapper;
 import com._s.api.presentation.mapper.product.ProductRequestMapper;
-import com._s.api.presentation.mapper.product.ProductResponseMapper;
-import com._s.api.presentation.response.ProductResponse;
+import com._s.api.presentation.response.ProductDetailsResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,24 +21,27 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class ProductController {
     private final GetProductsService getProductsService;
+    private final GetProductDetailsService getProductDetailsService;
     private final DeleteProductService deleteProductService;
     private final UpdateProductService updateProductService;
 
     public ProductController(
             GetProductsService getProductsService,
+            GetProductDetailsService getProductDetailsService,
             DeleteProductService deleteProductService,
             UpdateProductService updateProductService
     ) {
         this.getProductsService = getProductsService;
+        this.getProductDetailsService = getProductDetailsService;
         this.deleteProductService = deleteProductService;
         this.updateProductService = updateProductService;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> getById(@PathVariable String id) {
+    public ResponseEntity<ProductDetailsResponse> getById(@PathVariable String id) {
         return ResponseEntity
-                .ok(ProductResponseMapper
-                        .toResponse(getProductsService.executeById(id))
+                .ok(ProductDetailsResponseMapper
+                        .toResponse(getProductDetailsService.execute(id))
                 );
     }
 

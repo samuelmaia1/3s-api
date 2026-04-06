@@ -2,6 +2,7 @@ package com._s.api.infra.repositories;
 
 import com._s.api.domain.rent.RentStatus;
 import com._s.api.infra.repositories.entity.RentEntity;
+import com._s.api.infra.repositories.projection.MonthlyRevenueProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,6 +20,34 @@ public interface RentJpaRepository extends JpaRepository<RentEntity, String>, Jp
     Page<RentEntity> findAllByUserId(String userId, Pageable pageable);
     Page<RentEntity> findAllByCostumerId(String costumerId, Pageable pageable);
     List<RentEntity> findByUserIdOrderByCreatedAtDesc(String userId, Pageable pageable);
+    @Query("""
+        SELECT DISTINCT r
+        FROM RentEntity r
+        JOIN r.items ri
+        WHERE ri.product.id = :productId
+        ORDER BY r.createdAt DESC
+    """)
+    List<RentEntity> findRecentByProductId(
+            @Param("productId") String productId,
+            Pageable pageable
+    );
+
+    @Query("""
+        SELECT
+          YEAR(r.createdAt) AS year,
+          MONTH(r.createdAt) AS month,
+          COALESCE(SUM(ri.subTotal), 0) AS total
+        FROM RentItemEntity ri
+        JOIN ri.rent r
+        WHERE ri.product.id = :productId
+          AND r.status IN :statuses
+        GROUP BY YEAR(r.createdAt), MONTH(r.createdAt)
+        ORDER BY YEAR(r.createdAt), MONTH(r.createdAt)
+    """)
+    List<MonthlyRevenueProjection> sumMonthlyRevenueByProductId(
+            @Param("productId") String productId,
+            @Param("statuses") List<RentStatus> statuses
+    );
 
     @Query("""
         SELECT COALESCE(SUM(ri.quantity), 0)

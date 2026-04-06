@@ -3,6 +3,7 @@ package com._s.api.domain.order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,4 +15,8 @@ public interface OrderRepository {
     Optional<Order> findById(String id);
     void updateStatus(String id, OrderStatus status);
     List<Order> findByUserIdOrderByCreatedAtDesc(String userId, Pageable pageable);
+    List<Order> findRecentByProductId(String productId, Pageable pageable);
+    List<MonthlyRevenue> sumMonthlyRevenueByProductId(String productId, List<OrderStatus> statuses);
+
+    record MonthlyRevenue(Integer year, Integer month, BigDecimal total) {}
 }

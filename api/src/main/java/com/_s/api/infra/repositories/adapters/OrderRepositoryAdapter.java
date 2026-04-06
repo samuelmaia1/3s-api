@@ -9,6 +9,7 @@ import com._s.api.infra.mappers.OrderMapper;
 import com._s.api.infra.repositories.CostumerJpaRepository;
 import com._s.api.infra.repositories.OrderJpaRepository;
 import com._s.api.infra.repositories.UserJpaRepository;
+import com._s.api.infra.repositories.projection.MonthlyRevenueProjection;
 import com._s.api.infra.repositories.specification.OrderSpecifications;
 import com._s.api.infra.repositories.entity.CostumerEntity;
 import com._s.api.infra.repositories.entity.OrderEntity;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,5 +80,29 @@ public class OrderRepositoryAdapter implements OrderRepository {
     @Override
     public List<Order> findByUserIdOrderByCreatedAtDesc(String userId, Pageable pageable) {
         return repository.findByUserIdOrderByCreatedAtDesc(userId, pageable).stream().map(OrderMapper::toDomain).toList();
+    }
+
+    @Override
+    public List<Order> findRecentByProductId(String productId, Pageable pageable) {
+        return repository.findRecentByProductId(productId, pageable)
+                .stream()
+                .map(OrderMapper::toDomain)
+                .toList();
+    }
+
+    @Override
+    public List<MonthlyRevenue> sumMonthlyRevenueByProductId(String productId, List<OrderStatus> statuses) {
+        return repository.sumMonthlyRevenueByProductId(productId, statuses)
+                .stream()
+                .map(this::toMonthlyRevenue)
+                .toList();
+    }
+
+    private MonthlyRevenue toMonthlyRevenue(MonthlyRevenueProjection projection) {
+        return new MonthlyRevenue(
+                projection.getYear(),
+                projection.getMonth(),
+                projection.getTotal() == null ? BigDecimal.ZERO : projection.getTotal()
+        );
     }
 }
