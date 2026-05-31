@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Trabalho Prático 2 — Teste de Software</title>
+  <style>
+    /* ===== TELA ===== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12pt;
+      color: #000;
+      background: #ccc;
+      padding: 20px;
+    }
+
+    .page {
+      background: #fff;
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto 30px;
+      padding: 25mm 25mm 25mm 30mm;
+      box-shadow: 0 2px 12px rgba(0,0,0,.3);
+    }
+
+    /* ===== IMPRESSÃO ===== */
+    @media print {
+      body { background: none; padding: 0; }
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        padding: 25mm 25mm 25mm 30mm;
+        box-shadow: none;
+        page-break-after: always;
+      }
+      .page:last-child { page-break-after: avoid; }
+    }
+
+    /* ===== CAPA ===== */
+    .capa {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 247mm;
+      text-align: center;
+    }
+    .capa .inst { line-height: 1.6; }
+    .capa .inst p { font-size: 13pt; }
+    .capa .inst p.bold { font-weight: bold; font-size: 14pt; }
+
+    .capa .titulo { }
+    .capa .titulo h1 { font-size: 16pt; font-weight: bold; margin-bottom: 6px; }
+    .capa .titulo h2 { font-size: 14pt; font-weight: normal; margin-bottom: 16px; }
+    .capa .titulo .sistema {
+      font-size: 13pt; font-weight: bold;
+      border: 1px solid #000; padding: 10px 24px; display: inline-block; margin-top: 8px;
+    }
+
+    .capa .info { line-height: 2; font-size: 12pt; }
+    .capa .info p { margin-bottom: 2px; }
+
+    /* ===== CONTEÚDO ===== */
+    h2.secao {
+      font-size: 13pt;
+      font-weight: bold;
+      margin-top: 22px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #000;
+      padding-bottom: 3px;
+      text-transform: uppercase;
+    }
+    h3.subsecao {
+      font-size: 12pt;
+      font-weight: bold;
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+
+    p { line-height: 1.8; margin-bottom: 8px; text-align: justify; }
+    ul, ol { margin-left: 20px; margin-bottom: 10px; line-height: 1.8; }
+    li { margin-bottom: 3px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 10.5pt;
+    }
+    th {
+      background: #e0e0e0;
+      border: 1px solid #555;
+      padding: 5px 8px;
+      text-align: center;
+      font-weight: bold;
+    }
+    td {
+      border: 1px solid #555;
+      padding: 4px 8px;
+      vertical-align: middle;
+    }
+    td.center { text-align: center; }
+    td.right  { text-align: right; }
+
+    .destaque {
+      background: #f5f5f5;
+      border-left: 3px solid #000;
+      padding: 8px 12px;
+      margin: 12px 0;
+      font-size: 11pt;
+    }
+
+    code { font-family: 'Courier New', monospace; font-size: 10pt; background: #f0f0f0; padding: 1px 4px; }
+
+    .rodape {
+      margin-top: 30px;
+      border-top: 1px solid #aaa;
+      padding-top: 6px;
+      font-size: 9pt;
+      color: #555;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== PÁGINA 1: CAPA ========== -->
+<div class="page">
+  <div class="capa">
+
+    <div class="inst">
+      <p class="bold">Pontifícia Universidade Católica de Minas Gerais</p>
+      <p>Instituto de Ciências Exatas e Informática</p>
+      <p>Disciplina: Teste e Manutenção de Software</p>
+      <p>Professor: Pedro Felipe</p>
+    </div>
+
+    <div class="titulo">
+      <h1>Trabalho Prático 2</h1>
+      <h2>Casos de Teste e Cobertura de Código</h2>
+      <div class="sistema">3S API — Sistema de Gestão de Pedidos, Aluguéis e Contratos</div>
+    </div>
+
+    <div class="info">
+      <p><strong>Grupo:</strong> 3S API</p>
+      <p><strong>Integrantes:</strong></p>
+      <p>Bruna Luiza Siqueira Borges Matias</p>
+      <p>Gabriel Baumgratz de Paula Botaro</p>
+      <p>Geovane Araujo Viana</p>
+      <p>João Pedro Ferreira Bonifácio</p>
+      <p>Ricardo Araújo Maciel</p>
+      <p>Samuel Maia de Oliveira</p>
+      <p>Vitor Fortunato Silva</p>
+      <p><strong>Belo Horizonte, 2026</strong></p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ========== PÁGINA 2: DESCRIÇÃO + ESTRUTURA ========== -->
+<div class="page">
+
+  <h2 class="secao">1. Descrição do Software</h2>
+
+  <p>
+    A <strong>3S API</strong> é um sistema de gestão empresarial desenvolvido para a empresa
+    <em>3S Letreiros</em>, especializada na produção e locação de letreiros e placas decorativas.
+    A aplicação é uma API REST completa construída com <strong>Java 21</strong> e
+    <strong>Spring Boot 4.0.1</strong>, utilizando banco de dados <strong>PostgreSQL</strong>
+    hospedado na nuvem (Neon), autenticação via <strong>JWT</strong> e comunicação em tempo real
+    por <strong>WebSocket (STOMP)</strong>.
+  </p>
+
+  <p>
+    O sistema centraliza as operações de negócio da empresa em um único back-end,
+    expondo endpoints REST consumidos por um front-end web. As principais funcionalidades são:
+  </p>
+
+  <ul>
+    <li><strong>Gestão de usuários:</strong> cadastro, autenticação com JWT + refresh token, atualização de perfil</li>
+    <li><strong>Gestão de produtos:</strong> controle de estoque, preço, imagem e busca por nome</li>
+    <li><strong>Gestão de clientes:</strong> cadastro com validação de CPF e e-mail únicos</li>
+    <li><strong>Pedidos de venda:</strong> criação com itens, cálculo de total, controle de status e devolução de estoque no cancelamento</li>
+    <li><strong>Aluguéis:</strong> reserva de produtos com validação de disponibilidade no período, taxa de entrega e múltiplos status</li>
+    <li><strong>Contratos:</strong> geração de contratos em PDF com cláusulas customizáveis, assinatura e cancelamento</li>
+    <li><strong>Recibos:</strong> geração de recibos em PDF para pedidos e aluguéis</li>
+    <li><strong>Dashboard gerencial:</strong> métricas de aluguéis ativos, receita mensal e últimas transações</li>
+    <li><strong>Notificações em tempo real:</strong> eventos publicados via WebSocket após cada operação crítica</li>
+  </ul>
+
+  <p>
+    A arquitetura segue o padrão de <strong>três camadas</strong>:
+    <em>Presentation</em> (Controllers e DTOs),
+    <em>Domain</em> (regras de negócio, entidades, serviços e políticas) e
+    <em>Infrastructure</em> (persistência JPA, segurança, configurações).
+  </p>
+
+  <h2 class="secao">2. Estrutura do Software</h2>
+
+  <p>A tabela abaixo resume a estrutura quantitativa do projeto:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Camada</th>
+        <th>Classes / Arquivos</th>
+        <th>Métodos / Funções</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Domain (regras de negócio)</td><td class="center">~55</td><td class="center">~130</td></tr>
+      <tr><td>Infrastructure (JPA, segurança)</td><td class="center">~20</td><td class="center">~60</td></tr>
+      <tr><td>Presentation (controllers, DTOs)</td><td class="center">~20</td><td class="center">~45</td></tr>
+      <tr><td><strong>Total do projeto</strong></td><td class="center"><strong>~95</strong></td><td class="center"><strong>~235</strong></td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    O escopo dos testes unitários foi a <strong>camada de domínio</strong>, que contém toda a
+    lógica de negócio da aplicação. As camadas de infraestrutura e apresentação requerem
+    testes de integração com banco de dados real, fora do escopo deste trabalho.
+    No escopo medido pelo JaCoCo, foram analisados <strong>69 classes</strong> com
+    <strong>183 métodos</strong>.
+  </p>
+
+  <div class="rodape">
+    Trabalho Prático 2 — Teste e Manutenção de Software — PUC Minas 2026.1 &nbsp;|&nbsp; Página 1
+  </div>
+
+</div>
+
+<!-- ========== PÁGINA 3: CASOS DE TESTE ========== -->
+<div class="page">
+
+  <h2 class="secao">3. Casos de Teste Desenvolvidos</h2>
+
+  <p>
+    Foram desenvolvidos <strong>169 casos de teste</strong> distribuídos em
+    <strong>31 suítes de teste</strong> (arquivos <em>.java</em> com sufixo <code>Test</code>),
+    todas aprovadas com <strong>0 falhas</strong>. Os testes foram escritos utilizando
+    <strong>JUnit 5 (Jupiter)</strong> e <strong>Mockito 5</strong> para isolamento de dependências.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Suíte de Teste</th>
+        <th>Classe Testada</th>
+        <th style="width:80px">Nº Testes</th>
+        <th style="width:70px">Resultado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>CpfTest</td><td>Cpf (Value Object)</td><td class="center">12</td><td class="center">✔ OK</td></tr>
+      <tr><td>AddressTest</td><td>Address (Value Object)</td><td class="center">3</td><td class="center">✔ OK</td></tr>
+      <tr><td>ProductTest</td><td>Product (Entidade)</td><td class="center">7</td><td class="center">✔ OK</td></tr>
+      <tr><td>OrderItemTest</td><td>OrderItem (Entidade)</td><td class="center">5</td><td class="center">✔ OK</td></tr>
+      <tr><td>OrderItemPolicyTest</td><td>OrderItemPolicy</td><td class="center">7</td><td class="center">✔ OK</td></tr>
+      <tr><td>RentItemTest</td><td>RentItem (Entidade)</td><td class="center">5</td><td class="center">✔ OK</td></tr>
+      <tr><td>RentItemPolicyTest</td><td>RentItemPolicy</td><td class="center">5</td><td class="center">✔ OK</td></tr>
+      <tr><td>OrderTest</td><td>Order (Entidade)</td><td class="center">8</td><td class="center">✔ OK</td></tr>
+      <tr><td>OrderStatusTest</td><td>OrderStatus (Enum)</td><td class="center">10</td><td class="center">✔ OK</td></tr>
+      <tr><td>RentTest</td><td>Rent (Entidade)</td><td class="center">7</td><td class="center">✔ OK</td></tr>
+      <tr><td>RentStatusTest</td><td>RentStatus (Enum)</td><td class="center">9</td><td class="center">✔ OK</td></tr>
+      <tr><td>ContractTest</td><td>Contract (Entidade)</td><td class="center">10</td><td class="center">✔ OK</td></tr>
+      <tr><td>RefreshTokenPolicyTest</td><td>RefreshTokenPolicy</td><td class="center">5</td><td class="center">✔ OK</td></tr>
+      <tr><td>UserEntityTest</td><td>User (Entidade)</td><td class="center">10</td><td class="center">✔ OK</td></tr>
+      <tr><td>UserPolicyTest</td><td>UserPolicy</td><td class="center">6</td><td class="center">✔ OK</td></tr>
+      <tr><td>CostumerTest</td><td>Costumer (Entidade)</td><td class="center">6</td><td class="center">✔ OK</td></tr>
+      <tr><td>CreateUserServiceTest</td><td>CreateUserService</td><td class="center">5</td><td class="center">✔ OK</td></tr>
+      <tr><td>LoginUserServiceTest</td><td>LoginUserService</td><td class="center">5</td><td class="center">✔ OK</td></tr>
+      <tr><td>GetUserServiceTest</td><td>GetUserService</td><td class="center">2</td><td class="center">✔ OK</td></tr>
+      <tr><td>UpdateUserServiceTest</td><td>UpdateUserService</td><td class="center">2</td><td class="center">✔ OK</td></tr>
+      <tr><td>CreateProductServiceTest</td><td>CreateProductService</td><td class="center">3</td><td class="center">✔ OK</td></tr>
+      <tr><td>GetProductsServiceTest</td><td>GetProductsService</td><td class="center">5</td><td class="center">✔ OK</td></tr>
+      <tr><td>UpdateProductServiceTest</td><td>UpdateProductService</td><td class="center">2</td><td class="center">✔ OK</td></tr>
+      <tr><td>DeleteProductServiceTest</td><td>DeleteProductService</td><td class="center">1</td><td class="center">✔ OK</td></tr>
+      <tr><td>GetOrderServiceTest</td><td>GetOrderService</td><td class="center">5</td><td class="center">✔ OK</td></tr>
+      <tr><td>UpdateOrderServiceTest</td><td>UpdateOrderService</td><td class="center">4</td><td class="center">✔ OK</td></tr>
+      <tr><td>GetRentServiceTest</td><td>GetRentService</td><td class="center">5</td><td class="center">✔ OK</td></tr>
+      <tr><td>GetCostumerServiceTest</td><td>GetCostumerService</td><td class="center">6</td><td class="center">✔ OK</td></tr>
+      <tr><td>UpdateContractServiceTest</td><td>UpdateContractService</td><td class="center">4</td><td class="center">✔ OK</td></tr>
+      <tr><td>CreateClauseServiceTest</td><td>CreateClauseService</td><td class="center">2</td><td class="center">✔ OK</td></tr>
+      <tr><td>GetClauseServiceTest</td><td>GetClauseService</td><td class="center">2</td><td class="center">✔ OK</td></tr>
+      <tr style="background:#e8f5e9; font-weight:bold">
+        <td><strong>TOTAL</strong></td><td>31 suítes</td><td class="center"><strong>169</strong></td><td class="center"><strong>169 ✔</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="rodape">
+    Trabalho Prático 2 — Teste e Manutenção de Software — PUC Minas 2026.1 &nbsp;|&nbsp; Página 2
+  </div>
+
+</div>
+
+<!-- ========== PÁGINA 4: COBERTURA ========== -->
+<div class="page">
+
+  <h2 class="secao">4. Cálculo de Cobertura de Testes</h2>
+
+  <h3 class="subsecao">4.1 Ferramenta Utilizada</h3>
+
+  <p>
+    A cobertura foi calculada automaticamente pela ferramenta <strong>JaCoCo 0.8.12</strong>
+    (<em>Java Code Coverage</em>), integrada ao projeto via plugin Maven. O relatório é gerado
+    automaticamente ao executar o comando <code>mvn test</code>, sendo salvo em
+    <code>target/site/jacoco/</code> nos formatos HTML, XML e CSV.
+  </p>
+
+  <h3 class="subsecao">4.2 Escopo da Medição</h3>
+
+  <p>
+    O escopo de medição foi restrito à <strong>camada de domínio</strong> do projeto.
+    As camadas de infraestrutura (persistência JPA, segurança, configurações) e de apresentação
+    (controllers REST, DTOs) foram excluídas por serem adaptadores técnicos que não contêm
+    regras de negócio e requerem testes de integração com banco de dados real para serem
+    validados adequadamente. Essa é uma prática padrão em arquiteturas que seguem os
+    princípios de separação de responsabilidades.
+  </p>
+
+  <h3 class="subsecao">4.3 Resultados Obtidos</h3>
+
+  <div class="destaque">
+    <strong>Resultado geral: 71,06% de cobertura de linhas &nbsp;|&nbsp; 169 testes aprovados &nbsp;|&nbsp; 0 falhas</strong>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Métrica</th>
+        <th>Cobertas</th>
+        <th>Não Cobertas</th>
+        <th>Total</th>
+        <th>Cobertura</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Linhas de código</td><td class="center">474</td><td class="center">193</td><td class="center">667</td><td class="center"><strong>71,06%</strong></td></tr>
+      <tr><td>Métodos / funções</td><td class="center">128</td><td class="center">55</td><td class="center">183</td><td class="center"><strong>69,95%</strong></td></tr>
+      <tr><td>Classes testadas</td><td class="center">~50</td><td class="center">~19</td><td class="center">69</td><td class="center"><strong>~72%</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="subsecao">4.4 Cobertura por Classe (principais)</h3>
+
+  <table>
+    <thead>
+      <tr><th>Classe</th><th>Tipo</th><th>Linhas Cobertas</th><th>Total</th><th>%</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Cpf</td><td>Value Object</td><td class="center">13</td><td class="center">13</td><td class="center">100%</td></tr>
+      <tr><td>Address</td><td>Value Object</td><td class="center">1</td><td class="center">1</td><td class="center">100%</td></tr>
+      <tr><td>User</td><td>Entidade</td><td class="center">55</td><td class="center">55</td><td class="center">100%</td></tr>
+      <tr><td>Costumer</td><td>Entidade</td><td class="center">21</td><td class="center">21</td><td class="center">100%</td></tr>
+      <tr><td>Product</td><td>Entidade</td><td class="center">22</td><td class="center">22</td><td class="center">100%</td></tr>
+      <tr><td>Order</td><td>Entidade</td><td class="center">22</td><td class="center">22</td><td class="center">100%</td></tr>
+      <tr><td>OrderStatus</td><td>Enum</td><td class="center">19</td><td class="center">19</td><td class="center">100%</td></tr>
+      <tr><td>OrderItem</td><td>Entidade</td><td class="center">11</td><td class="center">11</td><td class="center">100%</td></tr>
+      <tr><td>OrderItemPolicy</td><td>Política</td><td class="center">6</td><td class="center">6</td><td class="center">100%</td></tr>
+      <tr><td>Rent</td><td>Entidade</td><td class="center">23</td><td class="center">23</td><td class="center">100%</td></tr>
+      <tr><td>RentStatus</td><td>Enum</td><td class="center">20</td><td class="center">20</td><td class="center">100%</td></tr>
+      <tr><td>RentItem</td><td>Entidade</td><td class="center">11</td><td class="center">11</td><td class="center">100%</td></tr>
+      <tr><td>RentItemPolicy</td><td>Política</td><td class="center">6</td><td class="center">6</td><td class="center">100%</td></tr>
+      <tr><td>Contract</td><td>Entidade</td><td class="center">30</td><td class="center">30</td><td class="center">100%</td></tr>
+      <tr><td>UserPolicy</td><td>Política</td><td class="center">9</td><td class="center">9</td><td class="center">100%</td></tr>
+      <tr><td>RefreshTokenPolicy</td><td>Política</td><td class="center">3</td><td class="center">3</td><td class="center">100%</td></tr>
+      <tr><td>CreateUserService</td><td>Serviço</td><td class="center">10</td><td class="center">10</td><td class="center">100%</td></tr>
+      <tr><td>LoginUserService</td><td>Serviço</td><td class="center">9</td><td class="center">9</td><td class="center">100%</td></tr>
+      <tr><td>UpdateContractService</td><td>Serviço</td><td class="center">14</td><td class="center">14</td><td class="center">100%</td></tr>
+      <tr><td>UpdateOrderService</td><td>Serviço</td><td class="center">21</td><td class="center">25</td><td class="center">84%</td></tr>
+      <tr><td>Clause</td><td>Entidade</td><td class="center">7</td><td class="center">15</td><td class="center">47%</td></tr>
+      <tr><td>Exceções de domínio (12 classes)</td><td>Exceção</td><td class="center">24</td><td class="center">48</td><td class="center">50%</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="subsecao">4.5 Como Reproduzir a Medição</h3>
+
+  <p>Para reproduzir os testes e gerar o relatório de cobertura:</p>
+  <ol>
+    <li>Clonar o repositório: <code>git clone [URL_DO_REPOSITORIO]</code></li>
+    <li>Acessar o diretório: <code>cd api</code></li>
+    <li>Executar: <code>mvn test</code> (requer Java 21 e Maven 3.9+)</li>
+    <li>Abrir o relatório: <code>target/site/jacoco/index.html</code></li>
+  </ol>
+
+  <div class="rodape">
+    Trabalho Prático 2 — Teste e Manutenção de Software — PUC Minas 2026.1 &nbsp;|&nbsp; Página 3
+  </div>
+
+</div>
+
+<!-- ========== PÁGINA 5: CONSIDERAÇÕES FINAIS ========== -->
+<div class="page">
+
+  <h2 class="secao">5. Considerações Finais</h2>
+
+  <h3 class="subsecao">5.1 Estratégia de Teste Adotada</h3>
+
+  <p>
+    A equipe adotou a estratégia de <strong>testes unitários</strong> com foco na camada de domínio,
+    por ser a camada que concentra toda a lógica de negócio da aplicação e é independente de
+    frameworks externos (banco de dados, HTTP, WebSocket). Isso permite que os testes sejam
+    rápidos, determinísticos e fáceis de manter.
+  </p>
+
+  <p>
+    Para os serviços que possuem dependências externas (repositórios, template de mensagens),
+    foi utilizado <strong>Mockito</strong> para criar objetos simulados (<em>mocks</em>),
+    garantindo o isolamento da unidade testada. Essa técnica permite verificar não apenas
+    o resultado das operações, mas também se as dependências foram chamadas corretamente
+    (verificação de interações via <code>verify()</code>).
+  </p>
+
+  <h3 class="subsecao">5.2 Tipos de Casos de Teste Implementados</h3>
+
+  <ul>
+    <li><strong>Testes de valor válido (happy path):</strong> verificam o comportamento correto quando os dados de entrada são válidos</li>
+    <li><strong>Testes de valor inválido:</strong> verificam se exceções são lançadas com dados inválidos (ex.: CPF com menos de 11 dígitos, quantidade de item igual a zero)</li>
+    <li><strong>Testes de valor limite:</strong> verificam comportamento nos limites (ex.: quantidade exatamente igual ao estoque disponível)</li>
+    <li><strong>Testes de estado:</strong> verificam transições de estado das entidades (ex.: contrato cancelado não pode ser assinado)</li>
+    <li><strong>Testes de interação:</strong> verificam se os colaboradores (repositórios, serviços) foram invocados com os parâmetros corretos</li>
+    <li><strong>Testes de nulidade:</strong> verificam comportamento com valores nulos (ex.: cálculo de subtotal com valor unitário nulo)</li>
+  </ul>
+
+  <h3 class="subsecao">5.3 Tecnologias Utilizadas</h3>
+
+  <table>
+    <thead>
+      <tr><th>Tecnologia</th><th>Versão</th><th>Finalidade</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Java</td><td class="center">21</td><td>Linguagem de programação</td></tr>
+      <tr><td>Spring Boot</td><td class="center">4.0.1</td><td>Framework da aplicação</td></tr>
+      <tr><td>JUnit 5 (Jupiter)</td><td class="center">5.13.1</td><td>Framework de testes unitários</td></tr>
+      <tr><td>Mockito</td><td class="center">5.x</td><td>Criação de mocks e verificação de interações</td></tr>
+      <tr><td>JaCoCo</td><td class="center">0.8.12</td><td>Medição de cobertura de código</td></tr>
+      <tr><td>Maven</td><td class="center">3.9+</td><td>Gerenciamento de build e dependências</td></tr>
+      <tr><td>PostgreSQL</td><td class="center">—</td><td>Banco de dados (produção)</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="subsecao">5.4 Repositório do Projeto</h3>
+
+  <p>
+    O código-fonte completo, incluindo todos os casos de teste implementados, está disponível em:
+  </p>
+
+  <div class="destaque">
+    <strong>GitHub:</strong> https://github.com/samuelmaia1/3s-api
+  </div>
+
+  <h3 class="subsecao">5.5 Conclusão</h3>
+
+  <p>
+    O trabalho demonstrou a importância e a viabilidade de se obter alta cobertura de testes
+    em sistemas reais de médio porte. Com 169 casos de teste e cobertura de
+    <strong>71,06% das linhas</strong> de código da camada de domínio, superou-se o requisito
+    mínimo de 70% estabelecido para o trabalho. A adoção de ferramentas automatizadas como
+    JaCoCo elimina subjetividade no cálculo da cobertura e fornece relatórios detalhados que
+    facilitam a identificação de áreas de risco não testadas.
+  </p>
+
+  <div class="rodape">
+    Trabalho Prático 2 — Teste e Manutenção de Software — PUC Minas 2026.1 &nbsp;|&nbsp; Página 4
+  </div>
+
+</div>
+
+</body>
+</html>
